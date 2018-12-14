@@ -1,53 +1,37 @@
-element = (name) ->
-  self = @
+di = new(require('xmldom').DOMImplementation)
+
+module.exports = (name) ->
   meta = 
     name: name
     attrs: []
     content: []
+
+  exposed = 
   
-  attrs = (attr...) -> 
-    meta.attrs.push(attr...) 
-    self
+    attrs: (attr...) -> 
+      meta.attrs.push(attr...) 
+      exposed
 
-  content = (elem...) -> 
-    meta.content.push(elem...)
-    self
+    content: (elem...) -> 
+      meta.content.push(elem...)
+      exposed
 
-  ns = (ns) -> 
-    meta.ns = ns
-    self    
+    ns: (ns) -> 
+      meta.ns = ns
+      exposed    
 
-  { attrs, content, ns }    
+    build: (obj, doc = di.createDocument()) ->
+      el = 
+        if meta.ns?
+          doc.createElementNS(meta.ns, meta.name)
+        else
+          doc.createElement(meta.name)        
+      meta.attrs.forEach (attr) ->
+        attr.add(obj, el)
+      el
 
+  exposed
 
-attr = (name) ->
-  meta = 
-    name: name
-    required: false
-
-  required: ->
-    meta.required = true
-    self
-
-  bind: (expr) ->
-    meta.bind = expr  
-
-  { required, bind }    
-
-
-text = ->
-  meta = {}
-  
-  bind: (expr) ->
-    meta.bind = expr
-
-  { bind }    
-
-module.exports = {
-  element
-  attr
-  text
-}
 
 
 
