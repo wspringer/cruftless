@@ -27,7 +27,9 @@ module.exports = (name) ->
         else
           doc.createElement(meta.name)        
       meta.attrs.forEach (attr) ->
-        attr.add(obj, el)
+        attr.add(obj, el)              
+      meta.content.forEach (node) ->
+        el.appendChild(node.build(obj, doc))
       el
 
   exposed
