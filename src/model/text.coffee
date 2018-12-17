@@ -22,6 +22,13 @@ module.exports = ->
     build: (obj, doc) ->
       value = extractValue(meta, obj)
       doc.createTextNode(value)
+
+    matches: (node) ->
+      node.nodeType is Node.TEXT_NODE      
+
+    extract: (node, target) ->
+      meta.bind.set(target, node.textContent)
+
     
   exposed
 

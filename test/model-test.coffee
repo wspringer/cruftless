@@ -118,5 +118,12 @@ describe 'the entire model', ->
     extracted = el.extract(parse("<foo><bar baz='3'/></foo>"))
     expect(extracted).toHaveProperty('a', '3')
 
+  it 'should allow you to extract text from nested element', ->
+    el = element('foo').content(
+      text().bind('a')
+    )
+    extracted = el.extract(parse("<foo>3</foo>"))    
+    expect(extracted).toHaveProperty('a', '3')
+
 
   
