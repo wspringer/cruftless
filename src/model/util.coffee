@@ -13,3 +13,10 @@ module.exports =
         [ get, set ] = opts
         { get, set }    
 
+  extractValue: (meta, obj) ->
+    value =  meta.bind?.get?(obj) or meta.value
+    if not(value?)
+      if meta.required then throw new Error("Missing required attribute '#{meta.name}''")
+    value
+    
+

@@ -1,10 +1,27 @@
+{ parseExpr, extractValue } = require './util'
+
 module.exports = ->
-  self = @
-  meta = {}
+  
+  meta = 
+    required: false
 
-  bind: (opts) ->
-    meta.bind = expr
-    self
+  exposed = 
 
-  { bind }    
+    required: ->
+      meta.required = true
+      exposed
+
+    value: (value) ->
+      meta.value = value
+      exposed
+
+    bind: (opts...) ->
+      meta.bind = parseExpr(opts...)
+      exposed
+
+    build: (obj, doc) ->
+      value = extractValue(meta, obj)
+      doc.createTextNode(value)
+    
+  exposed
 

@@ -1,8 +1,7 @@
 _ = require 'lodash'
-{ parseExpr } = require './util'
+{ parseExpr, extractValue } = require './util'
 
 module.exports = (name) ->
-  self = @
   meta = 
     name: name
     required: false
@@ -26,10 +25,7 @@ module.exports = (name) ->
       exposed      
 
     add: (obj, elem) ->
-      value =  meta.bind?.get?(obj) or meta.value
-      if not(value?)
-        if meta.required then throw new Error("Missing required attribute '#{meta.name}''")
-        else value = meta.name # attribute behaviour
+      value = extractValue(meta, obj) or meta.name
       if meta.ns?
         elem.setAttributeNS(meta.ns, meta.name, value)
       else 

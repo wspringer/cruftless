@@ -84,4 +84,17 @@ describe 'the entire model', ->
     ) 
     expect(-> render(el.build({}))).toThrow("Missing required attribute 'bar'")
 
+  it 'should support nested text', ->
+    el = element('foo').content(
+      text().value('foo')
+    )
+    expect(render(el.build())).toEqual('<foo>foo</foo>')
 
+  it 'should support nested text based on binding expr', ->
+    el = element('foo').content(
+      text().bind('a.b.c').required()
+    )
+    expect(render(el.build(a:b:c: 3))).toEqual('<foo>3</foo>')    
+
+      
+  
