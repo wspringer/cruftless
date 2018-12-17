@@ -12,17 +12,21 @@ module.exports = (name) ->
 
     ns: (ns) ->
       meta.ns = ns
-      exposed      
+      exposed            
 
     bind: (expr) ->
       meta.bind = expr  
       exposed
 
+    value: (value) ->
+      meta.value = value
+      exposed      
+
     add: (obj, elem) ->
       if meta.ns?
-        elem.setAttributeNS(meta.ns, meta.name, 'watte')
+        elem.setAttributeNS(meta.ns, meta.name, meta.value or meta.name)
       else 
-        elem.setAttribute(meta.name, 'watte')
+        elem.setAttribute(meta.name, meta.value or meta.name)
 
 
   exposed

@@ -34,11 +34,11 @@ describe 'the entire model', ->
     el = element('foo').attrs(
       attr('bar')
     )
-    expect(render(el.build())).toEqual('<foo bar="watte"/>')
+    expect(render(el.build())).toEqual('<foo bar="bar"/>')
     el = element('foo').attrs(
       attr('bar').ns("http://www.eastpole.nl/")
     )
-    expect(render(el.build())).toEqual('<foo xmlns="http://www.eastpole.nl/\" bar="watte"/>')
+    expect(render(el.build())).toEqual('<foo xmlns="http://www.eastpole.nl/\" bar="bar"/>')
 
   it 'should allow you to construct an element with nested content', ->
     el = element('foo').content(
@@ -46,3 +46,16 @@ describe 'the entire model', ->
     )
     expect(render(el.build())).toEqual('<foo><bar/></foo>')
 
+  it 'should allow you to construct an element with nested elements with attributes', ->
+    el = element('foo').content(
+      element('bar').attrs(
+        attr('bar')
+      )
+    )    
+    expect(render(el.build())).toEqual("<foo><bar bar=\"bar\"/></foo>")
+
+  it 'should allow you to construct an element with an attribute with a value', ->
+    el = element('foo').attrs(
+      attr('bar').value('zaz')
+    )  
+    expect(render(el.build())).toEqual("<foo bar=\"zaz\"/>")
