@@ -1,8 +1,12 @@
 { element, text, attr } = require '../src/model/model'
 XMLSerializer = require('xmldom').XMLSerializer
+DOMParser = require('xmldom').DOMParser
 
 render = (node) ->
   new XMLSerializer().serializeToString(node)
+
+parse = (str) ->  
+  new DOMParser().parseFromString(str).documentElement  
 
 describe 'element', ->
 
@@ -96,5 +100,23 @@ describe 'the entire model', ->
     )
     expect(render(el.build(a:b:c: 3))).toEqual('<foo>3</foo>')    
 
-      
+  it 'should allow you to extract an attribute value from an element', ->
+    el = element('foo').attrs(
+      attr('bar').bind('a.b.c')
+    )    
+    extracted = el.extract(parse("<foo bar='3'/>"))
+    expect(extracted).toHaveProperty('a')
+    expect(extracted.a).toHaveProperty('b')
+    expect(extracted.a.b).toHaveProperty('c', '3')
+
+  it 'should allow you to extract an attribute value from a nested element', ->
+    el = element('foo').content(
+      element('bar').attrs(
+        attr('baz').bind('a')
+      )
+    )    
+    extracted = el.extract(parse("<foo><bar baz='3'/></foo>"))
+    expect(extracted).toHaveProperty('a', '3')
+
+
   

@@ -31,6 +31,14 @@ module.exports = (name) ->
       else 
         elem.setAttribute(meta.name, value)
 
+    extract: (elem, target) ->
+      if meta.bind?
+        value = 
+          if meta.ns?
+            elem.getAttributeNS(meta.ns, meta.name)
+          else 
+            elem.getAttribute(meta.name)        
+        if value? then meta.bind.set(target, value)
 
   exposed
 

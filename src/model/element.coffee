@@ -32,6 +32,20 @@ module.exports = (name) ->
         el.appendChild(node.build(obj, doc))
       el
 
+    matches: (elem) ->
+      elem.nodeType is Node.ELEMENT_NODE and elem.localName is meta.name and (
+        not(meta.ns?) or meta.ns is elem.namespaceURI
+      )
+
+    extract: (elem, target = {}) ->
+      meta.attrs.forEach (attr) ->
+        attr.extract(elem, target)        
+      Array.from(elem.childNodes).forEach (child) ->
+        match = meta.content.find (nodeDef) -> nodeDef.matches(child)
+        match.extract(child, target)
+
+      target
+
   exposed
 
 
