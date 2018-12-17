@@ -1,10 +1,12 @@
 _ = require 'lodash'
 { parseExpr, extractValue } = require './util'
+types = require './types'
 
 module.exports = (name) ->
   meta = 
     name: name
     required: false
+    valueType: types.string
 
   exposed = 
 
@@ -16,6 +18,15 @@ module.exports = (name) ->
       meta.ns = ns
       exposed            
 
+    number: -> 
+      meta.valueType = types.float
+      exposed
+
+    integer: -> 
+      meta.valueType = types.integer
+      exposed
+  
+
     bind: (opts...) ->
       meta.bind = parseExpr(opts...) 
       exposed
@@ -24,7 +35,7 @@ module.exports = (name) ->
       meta.value = value
       exposed      
 
-    add: (obj, elem) ->
+    generate: (obj, elem) ->
       value = extractValue(meta, obj) or meta.name
       if meta.ns?
         elem.setAttributeNS(meta.ns, meta.name, value)
@@ -38,7 +49,7 @@ module.exports = (name) ->
             elem.getAttributeNS(meta.ns, meta.name)
           else 
             elem.getAttribute(meta.name)        
-        if value? then meta.bind.set(target, value)
+        if value? then meta.bind.set(target, meta.valueType.from(value))
 
   exposed
 

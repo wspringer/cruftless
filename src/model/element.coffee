@@ -7,6 +7,8 @@ module.exports = (name) ->
     attrs: []
     content: []
     scope: (target) -> target or {}
+    traverse: (obj, iterator) -> iterator(obj)
+      
 
   exposed = 
   
@@ -41,8 +43,11 @@ module.exports = (name) ->
           scope = {}
           coll.push scope
           scope
+      meta.traverse = (obj, iterator) ->
+        coll = meta.bind.get(obj) or []          
+        coll.forEach iterator
       exposed
-
+        
     object: ->
       meta.scope = (target) ->
         scope = meta.bind.get(target)
@@ -53,19 +58,25 @@ module.exports = (name) ->
           scope = {}
           meta.bind.set(target, scope)
           scope
+      meta.traverse = (obj, iterator) ->
+        iterator(meta.bind.get(obj))
       exposed
 
-    build: (obj, doc = di.createDocument()) ->
-      el = 
-        if meta.ns?
-          doc.createElementNS(meta.ns, meta.name)
-        else
-          doc.createElement(meta.name)        
-      meta.attrs.forEach (attr) ->
-        attr.add(obj, el)              
-      meta.content.forEach (node) ->
-        el.appendChild(node.build(obj, doc))
-      el
+    generate: (obj, context) ->
+      doc = context?.ownerDocument or di.createDocument()      
+      meta.traverse obj, (item) ->
+        el = 
+          if meta.ns?
+            doc.createElementNS(meta.ns, meta.name)
+          else
+            doc.createElement(meta.name)        
+        meta.attrs.forEach (attr) -> attr.generate(item, el)              
+        meta.content.forEach (node) -> node.generate(item, el)
+        if context? 
+          context.appendChild(el)
+          return
+        else 
+          return el
 
     matches: (elem) ->
       elem.nodeType is Node.ELEMENT_NODE and elem.localName is meta.name and (

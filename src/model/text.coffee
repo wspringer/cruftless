@@ -1,9 +1,13 @@
 { parseExpr, extractValue } = require './util'
+Joi = require 'joi'
+_ = require 'lodash'
+types = require './types'
 
 module.exports = ->
   
   meta = 
     required: false
+    valueType: types.string
 
   exposed = 
 
@@ -15,19 +19,29 @@ module.exports = ->
       meta.value = value
       exposed
 
+    number: -> 
+      meta.valueType = types.float
+      exposed
+
+    integer: -> 
+      meta.valueType = types.integer
+      exposed
+
     bind: (opts...) ->
       meta.bind = parseExpr(opts...)
       exposed
 
-    build: (obj, doc) ->
+    generate: (obj, context) ->
       value = extractValue(meta, obj)
-      doc.createTextNode(value)
+      node = context.ownerDocument.createTextNode(value)
+      context.appendChild(node)
+      return
 
     matches: (node) ->
       node.nodeType is Node.TEXT_NODE      
 
     extract: (node, target) ->
-      meta.bind.set(target, node.textContent)
+      meta.bind.set(target, meta.valueType.from(node.textContent))
 
     
   exposed
