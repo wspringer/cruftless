@@ -125,5 +125,28 @@ describe 'the entire model', ->
     extracted = el.extract(parse("<foo>3</foo>"))    
     expect(extracted).toHaveProperty('a', '3')
 
+  it 'should deal with many occurences', ->
+    el = element('foo').content(
+      element('bar').bind('values').array().attrs(
+        attr('baz').bind('value')
+      )
+    )
+    extracted = el.extract(parse("<foo><bar baz='1'/><bar baz='2'/></foo>"))
+    expect(extracted).toHaveProperty('values')
+    expect(extracted.values).toContainEqual(value: '1')
+    expect(extracted.values).toContainEqual(value: '2')
+
+  it 'should deal with many occurences with nested content', ->
+    el = element('foo').content(
+      element('bar').bind('values').array().attrs(
+        attr('baz').bind('value.first')
+      )
+    )
+    extracted = el.extract(parse("<foo><bar baz='1'/><bar baz='2'/></foo>"))
+    expect(extracted).toHaveProperty('values')
+    expect(extracted.values).toContainEqual(value: first: '1')
+    expect(extracted.values).toContainEqual(value: first: '2')
+
+
 
   
