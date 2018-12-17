@@ -2,7 +2,7 @@ module.exports = ->
   self = @
   meta = {}
 
-  bind: (expr) ->
+  bind: (opts) ->
     meta.bind = expr
     self
 

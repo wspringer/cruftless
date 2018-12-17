@@ -59,3 +59,29 @@ describe 'the entire model', ->
       attr('bar').value('zaz')
     )  
     expect(render(el.build())).toEqual("<foo bar=\"zaz\"/>")
+
+  it 'should allow you to construct an element with an attribute with a reference', ->
+    el = element('foo').attrs(
+      attr('bar').bind('a')
+    )    
+    expect(render(el.build({ a: 'tree' }))).toEqual('<foo bar="tree"/>')
+
+  it 'should allow you to construct an element with an attribute with a nested reference', ->
+    el = element('foo').attrs(
+      attr('bar').bind('a.b.c')
+    )    
+    expect(render(el.build(a: b: c: 4))).toEqual('<foo bar="4"/>')    
+
+  it 'should fail over a missing attribute value', ->
+    el = element('foo').attrs(
+      attr('bar').required()
+    )
+    expect(-> render(el.build())).toThrowError("Missing required attribute 'bar'")
+
+  it 'should fail over a missing property', ->
+    el = element('foo').attrs(
+      attr('bar').bind('a').required()
+    ) 
+    expect(-> render(el.build({}))).toThrow("Missing required attribute 'bar'")
+
+
