@@ -1,5 +1,5 @@
 {
-  "name": "xx",
+  "name": "cruftless",
   "version": "0.1.0",
   "description": "Yet another simple way to parse and generate XML",
   "main": "lib/index.js",
