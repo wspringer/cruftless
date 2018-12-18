@@ -90,7 +90,10 @@ module.exports = (name) ->
       Array.from(elem.childNodes).forEach (child) ->
         match = meta.content.find (nodeDef) -> nodeDef.matches(child)        
         match.extract(child, scope)
-      target       
+      target  
+      
+    toString: ->
+      JSON.stringify(meta, null, 2)
     
 
   exposed

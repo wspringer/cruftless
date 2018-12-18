@@ -1,4 +1,4 @@
-{ element, text, attr } = require '../src/model/model'
+{ element, text, attr } = require '../../src/model/model'
 XMLSerializer = require('xmldom').XMLSerializer
 DOMParser = require('xmldom').DOMParser
 
@@ -9,7 +9,6 @@ parse = (str) ->
   new DOMParser().parseFromString(str).documentElement  
 
 describe 'element', ->
-
 
   it 'should allow you to construct the meta data for an element', ->
     el = element('foo')
