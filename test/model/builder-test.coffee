@@ -11,7 +11,6 @@ describe 'the builder', ->
     xml = '<foo><bar/></foo>'
     expect(render(build(xml).generate())).toEqual xml
 
-
   it 'should allow you to build a model from XML with attributes', ->
     xml = '<foo a="3"><bar/></foo>'
     expect(render(build(xml).generate())).toEqual xml
@@ -39,3 +38,28 @@ describe 'the builder', ->
   it 'should handle modifiers correctly', ->        
     xml = '<foo>{{bar|required}}</foo>'
     expect(-> render(build(xml).generate())).toThrowError()
+
+  it 'should allow you to bind elements too', ->
+    xml = '''
+    <foo xmlns:c="https://github.com/wspringer/cruftless" c:bind="a">
+      <bar>{{b}}</bar>
+    </foo>
+    '''
+    expect(render(build(xml).generate(a: b: 3)).replace(/\s/g, '')).toEqual "<foo><bar>3</bar></foo>"
+
+  it 'should support a short syntax for binding elements', ->
+    xml = '''
+    <foo c-bind="a">
+      <bar>{{b}}</bar>
+    </foo>
+    '''
+    expect(render(build(xml).generate(a: b: 3)).replace(/\s/g, '')).toEqual "<foo><bar>3</bar></foo>"
+
+  it 'should support arrays', ->
+    xml = '<foo><bar c-bind="a|array" t="{{b}}"/></foo>'
+    expect(render(build(xml).generate(a: [ { b: 3 }, { b: 4 }]))).toEqual '<foo><bar t="3"/><bar t="4"/></foo>'
+    
+  it 'should support arrays', ->
+    xml = '<foo><bar c-bind="a|array">{{b}}</bar></foo>'
+    expect(render(build(xml).generate(a: [ { b: 3 }, { b: 4 }]))).toEqual '<foo><bar>3</bar><bar>4</bar></foo>'
+    

@@ -2,6 +2,7 @@ DOMParser = require('xmldom').DOMParser
 { element, attr, text } = require './model'
 _ = require 'lodash'
 expr = require './expr'
+curlyNS = 'https://github.com/wspringer/cruftless'
 
 forAllAttributes = (node, fn) ->
   i = 0
@@ -24,16 +25,21 @@ parse = (node) ->
         .filter _.negate(_.isUndefined)
       el.content(content...)
 
-      attrs = forAllAttributes(node, (item) ->
-        res = expr(item.value).apply(attr(item.name))
-        if item.namespaceURI then res.ns(item.namespaceURI)
-        res
+      attrs = []
+      forAllAttributes(node, (item) ->
+        if (item.namespaceURI is curlyNS) or (item.name is 'c-bind')
+          expr.raw(item.value).apply(el)
+        else if item.prefix is 'xmlns'
+        else
+          res = expr.curly(item.value).apply(attr(item.name))
+          if item.namespaceURI then res.ns(item.namespaceURI)
+          attrs.push(res)
       )
       el.attrs(attrs...)
 
       el
     when Node.TEXT_NODE
-      expr(node.textContent).apply(text())
+      expr.curly(node.textContent).apply(text())
 
 
 module.exports = (xml) ->

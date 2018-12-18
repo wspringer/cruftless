@@ -158,8 +158,8 @@ describe 'the entire model', ->
     ]))).toEqual('<foo><bar baz="1"/><bar baz="2"/></foo>')
 
   it 'should support nested objects', ->
-    el = element('foo').object().bind('a').content(
-      element('bar').bind('b').object().content(
+    el = element('foo').bind('a').content(
+      element('bar').bind('b').content(
         text().bind('c')
       )
     )

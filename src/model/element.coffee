@@ -25,8 +25,8 @@ module.exports = (name) ->
       exposed
       
     bind: (opts...) ->
-      meta.bind = parseExpr(opts...)
-      exposed
+      meta.bind = parseExpr(opts...) 
+      exposed.object()     
   
     array: ->
       meta.scope = (target) ->
