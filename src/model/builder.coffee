@@ -1,6 +1,7 @@
 DOMParser = require('xmldom').DOMParser
 { element, attr, text } = require './model'
 _ = require 'lodash'
+expr = require './expr'
 
 forAllAttributes = (node, fn) ->
   i = 0
@@ -24,7 +25,7 @@ parse = (node) ->
       el.content(content...)
 
       attrs = forAllAttributes(node, (item) ->
-        res = attr(item.name).value(item.value)
+        res = expr(item.value).apply(attr(item.name))
         if item.namespaceURI then res.ns(item.namespaceURI)
         res
       )
@@ -32,7 +33,7 @@ parse = (node) ->
 
       el
     when Node.TEXT_NODE
-      text().value(node.textContent)
+      expr(node.textContent).apply(text())
 
 
 module.exports = (xml) ->

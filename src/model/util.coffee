@@ -2,6 +2,7 @@ _ = require 'lodash'
 
 module.exports = 
 
+  # Parse binding expressions (the expression you pass to the `bind` operation.)
   parseExpr: (opts...) ->
     switch opts.length
       when 1 
@@ -15,8 +16,8 @@ module.exports =
 
   extractValue: (meta, obj) ->
     value =  meta.bind?.get?(obj) or meta.value
-    if not(value?)
-      if meta.required then throw new Error("Missing required attribute '#{meta.name}''")
+    if meta.required then throw new Error("Missing required attribute#{ if meta.name? then " '" + meta.name + "'" else ""}")
     value
     
+  
 
