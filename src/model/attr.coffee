@@ -51,6 +51,9 @@ module.exports = (name) ->
             elem.getAttribute(meta.name)        
         if value? then meta.bind.set(target, meta.valueType.from(value))
 
+    describe: (obj) ->
+      meta.bind?.describe?(obj, meta.valueType.desc)      
+
   exposed
 
 

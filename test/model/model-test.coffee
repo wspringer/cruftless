@@ -175,4 +175,42 @@ describe 'the entire model', ->
     expect(extracted).toHaveProperty('a')
     expect(typeof extracted.a).toEqual 'number'
 
-  
+  it 'should return a type definition', ->
+    el = element('foo').content(
+      text().integer().bind('a')
+    ) 
+    expect(el.describe()).toEqual({ a: { type: 'integer' }})
+
+  it 'should return a type definition in nested object situations', ->
+    el = element('foo').bind('c').content(
+      text().integer().bind('a')
+    ) 
+    expect(el.describe()).toEqual({"c": {"keys": {"a": {"type": "integer"}}, "type": "object"}})
+
+  it 'should return a type definition in nested array situations', ->
+    el = element('foo').bind('c').array().content(
+      text().integer().bind('a')
+    ) 
+    expect(el.describe()).toEqual({"c": {"element": {"a": {"type": "integer"}}, "type": "array"}})
+
+  it 'should handle complicated situations well', ->
+    el = element('foo').bind('a').content(
+      element('bar').bind('b.c').content(
+        element('zaz').content(text().bind('d'))        
+      )
+      element('baz').content(
+        text().bind('b.c.e')
+      )
+    )
+    expect(el.describe()).toEqual({"a": {"keys": {"b": {"keys": {"c": {"keys": {"d": {"type": "string"}, "e": {"type": "string"}}, "type": "object"}}, "type": "object"}}, "type": "object"}})
+
+  it 'should handle nested unbound elements', ->
+    el = element('foo').content(
+      element('bar').content(
+        element('baz').content(
+          text().bind('a')
+        )
+      )
+    )
+    expect(el.describe()).toEqual({"a": {"type": "string"}})
+

@@ -1,19 +1,18 @@
-Joi = require 'joi'
 _ = require 'lodash'
 
 module.exports = 
 
   string: 
-    joi: Joi.string()
+    desc: type: 'string'
     from: _.identity
     to: _.identity
 
   integer: 
-    joi: Joi.number().integer()
+    desc: type: 'integer'
     from: (str) -> parseInt(str)
     to: (value) -> value.toString()
 
   float:
-    joi: Joi.number()
+    desc : type: 'float'
     from: (str) -> parseFloat()
     to: (value) -> value.toString()    

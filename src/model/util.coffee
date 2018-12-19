@@ -2,7 +2,8 @@ _ = require 'lodash'
 
 parsePath = (str) ->
   segments = str.split('.')
-  set: (obj, value) ->
+  
+  set = (obj, value) ->
     context = _.reduce(_.initial(segments), (acc, segment) ->
       if acc[segment]? 
         acc[segment]
@@ -12,10 +13,25 @@ parsePath = (str) ->
         obj
     , obj)
     context[_.last(segments)] = value
-  get: (obj) ->
+  
+  get = (obj) ->
     _.reduce(segments, (acc, segment) ->
       if acc? then acc[segment]
     , obj)
+  
+  describe = (obj, type) ->
+    context = _.reduce(_.initial(segments), (acc, segment) ->
+      if acc[segment]? 
+        acc[segment].keys
+      else 
+        obj = { type: 'object', keys: {} }
+        acc[segment] = obj
+        obj.keys
+    , obj)
+    context[_.last(segments)] = type
+
+  { set, get, describe }  
+
 
 module.exports = 
 

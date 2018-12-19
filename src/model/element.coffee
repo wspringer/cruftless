@@ -8,7 +8,10 @@ module.exports = (name) ->
     content: []
     scope: (target) -> target or {}
     traverse: (obj, iterator) -> iterator(obj)
-      
+    describe: (obj) -> 
+      meta.attrs.forEach (item) -> item.describe(obj)
+      meta.content.forEach (item) -> item.describe(obj)
+      obj      
 
   exposed = 
   
@@ -46,6 +49,12 @@ module.exports = (name) ->
       meta.traverse = (obj, iterator) ->
         coll = meta.bind.get(obj) or []          
         coll.forEach iterator
+      meta.describe = (obj) ->
+        res = { type: 'array', element: {} }
+        meta.attrs.forEach (item) -> item.describe(res.element)
+        meta.content.forEach (item) -> item.describe(res.element)
+        meta.bind.describe(obj, res)  
+        res
       exposed
         
     object: ->
@@ -60,6 +69,12 @@ module.exports = (name) ->
           scope
       meta.traverse = (obj, iterator) ->
         iterator(meta.bind.get(obj))
+      meta.describe = (obj) ->
+        res = { type: 'object', keys: {} }
+        meta.attrs.forEach (item) -> item.describe(res.keys)
+        meta.content.forEach (item) -> item.describe(res.keys)
+        meta.bind.describe(obj, res)  
+        res
       exposed
 
     generate: (obj, context) ->
@@ -92,9 +107,11 @@ module.exports = (name) ->
         match.extract(child, scope)
       target  
       
-    toString: ->
-      JSON.stringify(meta, null, 2)
-    
+    describe: (obj = {}) ->
+      meta.describe(obj)
+      obj
+      
+
 
   exposed
 

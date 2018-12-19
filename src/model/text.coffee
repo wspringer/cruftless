@@ -43,6 +43,8 @@ module.exports = ->
     extract: (node, target) ->
       meta.bind.set(target, meta.valueType.from(node.textContent))
 
+    describe: (obj) ->
+      meta.bind?.describe?(obj, meta.valueType.desc)      
     
   exposed
 
