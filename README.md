@@ -96,7 +96,7 @@ el.toXML({ name: 'Jane Doe', age: '18' });
 let xml = `<persons>
   <person c-bind="persons|array">
     <name>{{name|required}}</name>
-		<age>{{age|integer|required}}</age>
+    <age>{{age|integer|required}}</age>
   </person>
 </persons>`
 
