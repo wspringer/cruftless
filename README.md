@@ -11,7 +11,7 @@ I hate to say this, but: 'yes'. Or, perhaps: 'no'. Because Cruftless is not real
 
 ## Five minute introduction
 
-**Building XML documents**
+### Building XML documents**
 
 Cruftless builds a simplified metamodel of your XML document, and it's not based on a DOM API. So, if this is the XML document:
 
@@ -49,7 +49,7 @@ el.toXML(); // <person><name>John Doe</name><age>16</age></person>
 el.toDOM()
 ```
 
-**Binding**
+### Binding
 
 Now, this itself doesn't seem all that useful. Where it gets useful is when you start adding references to your document model:
 
@@ -76,7 +76,7 @@ But the beauty is, it also works the other way around. If you have your model wi
 el.fromXML(xml); // { name: 'John Doe', age: '16' }
 ```
 
-**Less tedious, please**
+### Less tedious, please
 
 I hope you can see how this is useful. However, I also hope you can see that this is perhaps not ideal. I mean, it's nice that you're able to build a model of XML, but in many cases, you already have the snippets of XML that you need to populate with data. So, the question is if there is an easier way to achieve the same, if you already have snippets of XML. Perhaps not surprisingly, there is:
 
@@ -92,7 +92,7 @@ let el = parse(xml)
 el.toXML({ name: 'Jane Doe', age: '18' });
 ```
 
-**Additional metadata**
+### Additional metadata
 
 ```javascript
 let xml = `<persons>
