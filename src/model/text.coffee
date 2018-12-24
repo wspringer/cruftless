@@ -38,7 +38,7 @@ module.exports = ->
       return
 
     matches: (node) ->
-      node.nodeType is Node.TEXT_NODE      
+      node.nodeType is 3
 
     extract: (node, target) ->
       meta.bind.set(target, meta.valueType.from(node.textContent))

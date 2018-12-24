@@ -15,7 +15,7 @@ forAllAttributes = (node, fn) ->
 
 parse = (node) ->
   switch node.nodeType 
-    when Node.ELEMENT_NODE
+    when 1
       el = element(node.localName)
       if node.namespaceURI then el.ns(node.namespaceURI)
 
@@ -38,7 +38,7 @@ parse = (node) ->
       el.attrs(attrs...)
 
       el
-    when Node.TEXT_NODE
+    when 3
       expr.curly(node.textContent).apply(text())
 
 

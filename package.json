@@ -6,16 +6,18 @@
   "scripts": {
     "test": "jest",
     "watch": "jest --watch",
-    "prepare": "coffee -c -o ./lib ./src"
+    "prepare": "coffee -c -o ./lib ./src",
+    "readme": "runmd --output=./README.md ./README.js.md"
   },
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "runmd": "^1.0.1"
+  },
   "dependencies": {
     "dom-serialize": "^2.2.1",
-    "joi": "^14.3.0",
     "xmldom": "^0.1.27",
-    "xmlserializer": "^0.6.1",
-    "yup": "^0.26.6"
+    "xmlserializer": "^0.6.1"
   },
   "jest": {
     "preset": "jest-preset-coffeescript"

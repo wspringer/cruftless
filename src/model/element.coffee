@@ -102,7 +102,7 @@ module.exports = (name) ->
       serializer.serializeToString(exposed.generate(obj))      
 
     matches: (elem) ->
-      elem.nodeType is Node.ELEMENT_NODE and elem.localName is meta.name and (
+      elem.nodeType is 1 and elem.localName is meta.name and (
         not(meta.ns?) or meta.ns is elem.namespaceURI
       )
 
@@ -118,7 +118,7 @@ module.exports = (name) ->
     fromDOM: (elem) -> exposed.extract(elem)  
 
     fromXML: (str) ->
-      exposed.extract(parser.parseFromString(str))
+      exposed.extract(parser.parseFromString(str).documentElement)
       
     describe: (obj = {}) ->
       meta.describe(obj)
