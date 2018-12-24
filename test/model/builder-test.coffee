@@ -62,4 +62,8 @@ describe 'the builder', ->
   it 'should support arrays', ->
     xml = '<foo><bar c-bind="a|array">{{b}}</bar></foo>'
     expect(render(build(xml).generate(a: [ { b: 3 }, { b: 4 }]))).toEqual '<foo><bar>3</bar><bar>4</bar></foo>'
-    
+  
+  it 'should support comment syntax', ->
+    xml = '<foo><bar t="{{b}}"><!--a|array--></bar></foo>'
+    expect(render(build(xml).generate(a: [ { b: 3 }, { b: 4 }]))).toEqual '<foo><bar t="3"/><bar t="4"/></foo>'
+  

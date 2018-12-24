@@ -101,11 +101,11 @@ console.log(el.toXML({ name: 'Jane Doe', age: '18' }));
 
 ## Additional metadata
 
-The example above is rather simple. However, Cruftless allows you also deal with more complex cases. And not only that, it also allows you to set additional metadata on binding expressions, using the pipe symbol.
+The example above is rather simple. However, Cruftless allows you also deal with more complex cases. And not only that, it also allows you to set additional metadata on binding expressions, using the pipe symbol. In the template below, we're binding `<person/>` elements inside a `<persons/>` element to a property `persons`, and we're inserting every occurence of it into the `persons` array. The `<!--…-->` annotation might be feel a little awkward at first. There are other ways to define the binding, including one that requires using attributes of particular namespace. Check the test files for examples.
 
 ```javascript --run simple
 template = parse(`<persons>
-  <person c-bind="persons|array">
+  <person><!--persons|array-->
     <name>{{name|required}}</name>
     <age>{{age|integer|required}}</age>
   </person>

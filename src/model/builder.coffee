@@ -19,8 +19,15 @@ parse = (node) ->
       el = element(node.localName)
       if node.namespaceURI then el.ns(node.namespaceURI)
 
+      childNodes = Array.from(node.childNodes)
+
+      commentNode = childNodes.find (node) -> node.nodeType is 8 
+      if commentNode? 
+        console.info(commentNode.textContent)
+        expr.raw(commentNode.textContent).apply(el)
+
       content = 
-        Array.from(node.childNodes)
+        childNodes
         .map parse
         .filter _.negate(_.isUndefined)
       el.content(content...)
