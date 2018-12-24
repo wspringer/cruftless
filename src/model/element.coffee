@@ -1,4 +1,7 @@
+serializer = new(require('xmldom').XMLSerializer)
 di = new(require('xmldom').DOMImplementation)
+parser = new(require('xmldom').DOMParser)
+
 { parseExpr } = require './util'
 
 module.exports = (name) ->
@@ -91,7 +94,12 @@ module.exports = (name) ->
           context.appendChild(el)
           return
         else 
-          return el
+          return el     
+          
+    toDOM: (obj) -> exposed.generate(obj)
+
+    toXML: (obj) ->
+      serializer.serializeToString(exposed.generate(obj))      
 
     matches: (elem) ->
       elem.nodeType is Node.ELEMENT_NODE and elem.localName is meta.name and (
@@ -106,6 +114,11 @@ module.exports = (name) ->
         match = meta.content.find (nodeDef) -> nodeDef.matches(child)        
         match.extract(child, scope)
       target  
+
+    fromDOM: (elem) -> exposed.extract(elem)  
+
+    fromXML: (str) ->
+      exposed.extract(parser.parseFromString(str))
       
     describe: (obj = {}) ->
       meta.describe(obj)
