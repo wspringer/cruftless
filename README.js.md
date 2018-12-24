@@ -104,23 +104,30 @@ console.log(el.toXML({ name: 'Jane Doe', age: '18' }));
 The example above is rather simple. However, Cruftless allows you also deal with more complex cases. And not only that, it also allows you to set additional metadata on binding expressions, using the pipe symbol.
 
 ```javascript --run simple
-template = `<persons>
+template = parse(`<persons>
   <person c-bind="persons|array">
     <name>{{name|required}}</name>
     <age>{{age|integer|required}}</age>
   </person>
-</persons>`;
+</persons>`);
 
 // Note that because of the 'integer' modifier, integer values are 
 // now automatically getting transfered from and to strings.
 
-console.log(parse(template).toXML({ persons: [
+console.log(template.toXML({ persons: [
   { name: 'John Doe', age: 16 },
   { name: 'Jane Doe', age: 18 }
 ]}));
 ```
+
+## Schema
+
+Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects. 
   
-  
+```javascript --run simple
+let schema = template.describe();
+console.log(JSON.stringify(schema, null, 2));
+```  
 
 
 
