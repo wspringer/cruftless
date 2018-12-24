@@ -9,11 +9,8 @@
     "prepare": "coffee -c -o ./lib ./src",
     "readme": "runmd --output=./README.md ./README.js.md"
   },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "runmd": "^1.0.1"
-  },
+  "author": "Wilfred Springer",
+  "license": "UNLICENSED",
   "dependencies": {
     "dom-serialize": "^2.2.1",
     "xmldom": "^0.1.27",
@@ -26,6 +23,7 @@
     "coffeescript": "^2.3.2",
     "jest": "^23.6.0",
     "jest-preset-coffeescript": "^1.0.0",
-    "sinon": "^7.2.2"
+    "sinon": "^7.2.2",
+    "runmd": "^1.0.1"
   }
 }
