@@ -92,6 +92,8 @@ el.toXML({ name: 'Jane Doe', age: '18' });
 
 ## Additional metadata
 
+The example above is rather simple. However, Cruftless allows you also deal with more complex cases. And not only that, it also allows you to set additional metadata on binding expressions, using the pipe symbol.
+
 ```javascript
 let xml = `<persons>
   <person c-bind="persons|array">
