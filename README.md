@@ -41,7 +41,7 @@ let el = element('person').content(
 el.toXML(); // <person><name>John Doe</name><age>16</age></person>
 ```
 
-… or the `generate()` operation instead to return a DOM representation of the document:
+… or the `toDOM()` operation instead to return a DOM representation of the document:
 
 ```javascript
 el.toDOM()
