@@ -82,7 +82,7 @@ I hope you can see how this is useful. However, I also hope you can see that thi
 let xml = `<person>
   <name>{{name}}</name>
   <age>{{age}}</age>
-</person>`
+</person>`;
 
 { parse } = require('cruftless');
 
@@ -100,7 +100,7 @@ let xml = `<persons>
     <name>{{name|required}}</name>
     <age>{{age|integer|required}}</age>
   </person>
-</persons>`
+</persons>`;
 
 // Note that because of the 'integer' modifier, integer values are 
 // now automatically getting transfered from and to strings.
