@@ -9,14 +9,14 @@ An XML builder / parser that tries to ease the common cases, allowing you to qui
 
 I hate to say this, but: 'yes'. Or, perhaps: 'no'. Because Cruftless is not really an XML binding framework as you know it. It's almost more like Handlebars. But where Handlebars allows you to only *generate* documents, Cruftless also allows you to *parse* documents. 
 
-## Building XML documents**
+## Building XML documents
 
 Cruftless builds a simplified metamodel of your XML document, and it's not based on a DOM API. So, if this is the XML document:
 
 ```xml
 <person>
-	<name>John Doe</name>
-	<age>16</age>
+  <name>John Doe</name>
+  <age>16</age>
 </person>
 ```
 
@@ -26,12 +26,12 @@ Then, using the builder API, Cruftless allows you to *build* a model of your doc
 const { element, attr, text } = require('cruftless');
 
 let el = element('person').content(
-	element('name').content(
-		text().value('John Doe')
-	),
-	element('age').content(
-	  text().value(16)
-	)
+  element('name').content(
+    text().value('John Doe')
+  ),
+  element('age').content(
+    text().value(16)
+  )
 );
 ```
 
@@ -53,12 +53,12 @@ Now, this itself doesn't seem all that useful. Where it gets useful is when you 
 
 ```javascript
 let el = element('person').content(
-	element('name').content(
-		text().bind('name')
-	),
-	element('age').content(
-	  text().bind('age')
-	)
+  element('name').content(
+    text().bind('name')
+  ),
+  element('age').content(
+    text().bind('age')
+  )
 );
 ```
 
@@ -96,7 +96,7 @@ el.toXML({ name: 'Jane Doe', age: '18' });
 let xml = `<persons>
   <person c-bind="persons|array">
     <name>{{name|required}}</name>
-    <age>{{age|integer|required}}</age>
+		<age>{{age|integer|required}}</age>
   </person>
 </persons>`
 
@@ -104,11 +104,10 @@ let xml = `<persons>
 // now automatically getting transfered from and to strings.
 
 el.toXML({ persons: [
-	{ name: 'John Doe', age: 16 },
-	{ name: 'Jane Doe', age: 18 }
+  { name: 'John Doe', age: 16 },
+  { name: 'Jane Doe', age: 18 }
 ]});
 ```
-
   
   
 
