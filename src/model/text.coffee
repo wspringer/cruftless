@@ -1,5 +1,4 @@
 { parseExpr, extractValue } = require './util'
-Joi = require 'joi'
 _ = require 'lodash'
 types = require './types'
 
