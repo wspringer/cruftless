@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "jest",
-    "watch": "jest --watch"
+    "watch": "jest --watch",
+    "prepare": "coffee -c -o ./lib ./src"
   },
   "author": "",
   "license": "ISC",
