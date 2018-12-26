@@ -147,6 +147,7 @@ template = parse(`<foo><bar c-if="a">{{a}}</bar></foo>`);
 
 template.toXML({}); // RESULT
 template.toXML({ a: 3 }); // RESULT
+template.toXML({ a: null }); // RESULT
 ```
 
 ## Schema (incomplete, subject to change)
