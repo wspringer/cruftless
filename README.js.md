@@ -120,6 +120,8 @@ console.log(template.toXML({ persons: [
 ]}));
 ```
 
+## Alternative notation
+
 The `<!--persons|array-->` way of annotating an element is not the only way you are able to add metadata. Another way to add metadata to elements is by using one of the reserved attributes prefixed with `c-`. 
 
 ```javascript --run simple
@@ -129,6 +131,7 @@ template = parse(`<persons>
     <age>{{age|integer|required}}</age>
   </person>
 </persons>`);
+
 console.log(template.toXML({ persons: [
   { name: 'John Doe', age: 16 },
   { name: 'Jane Doe', age: 18 }
