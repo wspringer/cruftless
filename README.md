@@ -172,8 +172,9 @@ There may be times when you want to exclude entire sections of an XML structure 
 template = parse(`<foo><bar c-if="a">{{a}}</bar></foo>`);
 
 template.toXML({}); // ⇨ '<foo/>'
-template.toXML({ a: 3 }); // ⇨ '<foo><bar>3</bar></foo>'
 template.toXML({ a: null }); // ⇨ '<foo/>'
+template.toXML({ a: void 0 }); // ⇨ '<foo/>'
+template.toXML({ a: 3 }); // ⇨ '<foo><bar>3</bar></foo>'
 
 ```
 
