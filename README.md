@@ -173,6 +173,7 @@ template = parse(`<foo><bar c-if="a">{{a}}</bar></foo>`);
 
 template.toXML({}); // ⇨ '<foo/>'
 template.toXML({ a: 3 }); // ⇨ '<foo><bar>3</bar></foo>'
+template.toXML({ a: null }); // ⇨ '<foo/>'
 
 ```
 
