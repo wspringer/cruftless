@@ -179,19 +179,19 @@ describe 'the entire model', ->
     el = element('foo').content(
       text().integer().bind('a')
     ) 
-    expect(el.describe()).toEqual({ a: { type: 'integer' }})
+    expect(el.describe()).toEqual({ type: 'object', keys: { a: { type: 'integer' }}})
 
   it 'should return a type definition in nested object situations', ->
     el = element('foo').bind('c').content(
       text().integer().bind('a')
     ) 
-    expect(el.describe()).toEqual({"c": {"keys": {"a": {"type": "integer"}}, "type": "object"}})
+    expect(el.describe()).toEqual({ type: 'object', keys: {"c": {"keys": {"a": {"type": "integer"}}, "type": "object"}}})
 
   it 'should return a type definition in nested array situations', ->
     el = element('foo').bind('c').array().content(
       text().integer().bind('a')
     ) 
-    expect(el.describe()).toEqual({"c": {"element": {"a": {"type": "integer"}}, "type": "array"}})
+    expect(el.describe()).toEqual({ type: 'object', keys: {"c": {type: 'array', "element": { type: 'object', keys: {"a": {"type": "integer"}}}}}})
 
   it 'should handle complicated situations well', ->
     el = element('foo').bind('a').content(
@@ -202,7 +202,7 @@ describe 'the entire model', ->
         text().bind('b.c.e')
       )
     )
-    expect(el.describe()).toEqual({"a": {"keys": {"b": {"keys": {"c": {"keys": {"d": {"type": "string"}, "e": {"type": "string"}}, "type": "object"}}, "type": "object"}}, "type": "object"}})
+    expect(el.describe()).toEqual({"keys": {"a": {"keys": {"b": {"keys": {"c": {"keys": {"d": {"type": "string"}, "e": {"type": "string"}}, "type": "object"}}, "type": "object"}}, "type": "object"}}, "type": "object"})
 
   it 'should handle nested unbound elements', ->
     el = element('foo').content(
@@ -212,5 +212,5 @@ describe 'the entire model', ->
         )
       )
     )
-    expect(el.describe()).toEqual({"a": {"type": "string"}})
+    expect(el.describe()).toEqual({ type: 'object', keys: {"a": {"type": "string"}}})
 

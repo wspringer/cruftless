@@ -53,9 +53,9 @@ module.exports = (name) ->
         coll = meta.bind.get(obj) or []          
         coll.forEach iterator
       meta.describe = (obj) ->
-        res = { type: 'array', element: {} }
-        meta.attrs.forEach (item) -> item.describe(res.element)
-        meta.content.forEach (item) -> item.describe(res.element)
+        res = { type: 'array', element: { type: 'object', keys: {} } }
+        meta.attrs.forEach (item) -> item.describe(res.element.keys)
+        meta.content.forEach (item) -> item.describe(res.element.keys)
         meta.bind.describe(obj, res)  
         res
       exposed
@@ -76,7 +76,7 @@ module.exports = (name) ->
         res = { type: 'object', keys: {} }
         meta.attrs.forEach (item) -> item.describe(res.keys)
         meta.content.forEach (item) -> item.describe(res.keys)
-        meta.bind.describe(obj, res)  
+        meta.bind?.describe(obj, res)  
         res
       exposed
 
@@ -120,9 +120,14 @@ module.exports = (name) ->
     fromXML: (str) ->
       exposed.extract(parser.parseFromString(str).documentElement)
       
-    describe: (obj = {}) ->
-      meta.describe(obj)
-      obj
+    describe: (obj) ->
+      if obj?
+        meta.describe(obj)
+        obj
+      else 
+        obj = {}
+        meta.describe(obj)
+        { type: 'object', keys: obj }
       
 
 

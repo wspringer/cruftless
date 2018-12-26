@@ -145,14 +145,20 @@ let schema = template.describe();
 console.log(JSON.stringify(schema, null, 2));
 
 ⇒ {
-⇒   "persons": {
-⇒     "type": "array",
-⇒     "element": {
-⇒       "name": {
-⇒         "type": "string"
-⇒       },
-⇒       "age": {
-⇒         "type": "integer"
+⇒   "type": "object",
+⇒   "keys": {
+⇒     "persons": {
+⇒       "type": "array",
+⇒       "element": {
+⇒         "type": "object",
+⇒         "keys": {
+⇒           "name": {
+⇒             "type": "string"
+⇒           },
+⇒           "age": {
+⇒             "type": "integer"
+⇒           }
+⇒         }
 ⇒       }
 ⇒     }
 ⇒   }
