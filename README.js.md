@@ -124,7 +124,7 @@ The `<!--persons|array-->` way of annotating an element is not the only way you 
 
 ```javascript --run simple
 template = parse(`<persons>
-  <person><!--persons|array-->
+  <person c-bind="persons|array">
     <name>{{name|required}}</name>
     <age>{{age|integer|required}}</age>
   </person>
