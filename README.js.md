@@ -138,6 +138,17 @@ console.log(template.toXML({ persons: [
 ]}));
 ```
 
+## Conditionals
+
+There may be times when you want to exclude entire sections of an XML structure if a particular condition is met. Cruftless has some basic support for that, albeit limited. You can set conditions on elements, using the `c-if` attribute. In that case, the element will only be included in case the expression of the `c-if` attribute is evaluating to something else than `undefined` or `null`.
+
+```javascript --run simple
+template = parse(`<foo><bar c-if="a">{{a}}</bar></foo>`);
+
+template.toXML({}); // RESULT
+template.toXML({ a: 3 }); // RESULT
+```
+
 ## Schema (incomplete, subject to change)
 
 Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects. 
