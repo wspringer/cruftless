@@ -17,12 +17,12 @@ parser = (regex) ->
 
     parsed: parsed
 
-    apply: (context) ->
+    apply: (context, op = 'bind') ->
       if not(parsed?) or parsed.length is 0 then context.value(str)
       else 
         _.reduce(_.tail(parsed), (acc, term) ->
           if acc[term] then acc[term]() else acc
-        , context.bind(_.head(parsed)))          
+        , context[op](_.head(parsed)))          
 
 module.exports = 
   raw: parser(raw)

@@ -67,3 +67,6 @@ describe 'the builder', ->
     xml = '<foo><bar t="{{b}}"><!--a|array--></bar></foo>'
     expect(render(build(xml).generate(a: [ { b: 3 }, { b: 4 }]))).toEqual '<foo><bar t="3"/><bar t="4"/></foo>'
   
+  it 'should support conditionals', ->
+    xml = '<foo><bar c-if="a">{{a}}</bar></foo>'
+    expect(build(xml).toXML()).toEqual '<foo/>'

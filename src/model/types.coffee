@@ -16,3 +16,8 @@ module.exports =
     desc : type: 'float'
     from: (str) -> parseFloat()
     to: (value) -> value.toString()    
+
+  boolean:
+    desc: type: 'boolean'
+    from: (str) -> str is 'true'
+    to: (value) -> value.toString()

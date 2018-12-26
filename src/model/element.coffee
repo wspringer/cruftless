@@ -12,6 +12,7 @@ module.exports = (name) ->
     scope: (target) -> target or {}
     traverse: (obj, iterator) -> iterator(obj)
     describe: (obj) -> 
+      meta.if?.describe(obj, { type: 'any' })
       meta.attrs.forEach (item) -> item.describe(obj)
       meta.content.forEach (item) -> item.describe(obj)
       obj      
@@ -33,6 +34,10 @@ module.exports = (name) ->
     bind: (opts...) ->
       meta.bind = parseExpr(opts...) 
       exposed.object()     
+
+    if: (opts...) ->
+      meta.if = parseExpr(opts...)
+      exposed      
   
     array: ->
       meta.scope = (target) ->
@@ -54,6 +59,7 @@ module.exports = (name) ->
         coll.forEach iterator
       meta.describe = (obj) ->
         res = { type: 'array', element: { type: 'object', keys: {} } }
+        meta.if?.describe(obj, res)
         meta.attrs.forEach (item) -> item.describe(res.element.keys)
         meta.content.forEach (item) -> item.describe(res.element.keys)
         meta.bind.describe(obj, res)  
@@ -74,6 +80,7 @@ module.exports = (name) ->
         iterator(meta.bind.get(obj))
       meta.describe = (obj) ->
         res = { type: 'object', keys: {} }
+        meta.if?.describe(obj, res)
         meta.attrs.forEach (item) -> item.describe(res.keys)
         meta.content.forEach (item) -> item.describe(res.keys)
         meta.bind?.describe(obj, res)  
@@ -83,18 +90,19 @@ module.exports = (name) ->
     generate: (obj, context) ->
       doc = context?.ownerDocument or di.createDocument()      
       meta.traverse obj, (item) ->
-        el = 
-          if meta.ns?
-            doc.createElementNS(meta.ns, meta.name)
-          else
-            doc.createElement(meta.name)        
-        meta.attrs.forEach (attr) -> attr.generate(item, el)              
-        meta.content.forEach (node) -> node.generate(item, el)
-        if context? 
-          context.appendChild(el)
-          return
-        else 
-          return el     
+        if not(meta.if?) or meta.if.get(item)?
+          el = 
+            if meta.ns?
+              doc.createElementNS(meta.ns, meta.name)
+            else
+              doc.createElement(meta.name)        
+          meta.attrs.forEach (attr) -> attr.generate(item, el)              
+          meta.content.forEach (node) -> node.generate(item, el)
+          if context? 
+            context.appendChild(el)
+            return
+          else 
+            return el     
           
     toDOM: (obj) -> exposed.generate(obj)
 

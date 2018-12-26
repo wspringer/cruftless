@@ -214,3 +214,22 @@ describe 'the entire model', ->
     )
     expect(el.describe()).toEqual({ type: 'object', keys: {"a": {"type": "string"}}})
 
+  it 'should handle conditionals', ->
+    el = element('foo').content(
+      element('bar').if('a').content(
+        text().bind('a')
+      )
+    )
+    expect(el.toXML()).toEqual('<foo/>')
+
+  it 'should factor in conditionals in describing the model', ->
+    el = element('foo').content(
+      element('bar').if('b').content(
+        text().bind('a')
+      )
+    )      
+    expect(el.describe()).toEqual({ type: 'object', keys: { a: { type: 'string' }, b: { type: 'any' }}})
+
+
+
+    
