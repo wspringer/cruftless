@@ -136,6 +136,31 @@ console.log(template.toXML({ persons: [
 ⇒ </persons>
 ```
 
+The `<!--persons|array-->` way of annotating an element is not the only way you are able to add metadata. Another way to add metadata to elements is by using one of the reserved attributes prefixed with `c-`. 
+
+```javascript
+template = parse(`<persons>
+  <person><!--persons|array-->
+    <name>{{name|required}}</name>
+    <age>{{age|integer|required}}</age>
+  </person>
+</persons>`);
+console.log(template.toXML({ persons: [
+  { name: 'John Doe', age: 16 },
+  { name: 'Jane Doe', age: 18 }
+]}));
+
+⇒ <persons>
+⇒   <person>
+⇒     <name>John Doe</name>
+⇒     <age>16</age>
+⇒   </person><person>
+⇒     <name>Jane Doe</name>
+⇒     <age>18</age>
+⇒   </person>
+⇒ </persons>
+```
+
 ## Schema (incomplete, subject to change)
 
 Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects. 
