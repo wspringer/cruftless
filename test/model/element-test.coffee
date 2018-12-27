@@ -1,4 +1,4 @@
-{ element, attr, text } = require('../../src/template')()
+{ element, attr, text } = require('../../src/cruftless')()
 
 describe 'element', ->
 

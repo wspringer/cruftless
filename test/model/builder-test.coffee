@@ -1,4 +1,4 @@
-{ parse } = require('../../src/template')()
+{ parse } = require('../../src/cruftless')()
 XMLSerializer = require('xmldom').XMLSerializer
 
 describe 'the builder', ->
