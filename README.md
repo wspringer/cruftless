@@ -164,6 +164,32 @@ console.log(template.toXML({ persons: [
 ⇒ </persons>
 ```
 
+If you hate the magic `c-` prefixed attributes, then you can also a slightly less readable but admittedly more correct XML namespace:
+
+```javascript
+template = parse(`<persons>
+  <person xmlns:c="https://github.com/wspringer/cruftless" c:bind="persons|array">
+    <name>{{name|required}}</name>
+    <age>{{age|integer|required}}</age>
+  </person>
+</persons>`);
+
+console.log(template.toXML({ persons: [
+  { name: 'John Doe', age: 16 },
+  { name: 'Jane Doe', age: 18 }
+]}));
+
+⇒ <persons>
+⇒   <person>
+⇒     <name>John Doe</name>
+⇒     <age>16</age>
+⇒   </person><person>
+⇒     <name>Jane Doe</name>
+⇒     <age>18</age>
+⇒   </person>
+⇒ </persons>
+```
+
 ## Conditionals
 
 There may be times when you want to exclude entire sections of an XML structure if a particular condition is met. Cruftless has some basic support for that, albeit limited. You can set conditions on elements, using the `c-if` attribute. In that case, the element will only be included in case the expression of the `c-if` attribute is evaluating to something else than `undefined` or `null`.
@@ -177,6 +203,8 @@ template.toXML({ a: void 0 }); // ⇨ '<foo/>'
 template.toXML({ a: 3 }); // ⇨ '<foo><bar>3</bar></foo>'
 
 ```
+
+
 
 ## Schema (incomplete, subject to change)
 
