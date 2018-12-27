@@ -7,7 +7,7 @@ module.exports =
     from: _.identity
     to: _.identity
 
-  integer: 
+  integer:
     desc: type: 'integer'
     from: (str) -> parseInt(str)
     to: (value) -> value.toString()

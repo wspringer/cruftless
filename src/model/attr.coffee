@@ -26,7 +26,14 @@ module.exports = (name) ->
       meta.valueType = types.integer
       exposed
   
+    boolean: ->
+      meta.valueType = types.boolean
+      exposed        
 
+    type: (valueType) ->
+      meta.valueType = valueType
+      exposed
+  
     bind: (opts...) ->
       meta.bind = parseExpr(opts...) 
       exposed

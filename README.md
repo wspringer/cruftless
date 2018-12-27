@@ -204,8 +204,6 @@ template.toXML({ a: 3 }); // ⇨ '<foo><bar>3</bar></foo>'
 
 ```
 
-
-
 ## Schema (incomplete, subject to change)
 
 Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects. 
