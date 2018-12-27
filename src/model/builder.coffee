@@ -33,9 +33,9 @@ parse = (node) ->
 
       attrs = []
       forAllAttributes(node, (item) ->
-        if (item.namespaceURI is curlyNS) or (item.name is 'c-bind')
+        if (item.namespaceURI is curlyNS and item.localName is 'bind') or (item.name is 'c-bind')
           expr.raw(item.value).apply(el)
-        else if item.name is 'c-if'
+        else if (item.namespaceURI is curlyNS and item.localName is 'if') or (item.name is 'c-if')
           expr.raw(item.value).apply(el, 'if')
         else if item.prefix is 'xmlns'
         else
