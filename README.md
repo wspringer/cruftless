@@ -27,7 +27,7 @@ Cruftless builds a simplified metamodel of your XML document, and it's not based
 Then, using the builder API, Cruftless allows you to *build* a model of your document like this:
 
 ```javascript
-const { element, attr, text } = require('cruftless');
+const { element, attr, text } = require('cruftless')();
 
 let el = element('person').content(
   element('name').content(
@@ -94,7 +94,7 @@ let template = `<person>
   <age>{{age}}</age>
 </person>`
 
-const { parse } = require('cruftless');
+const { parse } = require('cruftless')();
 
 el = parse(template)
 console.log(el.toXML({ name: 'Jane Doe', age: '18' }));
@@ -203,6 +203,8 @@ template.toXML({ a: void 0 }); // ⇨ '<foo/>'
 template.toXML({ a: 3 }); // ⇨ '<foo><bar>3</bar></foo>'
 
 ```
+
+## Schema (incomplete, subject to change)
 
 Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects. 
   

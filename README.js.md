@@ -2,7 +2,7 @@
 require('coffeescript/register');
 runmd.onRequire = function(path) {
   if (path === 'cruftless') {
-    return './src/index.coffee';
+    return './src/cruftless.coffee';
   }
 }
 ```
@@ -32,7 +32,7 @@ Cruftless builds a simplified metamodel of your XML document, and it's not based
 Then, using the builder API, Cruftless allows you to *build* a model of your document like this:
 
 ```javascript --run simple
-const { element, attr, text } = require('cruftless');
+const { element, attr, text } = require('cruftless')();
 
 let el = element('person').content(
   element('name').content(
@@ -93,7 +93,7 @@ let template = `<person>
   <age>{{age}}</age>
 </person>`
 
-const { parse } = require('cruftless');
+const { parse } = require('cruftless')();
 
 el = parse(template)
 console.log(el.toXML({ name: 'Jane Doe', age: '18' }));
