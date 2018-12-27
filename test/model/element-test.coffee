@@ -1,4 +1,4 @@
-{ element, attr, text } = require '../../src/model/model'
+{ element, attr, text } = require('../../src/template')()
 
 describe 'element', ->
 

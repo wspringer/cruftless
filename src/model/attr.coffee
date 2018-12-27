@@ -2,7 +2,7 @@ _ = require 'lodash'
 { parseExpr, extractValue } = require './util'
 types = require './types'
 
-module.exports = (name) ->
+module.exports = (types) -> (name) ->
   meta = 
     name: name
     required: false
@@ -17,22 +17,6 @@ module.exports = (name) ->
     ns: (ns) ->
       meta.ns = ns
       exposed            
-
-    number: -> 
-      meta.valueType = types.float
-      exposed
-
-    integer: -> 
-      meta.valueType = types.integer
-      exposed
-  
-    boolean: ->
-      meta.valueType = types.boolean
-      exposed        
-
-    type: (valueType) ->
-      meta.valueType = valueType
-      exposed
   
     bind: (opts...) ->
       meta.bind = parseExpr(opts...) 
@@ -61,6 +45,11 @@ module.exports = (name) ->
     describe: (obj) ->
       meta.bind?.describe?(obj, meta.valueType.desc)      
 
+  _.forEach types, (value, key) -> 
+    exposed[key] = -> 
+      meta.valueType = value
+      exposed    
+    
   exposed
 
 

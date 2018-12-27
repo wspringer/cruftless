@@ -1,4 +1,4 @@
-{ element, text, attr } = require '../../src/model/model'
+{ element, attr, text } = require('../../src/template')()
 XMLSerializer = require('xmldom').XMLSerializer
 DOMParser = require('xmldom').DOMParser
 
@@ -243,20 +243,7 @@ describe 'the entire model', ->
       text().bind('a').boolean()
     )
     expect(el.toXML({ a: true })).toEqual('<foo>true</foo>')
-    expect(el.fromXML('<foo>true</foo>')).toEqual({ a: true })
-
-  it 'should be able to handle special types', ->
-    special = 
-      desc: type: 'boolean'
-      from: (str) -> str is 'True'
-      to: (value) -> if value then 'True' else 'False'
-    el = element('foo').content(
-      text().bind('a').type(special)
-    )
-    expect(el.toXML({ a: true })).toEqual('<foo>True</foo>')
-    expect(el.fromXML('<foo>False</foo>')).toEqual({ a: false })
-  
-  
+    expect(el.fromXML('<foo>true</foo>')).toEqual({ a: true })  
 
 
     
