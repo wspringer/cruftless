@@ -1,4 +1,4 @@
-{ element, text, attr } = require '../../src/model/model'
+{ element, attr, text } = require('../../src/template')()
 XMLSerializer = require('xmldom').XMLSerializer
 DOMParser = require('xmldom').DOMParser
 
@@ -28,6 +28,14 @@ describe 'element', ->
     expect(render(element('foo').generate())).toEqual '<foo/>'
     expect(render(element('foo').ns('http://eastpole.nl/').generate())).toEqual '<foo xmlns="http://eastpole.nl/"/>'
         
+
+  xit 'should allow you to have multiple namespaces', ->
+    el = element('foo').ns('http://foo.bar/').attrs(
+      attr('zaz').ns('http://yay.me/')
+    ).content(
+      element('bar').ns('http://bar.foo')
+    )
+    expect(el.toXML()).toEqual 'foo'
 
 
 describe 'the entire model', ->
@@ -230,6 +238,12 @@ describe 'the entire model', ->
     )      
     expect(el.describe()).toEqual({ type: 'object', keys: { a: { type: 'string' }, b: { type: 'any' }}})
 
+  it 'should be able to handle booleans', ->
+    el = element('foo').content(
+      text().bind('a').boolean()
+    )
+    expect(el.toXML({ a: true })).toEqual('<foo>true</foo>')
+    expect(el.fromXML('<foo>true</foo>')).toEqual({ a: true })  
 
 
     

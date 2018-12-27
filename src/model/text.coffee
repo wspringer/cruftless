@@ -2,7 +2,7 @@
 _ = require 'lodash'
 types = require './types'
 
-module.exports = ->
+module.exports = (types) -> () ->
   
   meta = 
     required: false
@@ -18,13 +18,13 @@ module.exports = ->
       meta.value = value
       exposed
 
-    number: -> 
-      meta.valueType = types.float
+    bind: (opts...) ->
+      meta.bind = parseExpr(opts...)
       exposed
 
-    integer: -> 
-      meta.valueType = types.integer
-      exposed
+    generate: (obj, context) ->
+      value = extractValue(meta, obj)
+      node = context.ownerDocument.createTextNode(meta.valueType.to(value))
 
     bind: (opts...) ->
       meta.bind = parseExpr(opts...)
@@ -32,7 +32,7 @@ module.exports = ->
 
     generate: (obj, context) ->
       value = extractValue(meta, obj)
-      node = context.ownerDocument.createTextNode(value)
+      node = context.ownerDocument.createTextNode(meta.valueType.to(value))
       context.appendChild(node)
       return
 
@@ -44,6 +44,11 @@ module.exports = ->
 
     describe: (obj) ->
       meta.bind?.describe?(obj, meta.valueType.desc)      
-    
+  
+  _.forEach types, (value, key) -> 
+    exposed[key] = -> 
+      meta.valueType = value
+      exposed    
+      
   exposed
 

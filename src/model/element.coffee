@@ -4,7 +4,7 @@ parser = new(require('xmldom').DOMParser)
 
 { parseExpr } = require './util'
 
-module.exports = (name) ->
+module.exports = (types) -> (name) ->
   meta = 
     name: name
     attrs: []
