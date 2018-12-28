@@ -18,7 +18,7 @@ module.exports = (opts) ->
   parse = (node) ->
     switch node.nodeType 
       when 1
-        el = element(node.localName)
+        el = element(node.tagName)
         if node.namespaceURI then el.ns(node.namespaceURI)
   
         childNodes = Array.from(node.childNodes)
