@@ -20,16 +20,6 @@ describe 'element', ->
     expect(element('foo').toXML()).toEqual '<foo/>'
     expect(element('foo').ns('http://eastpole.nl/').toXML()).toEqual '<foo xmlns="http://eastpole.nl/"/>'
         
-
-  xit 'should allow you to have multiple namespaces', ->
-    el = element('foo').ns('http://foo.bar/').attrs(
-      attr('zaz').ns('http://yay.me/')
-    ).content(
-      element('bar').ns('http://bar.foo')
-    )
-    expect(el.toXML()).toEqual 'foo'
-
-
 describe 'the entire model', ->
 
 
