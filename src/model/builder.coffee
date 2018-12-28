@@ -50,6 +50,8 @@ module.exports = (opts) ->
         el
       when 3
         expr.curly(node.textContent).apply(text())
+      when 4
+        expr.curly(node.data).apply(text())
 
   (xml) ->
     parse(new DOMParser().parseFromString(xml).documentElement)

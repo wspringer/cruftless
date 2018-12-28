@@ -70,3 +70,7 @@ describe 'the builder', ->
   it 'should support conditionals with namespaces', ->
     xml = '<foo><bar xmlns:c="https://github.com/wspringer/cruftless" c:if="a">{{a}}</bar></foo>'    
     expect(parse(xml).toXML()).toEqual '<foo/>'
+
+  it 'should handle CDATA', ->
+    xml = '<foo><![CDATA[Bad <strong>stuff</strong>]]></foo>'
+    expect(parse(xml).toXML()).toEqual "<foo>Bad &lt;strong>stuff&lt;/strong></foo>"
