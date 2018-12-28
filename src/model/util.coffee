@@ -21,14 +21,23 @@ parsePath = (str) ->
   
   describe = (obj, type) ->
     context = _.reduce(_.initial(segments), (acc, segment) ->
-      if acc[segment]? 
+      if acc[segment]? and acc[segment].type isnt 'any'
         acc[segment].keys
       else 
         obj = { type: 'object', keys: {} }
         acc[segment] = obj
         obj.keys
     , obj)
-    context[_.last(segments)] = type
+    last = _.last(segments)
+    ptr = context[last]
+    if type.type is 'object' and ptr?.type is 'object' 
+      merged = {
+        type: 'object'
+        keys: _.merge({}, type.keys, ptr.keys)
+      }
+      context[last] = merged
+    else
+      context[last] = type unless context[last]? and type.type is 'any'
 
   { set, get, describe }  
 

@@ -49,6 +49,6 @@ module.exports = (types) -> () ->
     exposed[key] = -> 
       meta.valueType = value
       exposed    
-      
+
   exposed
 
