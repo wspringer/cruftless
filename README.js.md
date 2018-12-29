@@ -170,10 +170,17 @@ template.toXML({ a: 3 }); // RESULT
 If your template contains variable references, and the data structure you are passing in does not contain these references, then — instead of generating the value `undefined`, Cruftless will drop the entire element. In fact, if a deeply nested element contains references to variable, and that variable is not defined, then it will not only drop *that* element, but all elements that included that element referring to a non-existing variable. 
 
 ```javascript --run simple
-template = parse('<level1><level2 b="{{b}}"><level3>{{a}}</level3></level2></level1>')
+template = parse(`<level1>
+  <level2 b="{{b}}">
+    <level3>{{a}}</level3>
+  </level2>
+</level1>`);
 
-template.toXML({ b: 2 }); // RESULT
-template.toXML({ b: 2, a: 3 }); // RESULT
+console.log(template.toXML({ b: 2 }));
+```
+
+```javascript --run simple
+console.log(template.toXML({ b: 2, a: 3 }));
 ```
 
 ## Schema (incomplete, subject to change)
