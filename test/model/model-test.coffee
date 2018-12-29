@@ -211,5 +211,35 @@ describe 'the entire model', ->
     expect(el.toXML({ a: true })).toEqual('<foo>true</foo>')
     expect(el.fromXML('<foo>true</foo>')).toEqual({ a: true })  
 
+  it 'should not include nested elements if they\'re not bound', ->
+    el = element('foo').content(
+      element('bar').content(
+        text().bind('a')
+      )
+    )    
+    expect(el.toXML()).toEqual('<foo/>')
 
+  it 'should not include text if the variables are missing', ->
+    el = element('foo').content(
+      text().bind('a')
+    )    
+    expect(el.toXML()).toEqual('<foo/>')
+
+  it 'should not include nested elements if the variables are missing', ->
+    el = element('foo').content(
+      element('bar').content(
+        text().bind('a')
+      )
+    )
+    expect(el.toXML()).toEqual('<foo/>')
+
+  it 'should not include nested elements with bound attributes if the variables are missing', ->
+    el = element('foo').content(
+      element('bar').attrs(
+        attr('baz').bind('a')
+      )
+    )
+    expect(el.toXML()).toEqual('<foo/>')
+    expect(el.toXML({ a: 3 })).toEqual('<foo><bar baz="3"/></foo>')
+  
     

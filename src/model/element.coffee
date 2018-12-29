@@ -1,6 +1,7 @@
 serializer = new(require('xmldom').XMLSerializer)
 di = new(require('xmldom').DOMImplementation)
 parser = new(require('xmldom').DOMParser)
+_ = require 'lodash'
 
 { parseExpr } = require './util'
 
@@ -90,20 +91,30 @@ module.exports = (types) -> (name) ->
     generate: (obj, context) ->
       doc = context?.ownerDocument or di.createDocument()      
       meta.traverse obj, (item) ->
-        if not(meta.if?) or meta.if.get(item)?
+        if (not(meta.if?) or meta.if.get(item)?)
           el = 
             if meta.ns?
               doc.createElementNS(meta.ns, meta.name)
             else
               doc.createElement(meta.name)        
           meta.attrs.forEach (attr) -> attr.generate(item, el)              
-          meta.content.forEach (node) -> node.generate(item, el)
+          meta.content.forEach (node) -> 
+            if node.isSet(item)
+              node.generate(item, el)
           if context? 
             context.appendChild(el)
             return
           else 
             return el     
-          
+
+    isSet: (obj) ->
+      (_.isEmpty(meta.attrs) and _.isEmpty(meta.content)) or (
+        checked = false 
+        meta.traverse obj, (item) ->
+          checked = checked or _.some(meta.attrs.concat(meta.content), (x) -> x.isSet(item))
+        checked
+      )
+
     toDOM: (obj) -> exposed.generate(obj)
 
     toXML: (obj) ->
