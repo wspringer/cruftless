@@ -1,4 +1,7 @@
 _ = require 'lodash'
+parse = require '../expr/parse'
+
+re = /([a-zA-Z0-9]+)(?:\[([0-9]+)\])?/
 
 parsePath = (str) ->
   segments = str.split('.')

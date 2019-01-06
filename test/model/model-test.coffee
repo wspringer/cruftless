@@ -241,5 +241,14 @@ describe 'the entire model', ->
     )
     expect(el.toXML()).toEqual('<foo/>')
     expect(el.toXML({ a: 3 })).toEqual('<foo><bar baz="3"/></foo>')
+
+  xit 'should work with array annotations', ->
+    el = element('foo').content(
+      element('bar').attrs(
+        attr('key').value('Person[1].Name')
+      ).content(
+        text().bind('persons[0].name')
+      )
+    )    
   
     
