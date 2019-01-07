@@ -1,45 +1,14 @@
 _ = require 'lodash'
+accessor = require '../expr/accessor'
+
+re = /([a-zA-Z0-9]+)(?:\[([0-9]+)\])?/
 
 parsePath = (str) ->
   segments = str.split('.')
   
-  set = (obj, value) ->
-    context = _.reduce(_.initial(segments), (acc, segment) ->
-      if acc[segment]? 
-        acc[segment]
-      else 
-        obj = {}
-        acc[segment] = obj
-        obj
-    , obj)
-    context[_.last(segments)] = value
-  
-  get = (obj) ->
-    _.reduce(segments, (acc, segment) ->
-      if acc? then acc[segment]
-    , obj)
-  
-  describe = (obj, type) ->
-    context = _.reduce(_.initial(segments), (acc, segment) ->
-      if acc[segment]? and acc[segment].type isnt 'any'
-        acc[segment].keys
-      else 
-        obj = { type: 'object', keys: {} }
-        acc[segment] = obj
-        obj.keys
-    , obj)
-    last = _.last(segments)
-    ptr = context[last]
-    if type.type is 'object' and ptr?.type is 'object' 
-      merged = {
-        type: 'object'
-        keys: _.merge({}, type.keys, ptr.keys)
-      }
-      context[last] = merged
-    else
-      context[last] = type unless context[last]? and type.type is 'any'
-
-  { set, get, describe }  
+  { set, get, descriptor } = accessor.of(str)
+    
+  { set, get, descriptor }    
 
 
 module.exports = 

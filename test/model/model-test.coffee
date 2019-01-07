@@ -169,19 +169,19 @@ describe 'the entire model', ->
     el = element('foo').content(
       text().integer().bind('a')
     ) 
-    expect(el.describe()).toEqual({ type: 'object', keys: { a: { type: 'integer' }}})
+    expect(el.descriptor()).toEqual({ type: 'object', keys: { a: { type: 'integer' }}})
 
   it 'should return a type definition in nested object situations', ->
     el = element('foo').bind('c').content(
       text().integer().bind('a')
     ) 
-    expect(el.describe()).toEqual({ type: 'object', keys: {"c": {"keys": {"a": {"type": "integer"}}, "type": "object"}}})
+    expect(el.descriptor()).toEqual({ type: 'object', keys: {"c": {"keys": {"a": {"type": "integer"}}, "type": "object"}}})
 
   it 'should return a type definition in nested array situations', ->
     el = element('foo').bind('c').array().content(
       text().integer().bind('a')
     ) 
-    expect(el.describe()).toEqual({ type: 'object', keys: {"c": {type: 'array', "element": { type: 'object', keys: {"a": {"type": "integer"}}}}}})
+    expect(el.descriptor()).toEqual({ type: 'object', keys: {"c": {type: 'array', "element": { type: 'object', keys: {"a": {"type": "integer"}}}}}})
 
   it 'should handle complicated situations well', ->
     el = element('foo').bind('a').content(
@@ -192,7 +192,7 @@ describe 'the entire model', ->
         text().bind('b.c.e')
       )
     )
-    expect(el.describe()).toEqual({"keys": {"a": {"keys": {"b": {"keys": {"c": {"keys": {"d": {"type": "string"}, "e": {"type": "string"}}, "type": "object"}}, "type": "object"}}, "type": "object"}}, "type": "object"})
+    expect(el.descriptor()).toEqual({"keys": {"a": {"keys": {"b": {"keys": {"c": {"keys": {"d": {"type": "string"}, "e": {"type": "string"}}, "type": "object"}}, "type": "object"}}, "type": "object"}}, "type": "object"})
 
   it 'should handle nested unbound elements', ->
     el = element('foo').content(
@@ -202,7 +202,7 @@ describe 'the entire model', ->
         )
       )
     )
-    expect(el.describe()).toEqual({ type: 'object', keys: {"a": {"type": "string"}}})
+    expect(el.descriptor()).toEqual({ type: 'object', keys: {"a": {"type": "string"}}})
 
   it 'should be able to handle booleans', ->
     el = element('foo').content(
@@ -211,5 +211,47 @@ describe 'the entire model', ->
     expect(el.toXML({ a: true })).toEqual('<foo>true</foo>')
     expect(el.fromXML('<foo>true</foo>')).toEqual({ a: true })  
 
+  it 'should not include nested elements if they\'re not bound', ->
+    el = element('foo').content(
+      element('bar').content(
+        text().bind('a')
+      )
+    )    
+    expect(el.toXML()).toEqual('<foo/>')
 
+  it 'should not include text if the variables are missing', ->
+    el = element('foo').content(
+      text().bind('a')
+    )    
+    expect(el.toXML()).toEqual('<foo/>')
+
+  it 'should not include nested elements if the variables are missing', ->
+    el = element('foo').content(
+      element('bar').content(
+        text().bind('a')
+      )
+    )
+    expect(el.toXML()).toEqual('<foo/>')
+
+  it 'should not include nested elements with bound attributes if the variables are missing', ->
+    el = element('foo').content(
+      element('bar').attrs(
+        attr('baz').bind('a')
+      )
+    )
+    expect(el.toXML()).toEqual('<foo/>')
+    expect(el.toXML({ a: 3 })).toEqual('<foo><bar baz="3"/></foo>')
+
+  it 'should work with array annotations', ->
+    el = element('foo').content(
+      element('bar').attrs(
+        attr('key').value('Person[1].Name')
+      ).content(
+        text().bind('persons[0].name')
+      ).if('persons[0].name')
+    )    
+    expect(el.toXML({ persons: [ { name: 'Joe' }] })).toEqual("<foo><bar key=\"Person[1].Name\">Joe</bar></foo>")
+    expect(el.toXML({ persons: []})).toEqual("<foo/>")
+    expect(el.fromXML('<foo><bar key="Person[1].name">Joe</bar></foo>')).toEqual({ persons: [ { name: 'Joe' } ] })
+  
     

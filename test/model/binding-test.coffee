@@ -1,4 +1,4 @@
-expr = require '../../src/model/expr'
+expr = require '../../src/model/binding'
 
 describe 'the expr parser', ->
 

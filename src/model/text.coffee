@@ -40,10 +40,15 @@ module.exports = (types) -> () ->
       node.nodeType is 3
 
     extract: (node, target) ->
+      obj = {}
+      meta.bind.set(obj, 'Joe')
       meta.bind.set(target, meta.valueType.from(node.textContent))
 
-    describe: (obj) ->
-      meta.bind?.describe?(obj, meta.valueType.desc)      
+    descriptor: ->
+      meta.bind?.descriptor(meta.valueType.desc)      
+
+    isSet: (obj) ->
+      meta.required or not(meta.bind) or meta.bind.get(obj)?
   
   _.forEach types, (value, key) -> 
     exposed[key] = -> 

@@ -1,6 +1,6 @@
 DOMParser = require('xmldom').DOMParser
 _ = require 'lodash'
-expr = require './expr'
+binding = require './binding'
 curlyNS = 'https://github.com/wspringer/cruftless'
 
 forAllAttributes = (node, fn) ->
@@ -25,7 +25,7 @@ module.exports = (opts) ->
   
         commentNode = childNodes.find (node) -> node.nodeType is 8 
         if commentNode? 
-          expr.raw(commentNode.textContent).apply(el)
+          binding.raw(commentNode.textContent).apply(el)
   
         content = 
           childNodes
@@ -36,12 +36,12 @@ module.exports = (opts) ->
         attrs = []
         forAllAttributes(node, (item) ->
           if (item.namespaceURI is curlyNS and item.localName is 'bind') or (item.name is 'c-bind')
-            expr.raw(item.value).apply(el)
+            binding.raw(item.value).apply(el)
           else if (item.namespaceURI is curlyNS and item.localName is 'if') or (item.name is 'c-if')
-            expr.raw(item.value).apply(el, 'if')
+            binding.raw(item.value).apply(el, 'if')
           else if item.prefix is 'xmlns'
           else
-            res = expr.curly(item.value).apply(attr(item.name))
+            res = binding.curly(item.value).apply(attr(item.name))
             if item.namespaceURI then res.ns(item.namespaceURI)
             attrs.push(res)
         )
@@ -49,9 +49,9 @@ module.exports = (opts) ->
   
         el
       when 3
-        expr.curly(node.textContent).apply(text())
+        binding.curly(node.textContent).apply(text())
       when 4
-        expr.curly(node.data).apply(text())
+        binding.curly(node.data).apply(text())
 
   (xml) ->
     parse(new DOMParser().parseFromString(xml).documentElement)

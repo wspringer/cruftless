@@ -16,11 +16,11 @@ describe 'conditionals', ->
         text().bind('a')
       )
     )      
-    expect(el.describe()).toEqual({ type: 'object', keys: { a: { type: 'string' }, b: { type: 'any' }}})
+    expect(el.descriptor()).toEqual({ type: 'object', keys: { a: { type: 'string' }, b: { type: 'any' }}})
 
   it 'should be able to handle conditionals in templates', ->
     el = parse('''
     <foo><bar c-if="a">{{a.b}}</bar></foo>
     ''')
-    expect(el.describe()).toEqual({"keys": {"a": {"keys": {"b": {"type": "string"}}, "type": "object"}}, "type": "object"})
+    expect(el.descriptor()).toEqual({"keys": {"a": {"keys": {"b": {"type": "string"}}, "type": "object"}}, "type": "object"})
 

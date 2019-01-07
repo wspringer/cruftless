@@ -42,8 +42,11 @@ module.exports = (types) -> (name) ->
             elem.getAttribute(meta.name)        
         if value? then meta.bind.set(target, meta.valueType.from(value))
 
-    describe: (obj) ->
-      meta.bind?.describe?(obj, meta.valueType.desc)      
+    descriptor: ->
+      meta.bind?.descriptor(meta.valueType.desc)      
+
+    isSet: (obj) ->
+      not(meta.bind) or meta.bind.get(obj)?
 
   _.forEach types, (value, key) -> 
     exposed[key] = -> 

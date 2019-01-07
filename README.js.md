@@ -159,7 +159,7 @@ console.log(template.toXML({ persons: [
 There may be times when you want to exclude entire sections of an XML structure if a particular condition is met. Cruftless has some basic support for that, albeit limited. You can set conditions on elements, using the `c-if` attribute. In that case, the element will only be included in case the expression of the `c-if` attribute is evaluating to something else than `undefined` or `null`.
 
 ```javascript --run simple
-template = parse(`<foo><bar c-if="a">{{a}}</bar></foo>`);
+template = parse(`<foo><bar c-if="a">text</bar></foo>`);
 
 template.toXML({}); // RESULT
 template.toXML({ a: null }); // RESULT
@@ -167,12 +167,28 @@ template.toXML({ a: void 0 }); // RESULT
 template.toXML({ a: 3 }); // RESULT
 ```
 
+If your template contains variable references, and the data structure you are passing in does not contain these references, then — instead of generating the value `undefined`, Cruftless will drop the entire element. In fact, if a deeply nested element contains references to variable, and that variable is not defined, then it will not only drop *that* element, but all elements that included that element referring to a non-existing variable. 
+
+```javascript --run simple
+template = parse(`<level1>
+  <level2 b="{{b}}">
+    <level3>{{a}}</level3>
+  </level2>
+</level1>`);
+
+console.log(template.toXML({ b: 2 }));
+```
+
+```javascript --run simple
+console.log(template.toXML({ b: 2, a: 3 }));
+```
+
 ## Schema (incomplete, subject to change)
 
 Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects. 
   
 ```javascript --run simple
-let schema = template.describe();
+let schema = template.descriptor();
 console.log(JSON.stringify(schema, null, 2));
 ```  
 
