@@ -188,7 +188,7 @@ console.log(template.toXML({ b: 2, a: 3 }));
 Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects. 
   
 ```javascript --run simple
-let schema = template.describe();
+let schema = template.descriptor();
 console.log(JSON.stringify(schema, null, 2));
 ```  
 
