@@ -4,12 +4,13 @@ _ = require 'lodash'
 accessor = (gen, desc) -> (key) ->
   set: (obj, value) -> obj[key] = value
   get: (obj) -> obj[key]
-  getOrCreate: (obj) -> 
+  getOrCreate: (obj, nextGen) -> 
     if obj[key]? then obj[key]
     else 
-      value = gen()
+      value = nextGen()
       obj[key] = value
       value
+  gen: gen    
   describe: (type) ->
     desc(key, type)
 
@@ -31,24 +32,27 @@ module.exports =
         when 'property' then property(segment.key)
     
     set: (obj, value) ->
-      context = _.reduce(_.initial(segments), (acc, segment) ->
-        segment.getOrCreate(acc)
+      context = _.reduce(_.initial(segments), (acc, segment, index) ->
+        segment.getOrCreate(acc, segments[index + 1].gen)
       , obj)
       _.last(segments).set(context, value)
 
     get: (obj) ->
       _.reduce(segments, (acc, segment) ->
-        segment.get(acc)
+        if acc? then segment.get(acc)
       , obj)
 
     descriptor: (type = { type: 'any' }) ->
       _.chain(segments)
+      .clone()
       .reverse()
       .reduce((acc, segment) ->
         segment.describe(acc)
       , type) 
       .value()
 
+    describe: (target, type) ->
+      _.merge(target, @descriptor(type))
       
 
 

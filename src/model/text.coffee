@@ -40,6 +40,10 @@ module.exports = (types) -> () ->
       node.nodeType is 3
 
     extract: (node, target) ->
+      console.info 'TARGET', target, meta.bind.descriptor(meta.valueType.desc)
+      obj = {}
+      meta.bind.set(obj, 'Joe')
+      console.info 'JOE', obj
       meta.bind.set(target, meta.valueType.from(node.textContent))
 
     describe: (obj) ->

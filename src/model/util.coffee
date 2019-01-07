@@ -1,27 +1,13 @@
 _ = require 'lodash'
-parse = require '../expr/parse'
+accessor = require '../expr/accessor'
 
 re = /([a-zA-Z0-9]+)(?:\[([0-9]+)\])?/
 
 parsePath = (str) ->
   segments = str.split('.')
   
-  set = (obj, value) ->
-    context = _.reduce(_.initial(segments), (acc, segment) ->
-      if acc[segment]? 
-        acc[segment]
-      else 
-        obj = {}
-        acc[segment] = obj
-        obj
-    , obj)
-    context[_.last(segments)] = value
-  
-  get = (obj) ->
-    _.reduce(segments, (acc, segment) ->
-      if acc? then acc[segment]
-    , obj)
-  
+  { set, get, descriptor } = accessor.of(str)
+    
   describe = (obj, type) ->
     context = _.reduce(_.initial(segments), (acc, segment) ->
       if acc[segment]? and acc[segment].type isnt 'any'
@@ -42,7 +28,7 @@ parsePath = (str) ->
     else
       context[last] = type unless context[last]? and type.type is 'any'
 
-  { set, get, describe }  
+  { set, get, describe, descriptor }    
 
 
 module.exports = 
@@ -51,6 +37,7 @@ module.exports =
   parseExpr: (opts...) ->
     switch opts.length
       when 1 
+        console.info 'Calling', opts[0]
         parsePath(opts[0])
       when 2
         [ get, set ] = opts

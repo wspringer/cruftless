@@ -242,13 +242,16 @@ describe 'the entire model', ->
     expect(el.toXML()).toEqual('<foo/>')
     expect(el.toXML({ a: 3 })).toEqual('<foo><bar baz="3"/></foo>')
 
-  xit 'should work with array annotations', ->
+  it 'should work with array annotations', ->
     el = element('foo').content(
       element('bar').attrs(
         attr('key').value('Person[1].Name')
       ).content(
         text().bind('persons[0].name')
-      )
+      ).if('persons[0].name')
     )    
+    expect(el.toXML({ persons: [ { name: 'Joe' }] })).toEqual("<foo><bar key=\"Person[1].Name\">Joe</bar></foo>")
+    expect(el.toXML({ persons: []})).toEqual("<foo/>")
+    expect(el.fromXML('<foo><bar key="Person[1].name">Joe</bar></foo>')).toEqual({ persons: [ { name: 'Joe' } ] })
   
     

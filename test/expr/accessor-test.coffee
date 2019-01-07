@@ -18,6 +18,7 @@ describe 'the accessor', ->
     it 'should allow you to access array values directly', ->
       expect(accessor.of('[1]').get(['a', 'b'])).toEqual('b')
   
+
   describe 'its set method', ->
     
     it 'should allow you to set object values', ->
@@ -67,6 +68,12 @@ describe 'the accessor', ->
       accessor.of('[0][1]').set(arr, 2)
       expect(arr).toEqual([[1, 2], [3, 4]])      
 
+    it 'should handle order correctly and not be affected by the implementation of a descriptor method', ->
+      obj = {}
+      accessor.of('persons[0].name').set(obj, 'Joe')      
+      expect(obj).toEqual({ persons: [ { name: 'Joe' } ] })
+
+
   describe 'its descriptor method', ->
   
     it 'should handle simple object references', ->
@@ -80,3 +87,14 @@ describe 'the accessor', ->
         {"keys": {"a": {"element": {"keys": {"b": {"element": {"element": {"type": "any"}, "type": "array"}, "type": "array"}}, "type": "object"}, "type": "array"}}, "type": "object"}
       )      
 
+  describe 'its describe method', ->
+    
+    it 'should merge data with the target getting passed in', ->
+      merged = accessor.of('a.b').describe({
+        type: 'object'
+        keys: {
+          d: { type: 'integer' }
+          e: { type: 'boolean' }
+        }
+      })
+      expect(merged).toEqual({"keys": {"a": {"keys": {"b": {"type": "any"}}, "type": "object"}, "d": {"type": "integer"}, "e": {"type": "boolean"}}, "type": "object"})
