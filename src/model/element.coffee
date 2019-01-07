@@ -12,11 +12,13 @@ module.exports = (types) -> (name) ->
     content: []
     scope: (target) -> target or {}
     traverse: (obj, iterator) -> iterator(obj)
-    describe: (obj) -> 
-      meta.if?.describe(obj, { type: 'any' })
-      meta.attrs.forEach (item) -> item.describe(obj)
-      meta.content.forEach (item) -> item.describe(obj)
-      obj      
+    descriptor: ->
+      concatenated = _.concat(
+        meta.if?.descriptor()
+        meta.attrs.map (item) -> item.descriptor()
+        meta.content.map (item) -> item.descriptor()          
+      )
+      _.merge(_.reject(concatenated, _.isUndefined)...)
 
   exposed = 
   
@@ -58,13 +60,17 @@ module.exports = (types) -> (name) ->
       meta.traverse = (obj, iterator) ->
         coll = meta.bind.get(obj) or []          
         coll.forEach iterator
-      meta.describe = (obj) ->
-        res = { type: 'array', element: { type: 'object', keys: {} } }
-        meta.if?.describe(obj, res)
-        meta.attrs.forEach (item) -> item.describe(res.element.keys)
-        meta.content.forEach (item) -> item.describe(res.element.keys)
-        meta.bind.describe(obj, res)  
-        res
+      meta.descriptor = ->
+        concatenated = _.concat(
+          meta.if?.descriptor()
+          meta.attrs.map (item) -> item.descriptor()
+          meta.content.map (item) -> item.descriptor()          
+        )
+        result = { type: 'array', element: _.merge(_.reject(concatenated, _.isUndefined)...) }
+        if meta.bind?
+          meta.bind.descriptor(result)
+        else 
+          result
       exposed
         
     object: ->
@@ -79,13 +85,16 @@ module.exports = (types) -> (name) ->
           scope
       meta.traverse = (obj, iterator) ->
         iterator(meta.bind.get(obj))
-      meta.describe = (obj) ->
-        res = { type: 'object', keys: {} }
-        meta.if?.describe(obj, res)
-        meta.attrs.forEach (item) -> item.describe(res.keys)
-        meta.content.forEach (item) -> item.describe(res.keys)
-        meta.bind?.describe(obj, res)  
-        res
+      meta.descriptor = ->
+        merged = _.merge(_.reject(_.concat(
+          meta.if?.descriptor()
+          meta.attrs.map (item) -> item.descriptor()
+          meta.content.map (item) -> item.descriptor()          
+        ), _.isUndefined)...)
+        if meta.bind?
+          meta.bind.descriptor(merged)
+        else 
+          merged
       exposed
 
     generate: (obj, context) ->
@@ -139,6 +148,9 @@ module.exports = (types) -> (name) ->
     fromXML: (str) ->
       exposed.extract(parser.parseFromString(str).documentElement)
       
+    descriptor: ->
+      meta.descriptor()
+
     describe: (obj) ->
       if obj?
         meta.describe(obj)
