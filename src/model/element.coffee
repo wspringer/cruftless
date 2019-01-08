@@ -139,8 +139,11 @@ module.exports = (types) -> (name) ->
       meta.attrs.forEach (attr) ->
         attr.extract(elem, scope)        
       Array.from(elem.childNodes).forEach (child) ->
-        match = meta.content.find (nodeDef) -> nodeDef.matches(child)        
-        match.extract(child, scope)
+        match = meta.content.find (nodeDef) -> nodeDef.matches(child) 
+        if match?
+          match.extract(child, scope)
+        else
+          console.error("Missing definition for `#{child.localName}`") unless match?               
       target  
 
     fromDOM: (elem) -> exposed.extract(elem)  

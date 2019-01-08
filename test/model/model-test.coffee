@@ -254,4 +254,10 @@ describe 'the entire model', ->
     expect(el.toXML({ persons: []})).toEqual("<foo/>")
     expect(el.fromXML('<foo><bar key="Person[1].name">Joe</bar></foo>')).toEqual({ persons: [ { name: 'Joe' } ] })
   
-    
+  it 'should survive content getting passed in that is not matching', ->
+    el = element('foo').content(
+      element('bar').content(
+        text().bind('a')
+      )
+    )    
+    expect(el.fromXML('<foo><zaz/></foo>')).toEqual({})
