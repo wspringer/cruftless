@@ -132,7 +132,7 @@ module.exports = (types) -> (name) ->
     matches: (elem) ->
       elem.nodeType is 1 and elem.localName is meta.name and (
         not(meta.ns?) or meta.ns is elem.namespaceURI
-      )
+      ) and (elem.attributes.length is meta.attrs.length) and _.every meta.attrs, (attr) -> attr.definedOn(elem)
 
     extract: (elem, target = {}) ->    
       scope = meta.scope(target)  
@@ -140,10 +140,7 @@ module.exports = (types) -> (name) ->
         attr.extract(elem, scope)        
       Array.from(elem.childNodes).forEach (child) ->
         match = meta.content.find (nodeDef) -> nodeDef.matches(child) 
-        if match?
-          match.extract(child, scope)
-        else
-          console.error("Missing definition for `#{child.localName}`") unless match?               
+        match?.extract(child, scope)
       target  
 
     fromDOM: (elem) -> exposed.extract(elem)  

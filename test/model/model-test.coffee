@@ -1,4 +1,4 @@
-{ element, attr, text } = require('../../src/cruftless')()
+{ element, attr, text, parse } = require('../../src/cruftless')()
 
 describe 'element', ->
 
@@ -252,7 +252,7 @@ describe 'the entire model', ->
     )    
     expect(el.toXML({ persons: [ { name: 'Joe' }] })).toEqual("<foo><bar key=\"Person[1].Name\">Joe</bar></foo>")
     expect(el.toXML({ persons: []})).toEqual("<foo/>")
-    expect(el.fromXML('<foo><bar key="Person[1].name">Joe</bar></foo>')).toEqual({ persons: [ { name: 'Joe' } ] })
+    expect(el.fromXML el.toXML({ persons: [ { name: 'Joe' }] })).toEqual({ persons: [ { name: 'Joe' } ] })
   
   it 'should survive content getting passed in that is not matching', ->
     el = element('foo').content(
@@ -261,3 +261,69 @@ describe 'the entire model', ->
       )
     )    
     expect(el.fromXML('<foo><zaz/></foo>')).toEqual({})
+
+  it 'should not fail on this', ->  
+    source = '''<CustomerSignupRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" MajorVersion="2" MinorVersion="0">
+    <Header>
+      <MessageId>c74894f9-1030-41ac-9aae-cbc5e6ee69a0</MessageId>
+    </Header></CustomerSignupRequest>'''
+    el = parse(source)
+    expect(el.fromXML(source)).toEqual({})
+
+  it 'should not fail on this either', ->
+    source = '''<DynamicAttributes>
+    <KeyGroup>
+        <Value key="opt-in">
+            {{optIn}}
+        </Value>
+        <Value key="IdentifiedSince">
+            {{since}}
+        </Value>
+    </KeyGroup></DynamicAttributes>'''
+    el = parse(source)
+    xml = el.toXML()
+    expect(xml).toEqual('''<DynamicAttributes>
+    <KeyGroup>
+        <Value key=\"opt-in\"/>
+        <Value key=\"IdentifiedSince\"/>
+    </KeyGroup></DynamicAttributes>''')
+    expect(el.fromXML(xml)).toEqual({})
+    xml = el.toXML({optIn : true})
+    expect(xml).toEqual('''<DynamicAttributes>
+    <KeyGroup>
+        <Value key=\"opt-in\">true</Value>
+        <Value key=\"IdentifiedSince\"/>
+    </KeyGroup></DynamicAttributes>''')
+    xml = el.toXML({optIn: 'True'})
+    expect(xml).toEqual('''<DynamicAttributes>
+    <KeyGroup>
+        <Value key=\"opt-in\">True</Value>
+        <Value key=\"IdentifiedSince\"/>
+    </KeyGroup></DynamicAttributes>''')
+
+  it 'should get the closest matching element', ->
+    el = element('foo').content(
+      element('bar').attrs(attr('a').value('b')).content(text().bind('c'))
+      element('bar').attrs(attr('d').value('e')).content(text().bind('f'))
+    )
+    expect(el.fromXML(el.toXML({ f: "3" }))).toEqual({ f: "3" })
+
+  it 'should match as closely as possible', ->
+    el = element('foo').content(
+      element('bar').content(text().bind('a'))
+      element('bar').attrs(attr('d').value('e')).content(text().bind('b'))
+    )
+    expect(el.fromXML('<foo><bar d="e">zaz</bar></foo>')).toEqual({'b': 'zaz'})
+
+  it 'should allow you bind to array elements', ->
+    el = element('foo').content(
+      text().bind('a.b[0]')
+    )
+    expect(el.fromXML('<foo>aa</foo>')).toEqual(a: b: [ 'aa' ])
+
+  it 'should be able to do that for currently failing cases', ->
+    el = parse('''<KeyGroup>
+      <Value key="Newsletter[1]">{{comm.newsLetter[0]|boolean}}</Value>
+    </KeyGroup>''')    
+    xml = el.toXML(comm: newsLetter: [true])
+    expect(el.fromXML(xml)).toEqual({"comm": {"newsLetter": [true]}})

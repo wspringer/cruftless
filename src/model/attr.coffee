@@ -48,6 +48,12 @@ module.exports = (types) -> (name) ->
     isSet: (obj) ->
       not(meta.bind) or meta.bind.get(obj)?
 
+    definedOn: (elem) ->
+      if meta.ns?
+        elem.hasAttributeNS(meta.name) and (meta.bind? or elem.getAttributeNS(meta.name) is meta.value) 
+      else     
+        elem.hasAttribute(meta.name) and (meta.bind? or elem.getAttribute(meta.name) is meta.value) 
+
   _.forEach types, (value, key) -> 
     exposed[key] = -> 
       meta.valueType = value
