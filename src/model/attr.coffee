@@ -27,11 +27,12 @@ module.exports = (types) -> (name) ->
       exposed      
 
     generate: (obj, elem) ->
-      value = extractValue(meta, obj) or meta.name
-      if meta.ns?
-        elem.setAttributeNS(meta.ns, meta.name, value)
-      else 
-        elem.setAttribute(meta.name, value)
+      value = extractValue(meta, obj)
+      if value?
+        if meta.ns?
+          elem.setAttributeNS(meta.ns, meta.name, value)
+        else 
+          elem.setAttribute(meta.name, value)
 
     extract: (elem, target) ->
       if meta.bind?

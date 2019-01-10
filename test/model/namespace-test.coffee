@@ -11,11 +11,11 @@ describe 'cruftless namespaces', ->
     it 'should allow you to bind attributes and elements to a namespace', ->
       el = element('foo').content(
         element('bar').attrs(
-          attr('t:zaz').ns('http://foo.bar')
+          attr('t:zaz').ns('http://foo.bar').value('foo')
         ),
         element('t:zaz').ns('http://foo.bar')
       )
-      expect(el.toXML()).toEqual('<foo><bar xmlns:t=\"http://foo.bar\" t:zaz=\"t:zaz\"/><t:zaz/></foo>')
+      expect(el.toXML()).toEqual('<foo><bar xmlns:t=\"http://foo.bar\" t:zaz=\"foo\"/><t:zaz/></foo>')
 
       
   describe 'when parsing templates', ->

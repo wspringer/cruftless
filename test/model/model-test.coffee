@@ -25,11 +25,11 @@ describe 'the entire model', ->
 
   it 'should allow you to construct an element with attributes', ->
     el = element('foo').attrs(
-      attr('bar')
+      attr('bar').value('bar')
     )
     expect(el.toXML()).toEqual('<foo bar="bar"/>')
     el = element('foo').attrs(
-      attr('bar').ns("http://www.eastpole.nl/")
+      attr('bar').ns("http://www.eastpole.nl/").value('bar')
     )
     expect(el.toXML()).toEqual('<foo xmlns="http://www.eastpole.nl/\" bar="bar"/>')
 
@@ -42,7 +42,7 @@ describe 'the entire model', ->
   it 'should allow you to construct an element with nested elements with attributes', ->
     el = element('foo').content(
       element('bar').attrs(
-        attr('bar')
+        attr('bar').value('bar')
       )
     )    
     expect(el.toXML()).toEqual("<foo><bar bar=\"bar\"/></foo>")
