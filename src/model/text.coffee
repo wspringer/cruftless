@@ -47,7 +47,7 @@ module.exports = (types) -> () ->
       meta.bind?.set(target, meta.valueType.from(node.textContent))
 
     descriptor: ->
-      meta.bind?.descriptor(_.merge({}, meta.valueType.desc, sample:meta.sample))      
+      meta.bind?.descriptor(_.merge({}, meta.valueType.desc, sample: if meta.sample? then meta.valueType.from(meta.sample)))      
 
     isSet: (obj) ->
       meta.required or not(meta.bind) or meta.bind.get(obj)?

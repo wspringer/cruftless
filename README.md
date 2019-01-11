@@ -285,7 +285,7 @@ console.log(JSON.stringify(schema, null, 2));
 ⇒     },
 ⇒     "age": {
 ⇒       "type": "integer",
-⇒       "sample": "45"
+⇒       "sample": 45
 ⇒     }
 ⇒   }
 ⇒ }

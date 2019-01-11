@@ -36,5 +36,11 @@ describe 'the descriptor', ->
       text().bind('a').sample('bling')
     ).descriptor()).toEqual({"keys": {"a": {"sample": "bling", "type": "string"}}, "type": "object"})
 
+  it 'should conver example values', ->
+    expect(element('foo').content(
+      text().bind('a').integer().sample('2')
+    ).descriptor()).toEqual({"keys": {"a": {"sample": 2, "type": "integer"}}, "type": "object"})
+
+
 
     

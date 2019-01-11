@@ -48,7 +48,7 @@ module.exports = (types) -> (name) ->
         if value? then meta.bind.set(target, meta.valueType.from(value))
 
     descriptor: ->
-      meta.bind?.descriptor(_.merge({}, meta.valueType.desc, sample:meta.sample))      
+      meta.bind?.descriptor(_.merge({}, meta.valueType.desc, sample: if meta.sample? then meta.valueType.from(meta.sample)))      
 
     isSet: (obj) ->
       not(meta.bind) or meta.bind.get(obj)?
