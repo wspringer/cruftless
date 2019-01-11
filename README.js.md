@@ -120,6 +120,8 @@ console.log(template.toXML({ persons: [
 ]}));
 ```
 
+You can add your own value types to convert from and to the string literals included in the XML representation. 
+
 ## Alternative notation
 
 The `<!--persons|array-->` way of annotating an element is not the only way you are able to add metadata. Another way to add metadata to elements is by using one of the reserved attributes prefixed with `c-`. 
@@ -195,6 +197,18 @@ Since Cruftless has all of the metadata of your XML document and how it binds to
 let schema = template.descriptor();
 console.log(JSON.stringify(schema, null, 2));
 ```  
+
+The schema will include additional metadata you attached to expressions:
+
+```javascript --run simple
+template = parse(`<person>
+  <name>{{name|sample:Wilfred}}</name>
+  <age>{{age|integer|sample:45}}</age>
+</person>`);
+
+schema = template.descriptor();
+console.log(JSON.stringify(schema, null, 2));
+```
 
 
 

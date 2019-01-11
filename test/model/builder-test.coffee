@@ -67,6 +67,10 @@ describe 'the builder', ->
     xml = '<foo><bar c-if="a">{{a}}</bar></foo>'
     expect(parse(xml).toXML()).toEqual '<foo/>'
 
+  it 'should support samples', ->
+    xml = '<foo>{{a|sample:something}}</foo>'
+    expect(parse(xml).descriptor()).toEqual({"keys": {"a": {"sample": "something", "type": "string"}}, "type": "object"})    
+
   it 'should support conditionals with namespaces', ->
     xml = '<foo><bar xmlns:c="https://github.com/wspringer/cruftless" c:if="a">{{a}}</bar></foo>'    
     expect(parse(xml).toXML()).toEqual '<foo/>'

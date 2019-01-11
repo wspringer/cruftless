@@ -39,11 +39,15 @@ module.exports = (types) -> () ->
     matches: (node) ->
       node.nodeType is 3
 
+    sample: (value) ->
+      meta.sample = value
+      exposed      
+
     extract: (node, target) ->
       meta.bind?.set(target, meta.valueType.from(node.textContent))
 
     descriptor: ->
-      meta.bind?.descriptor(meta.valueType.desc)      
+      meta.bind?.descriptor(_.merge({}, meta.valueType.desc, sample:meta.sample))      
 
     isSet: (obj) ->
       meta.required or not(meta.bind) or meta.bind.get(obj)?

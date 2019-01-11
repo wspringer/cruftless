@@ -1,8 +1,8 @@
 
 _ = require 'lodash'
 
-raw = /([\.a-zA-Z0-9\[\]]+)(?:\|([\.a-zA-Z0-9]+))?(?:\|([\.a-zA-Z0-9]+))?(?:\|([\.a-zA-Z0-9]+))?(?:\|([\.a-zA-Z0-9]+))?/
-curly = /\{\{([\.a-zA-Z0-9\[\]]+)(?:\|([\.a-zA-Z0-9]+))?(?:\|([\.a-zA-Z0-9]+))?(?:\|([\.a-zA-Z0-9]+))?(?:\|([\.a-zA-Z0-9]+))?\}\}/
+raw = /([\.a-zA-Z0-9\[\]]+)(?:\|([\:\.a-zA-Z0-9]+))?(?:\|([\:\.a-zA-Z0-9]+))?(?:\|([\:\.a-zA-Z0-9]+))?(?:\|([\:\.a-zA-Z0-9]+))?/
+curly = /\{\{([\.a-zA-Z0-9\[\]]+)(?:\|([\:\.a-zA-Z0-9]+))?(?:\|([\:\.a-zA-Z0-9]+))?(?:\|([\:\.a-zA-Z0-9]+))?(?:\|([\:\.a-zA-Z0-9]+))?\}\}/
 
 
 parser = (regex) -> 
@@ -21,7 +21,8 @@ parser = (regex) ->
       if not(parsed?) or parsed.length is 0 then context.value(str)
       else 
         _.reduce(_.tail(parsed), (acc, term) ->
-          if acc[term] then acc[term]() else acc
+          [op, param] = term.split(':')
+          if acc[op]? then acc[op](param) else acc
         , context[op](_.head(parsed)))          
 
 module.exports = 

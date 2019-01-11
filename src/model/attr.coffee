@@ -26,6 +26,10 @@ module.exports = (types) -> (name) ->
       meta.value = value
       exposed      
 
+    sample: (value) ->
+      meta.sample = value
+      exposed      
+
     generate: (obj, elem) ->
       value = extractValue(meta, obj)
       if value?
@@ -44,7 +48,7 @@ module.exports = (types) -> (name) ->
         if value? then meta.bind.set(target, meta.valueType.from(value))
 
     descriptor: ->
-      meta.bind?.descriptor(meta.valueType.desc)      
+      meta.bind?.descriptor(_.merge({}, meta.valueType.desc, sample:meta.sample))      
 
     isSet: (obj) ->
       not(meta.bind) or meta.bind.get(obj)?
