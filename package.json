@@ -5,16 +5,14 @@
   "main": "lib/cruftless.js",
   "scripts": {
     "test": "jest",
-    "watch": "jest --watch",
+    "watch:test": "jest --watch",
     "prepare": "coffee -c -o ./lib ./src",
     "readme": "runmd --output=./README.md ./README.js.md"
   },
   "author": "Wilfred Springer",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
-    "dom-serialize": "^2.2.1",
-    "xmldom": "^0.1.27",
-    "xmlserializer": "^0.6.1"
+    "xmldom": "^0.1.27"
   },
   "jest": {
     "preset": "jest-preset-coffeescript"
@@ -23,7 +21,6 @@
     "coffeescript": "^2.3.2",
     "jest": "^23.6.0",
     "jest-preset-coffeescript": "^1.0.0",
-    "sinon": "^7.2.2",
     "runmd": "^1.0.1"
   }
 }
