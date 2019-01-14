@@ -93,7 +93,7 @@ let template = `<person>
   <age>{{age}}</age>
 </person>`
 
-const { parse } = require('cruftless')();
+let { parse } = require('cruftless')();
 
 el = parse(template)
 console.log(el.toXML({ name: 'Jane Doe', age: '18' }));
@@ -122,11 +122,28 @@ console.log(template.toXML({ persons: [
 
 You can add your own value types to convert from and to the string literals included in the XML representation. 
 
+```javascript --run simple-2
+const { element, attr, text, parse } = require('cruftless')({
+  types: {
+    zeroOrOne: {
+      type: 'boolean',
+      from: str => str == '1',
+      to: value => value ? '1' : '0'
+    }
+  }
+});
+
+template = parse(`<foo>{{value|zeroOrOne}})</foo>`);
+console.log(template.toXML({ value: true }));
+console.log(template.toXML({ value: false }));
+```
+
+
 ## Alternative notation
 
 The `<!--persons|array-->` way of annotating an element is not the only way you are able to add metadata. Another way to add metadata to elements is by using one of the reserved attributes prefixed with `c-`. 
 
-```javascript --run simple
+```javascript --run simple-2
 template = parse(`<persons>
   <person c-bind="persons|array">
     <name>{{name|required}}</name>
@@ -142,7 +159,7 @@ console.log(template.toXML({ persons: [
 
 If you hate the magic `c-` prefixed attributes, then you can also a slightly less readable but admittedly more correct XML namespace:
 
-```javascript --run simple
+```javascript --run simple-2
 template = parse(`<persons>
   <person xmlns:c="https://github.com/wspringer/cruftless" c:bind="persons|array">
     <name>{{name|required}}</name>
@@ -160,7 +177,7 @@ console.log(template.toXML({ persons: [
 
 There may be times when you want to exclude entire sections of an XML structure if a particular condition is met. Cruftless has some basic support for that, albeit limited. You can set conditions on elements, using the `c-if` attribute. In that case, the element will only be included in case the expression of the `c-if` attribute is evaluating to something else than `undefined` or `null`.
 
-```javascript --run simple
+```javascript --run simple-2
 template = parse(`<foo><bar c-if="a">text</bar></foo>`);
 
 template.toXML({}); // RESULT
@@ -171,7 +188,7 @@ template.toXML({ a: 3 }); // RESULT
 
 If your template contains variable references, and the data structure you are passing in does not contain these references, then — instead of generating the value `undefined`, Cruftless will drop the entire element. In fact, if a deeply nested element contains references to variable, and that variable is not defined, then it will not only drop *that* element, but all elements that included that element referring to a non-existing variable. 
 
-```javascript --run simple
+```javascript --run simple-2
 template = parse(`<level1>
   <level2 b="{{b}}">
     <level3>{{a}}</level3>
@@ -181,11 +198,11 @@ template = parse(`<level1>
 console.log(template.toXML({ b: 2 }));
 ```
 
-```javascript --run simple
+```javascript --run simple-2
 console.log(template.toXML({ b: 2, a: 3 }));
 ```
 
-```javascript --run simple
+```javascript --run simple-2
 console.log(template.toXML({ a: 3 }));
 ```
 
@@ -193,14 +210,14 @@ console.log(template.toXML({ a: 3 }));
 
 Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects. 
   
-```javascript --run simple
+```javascript --run simple-2
 let schema = template.descriptor();
 console.log(JSON.stringify(schema, null, 2));
 ```  
 
 The schema will include additional metadata you attached to expressions:
 
-```javascript --run simple
+```javascript --run simple-2
 template = parse(`<person>
   <name>{{name|sample:Wilfred}}</name>
   <age>{{age|integer|sample:45}}</age>

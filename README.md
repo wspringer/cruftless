@@ -94,7 +94,7 @@ let template = `<person>
   <age>{{age}}</age>
 </person>`
 
-const { parse } = require('cruftless')();
+let { parse } = require('cruftless')();
 
 el = parse(template)
 console.log(el.toXML({ name: 'Jane Doe', age: '18' }));
@@ -137,6 +137,26 @@ console.log(template.toXML({ persons: [
 ```
 
 You can add your own value types to convert from and to the string literals included in the XML representation. 
+
+```javascript
+const { element, attr, text, parse } = require('cruftless')({
+  types: {
+    zeroOrOne: {
+      type: 'boolean',
+      from: str => str == '1',
+      to: value => value ? '1' : '0'
+    }
+  }
+});
+
+template = parse(`<foo>{{value|zeroOrOne}})</foo>`);
+console.log(template.toXML({ value: true }));
+console.log(template.toXML({ value: false }));
+
+⇒ <foo>1</foo>
+⇒ <foo>0</foo>
+```
+
 
 ## Alternative notation
 
