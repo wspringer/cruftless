@@ -16,7 +16,7 @@ An XML builder / parser that tries to ease the common cases, allowing you to qui
 
 ## Yet another XML binding framework?
 
-I hate to say this, but: 'yes'. Or, perhaps: 'no'. Because Cruftless is not really an XML binding framework as you know it. It's almost more like Handlebars. But where Handlebars allows you to only *generate* documents, Cruftless also allows you to *parse* documents. 
+I hate to say this, but: 'yes'. Or, perhaps: 'no'. Because Cruftless is not really an XML binding framework as you know it. It's almost more like Handlebars. But where Handlebars allows you to only *generate* documents, Cruftless also allows you to *extract* data from documents.
 
 ## Building XML documents
 
