@@ -315,4 +315,4 @@ console.log(JSON.stringify(schema, null, 2));
 
 
 ----
-Markdown generated from [./README.js.md](README.js.md) by [![RunMD Logo](http://i.imgur.com/h0FVyzU.png)](https://github.com/broofa/runmd)
+Markdown generated from [./README.js.md](README.js.md) by [![RunMD Logo](http://i.imgur.com/h0FVyzU.png)](https://github.com/broofa/runmd) [![Greenkeeper badge](https://badges.greenkeeper.io/wspringer/cruftless.svg)](https://greenkeeper.io/)
