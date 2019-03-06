@@ -9,6 +9,7 @@
     "prepare": "coffee -c -o ./lib ./src",
     "readme": "runmd --output=./README.md ./README.js.md"
   },
+  "repository": "github:wspringer/cruftless",
   "author": "Wilfred Springer",
   "license": "MIT",
   "dependencies": {
