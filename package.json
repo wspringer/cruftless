@@ -13,7 +13,6 @@
   "author": "Wilfred Springer",
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "^7.4.5",
     "xmldom": "^0.1.27"
   },
   "jest": {
