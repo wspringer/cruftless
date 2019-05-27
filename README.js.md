@@ -13,6 +13,8 @@ An XML builder / parser that tries to ease the common cases, allowing you to qui
 
 [![CircleCI](https://circleci.com/gh/wspringer/cruftless.svg?style=svg&circle-token=310415870909bda5fde99f144c9c06cf979abfa9)](https://circleci.com/gh/wspringer/cruftless)
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/wspringer/cruftless.svg)](https://greenkeeper.io/)
+
 
 ## Yet another XML binding framework?
 
