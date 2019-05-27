@@ -1,5 +1,6 @@
 {
   "name": "cruftless",
+  "engines" : { "node" : ">=0.10" },
   "version": "0.1.1",
   "description": "Yet another simple way to parse and generate XML",
   "main": "lib/cruftless.js",
