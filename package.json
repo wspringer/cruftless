@@ -13,6 +13,7 @@
   "author": "Wilfred Springer",
   "license": "MIT",
   "dependencies": {
+    "@babel/core": "^7.4.5",
     "xmldom": "^0.1.27"
   },
   "jest": {
@@ -20,7 +21,7 @@
   },
   "devDependencies": {
     "coffeescript": "^2.4.1",
-    "jest": "^23.6.0",
+    "jest": "^24.8.0",
     "jest-preset-coffeescript": "^1.0.1",
     "runmd": "^1.0.1"
   }
