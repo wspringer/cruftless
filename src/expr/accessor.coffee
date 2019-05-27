@@ -53,8 +53,5 @@ module.exports =
 
     describe: (target, type) ->
       _.merge(target, @descriptor(type))
-      
-
-
 
 
