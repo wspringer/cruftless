@@ -19,7 +19,7 @@
     "preset": "jest-preset-coffeescript"
   },
   "devDependencies": {
-    "coffeescript": "^2.3.2",
+    "coffeescript": "^2.4.1",
     "jest": "^23.6.0",
     "jest-preset-coffeescript": "^1.0.1",
     "runmd": "^1.0.1"
