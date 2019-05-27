@@ -21,7 +21,7 @@
   "devDependencies": {
     "coffeescript": "^2.3.2",
     "jest": "^23.6.0",
-    "jest-preset-coffeescript": "^1.0.0",
+    "jest-preset-coffeescript": "^1.0.1",
     "runmd": "^1.0.1"
   }
 }
