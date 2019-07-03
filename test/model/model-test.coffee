@@ -327,3 +327,62 @@ describe 'the entire model', ->
     </KeyGroup>''')    
     xml = el.toXML(comm: newsLetter: [true])
     expect(el.fromXML(xml)).toEqual({"comm": {"newsLetter": [true]}})
+
+  it 'should be able to parse a template from the wild', ->
+    el = parse('''
+<catalog>
+  <book id="{{id}}" c-bind="books|array">
+    <author>{{author}}</author>
+    <title>{{title}}</title>
+    <genre>{{genre}}</genre>
+    <price>{{price}}</price>
+    <publish_date>{{publicationDate}}</publish_date>
+    <description>{{desc}}</description>
+  </book>
+</catalog>
+    ''')
+    xml = '''
+    <catalog>
+       <book id="bk101">
+          <author>Gambardella, Matthew</author>
+          <title>XML Developer's Guide</title>
+          <genre>Computer</genre>
+          <price>44.95</price>
+          <publish_date>2000-10-01</publish_date>
+          <description>An in-depth look at creating applications 
+          with XML.</description>
+       </book>
+       <book id="bk102">
+          <author>Ralls, Kim</author>
+          <title>Midnight Rain</title>
+          <genre>Fantasy</genre>
+          <price>5.95</price>
+          <publish_date>2000-12-16</publish_date>
+          <description>A former architect battles corporate zombies, 
+          an evil sorceress, and her own childhood to become queen 
+          of the world.</description>
+       </book>
+    </catalog>
+    '''
+    expect(el.fromXML(xml)).toEqual({
+      "books": [
+        {
+          "id": "bk101",
+          "author": "Gambardella, Matthew",
+          "title": "XML Developer's Guide",
+          "genre": "Computer",
+          "price": "44.95",
+          "publicationDate": "2000-10-01",
+          "desc": "An in-depth look at creating applications \n      with XML."
+        },
+        {
+          "id": "bk102",
+          "author": "Ralls, Kim",
+          "title": "Midnight Rain",
+          "genre": "Fantasy",
+          "price": "5.95",
+          "publicationDate": "2000-12-16",
+          "desc": "A former architect battles corporate zombies, \n      an evil sorceress, and her own childhood to become queen \n      of the world."
+        }
+      ]
+    })
