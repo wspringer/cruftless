@@ -20,8 +20,8 @@
   },
   "devDependencies": {
     "coffeescript": "^2.4.1",
-    "jest": "^24.8.0",
-    "jest-preset-coffeescript": "^1.0.1",
+    "jest": "^24.9.0",
+    "jest-preset-coffeescript": "^1.1.1",
     "runmd": "^1.0.1"
   }
 }
