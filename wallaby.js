@@ -1,5 +1,5 @@
 module.exports = function (wallaby) {
-  
+
   return {
     files: [
       { pattern: 'src/**/*.coffee' }
@@ -9,7 +9,7 @@ module.exports = function (wallaby) {
       { pattern: 'test/**/*-test.coffee' },
       { pattern: 'test/**/*.xml' }
     ],
-    
+
     env: {
       type: 'node',
       params: {

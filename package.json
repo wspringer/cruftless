@@ -7,6 +7,7 @@
     "test": "jest",
     "watch:test": "jest --watch",
     "prepare": "coffee -c -o ./lib ./src",
+    "compile:test": "coffee -c -o ./build/test ./test",
     "readme": "runmd --output=./README.md ./README.js.md"
   },
   "repository": "github:wspringer/cruftless",
