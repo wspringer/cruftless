@@ -8,7 +8,7 @@ describe 'question 52281389', =>
     template = parse('''
 <TestScenario>
   <TestSuite name="{{name}}"><!--suites|array-->
-    <TestCaseName name="{{name}}">{{data}}</TestCaseName><!--cases|array-->
+    <TestCaseName name="{{name}}"><!--cases|array-->{{data}}</TestCaseName>
   </TestSuite>
 </TestScenario>'''.trim())
     extracted = template.fromXML('''
@@ -30,15 +30,52 @@ describe 'question 52281389', =>
    </TestSuite>
 </TestScenario>
     '''.trim())
-    expect(extracted).toEqual( {
-      suites: [
-        { name: 'tc_Logout', data: 'dt_EdgeCaseRoute' },
+    expect(extracted).toEqual({
+      "suites": [
         {
-          name: 'tc_AddContract',
-          data: 'dt_EdgeCaseHome,dt_EdgeCaseSpectrum'
+          "name": "TS_EdgeHome",
+          "cases": [
+            {
+              "name": "tc_Login",
+              "data": "dt_EdgeCaseHome,dt_EdgeCaseRoute"
+            },
+            {
+              "name": "tc_Logout",
+              "data": "dt_EdgeCaseRoute"
+            }
+          ]
         },
-        { name: 'tc_Payment', data: 'dt_EdgeCaseRoute' },
-        { name: 'tc_ClientFeedback', data: 'dt_EdgeCaseSpectrum' }
+        {
+          "name": "TS_EdgePanel",
+          "cases": [
+            {
+              "name": "tc_AddContract",
+              "data": "dt_EdgeCaseHome,dt_EdgeCaseSpectrum"
+            }
+          ]
+        },
+        {
+          "name": "TS_EdgeRoute",
+          "cases": [
+            {
+              "name": "tc_VerifyContract",
+              "data": "dt_EdgeCaseRoute"
+            },
+            {
+              "name": "tc_Payment",
+              "data": "dt_EdgeCaseRoute"
+            }
+          ]
+        },
+        {
+          "name": "TS_EdgeSpectrum",
+          "cases": [
+            {
+              "name": "tc_ClientFeedback",
+              "data": "dt_EdgeCaseSpectrum"
+            }
+          ]
+        }
       ]
     })
 
