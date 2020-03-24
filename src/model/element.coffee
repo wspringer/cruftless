@@ -6,7 +6,7 @@ _ = require 'lodash'
 { parseExpr } = require './util'
 
 module.exports = (types) -> (name) ->
-  meta = 
+  meta =
     name: name
     attrs: []
     content: []
@@ -16,70 +16,70 @@ module.exports = (types) -> (name) ->
       concatenated = _.concat(
         meta.if?.descriptor()
         meta.attrs.map (item) -> item.descriptor()
-        meta.content.map (item) -> item.descriptor()          
+        meta.content.map (item) -> item.descriptor()
       )
       _.merge(_.reject(concatenated, _.isUndefined)...)
 
-  exposed = 
-  
-    attrs: (attr...) -> 
-      meta.attrs.push(attr...) 
+  exposed =
+
+    attrs: (attr...) ->
+      meta.attrs.push(attr...)
       exposed
 
-    content: (elem...) -> 
+    content: (elem...) ->
       meta.content.push(elem...)
       exposed
 
-    ns: (ns) -> 
+    ns: (ns) ->
       meta.ns = ns
       exposed
-      
+
     bind: (opts...) ->
-      meta.bind = parseExpr(opts...) 
-      exposed.object()     
+      meta.bind = parseExpr(opts...)
+      exposed.object()
 
     if: (opts...) ->
       meta.if = parseExpr(opts...)
-      exposed      
-  
+      exposed
+
     array: ->
       meta.scope = (target) ->
         coll = meta.bind.get(target)
-        if coll? 
-          if Array.isArray(coll) 
+        if coll?
+          if Array.isArray(coll)
             scope = {}
             coll.push(scope)
             scope
           else throw new Error("Scope already assignd value of type #{typeof value}")
-        else 
+        else
           coll = []
           meta.bind.set(target, coll)
           scope = {}
           coll.push scope
           scope
       meta.traverse = (obj, iterator) ->
-        coll = meta.bind.get(obj) or []          
+        coll = meta.bind.get(obj) or []
         coll.forEach iterator
       meta.descriptor = ->
         concatenated = _.concat(
           meta.if?.descriptor()
           meta.attrs.map (item) -> item.descriptor()
-          meta.content.map (item) -> item.descriptor()          
+          meta.content.map (item) -> item.descriptor()
         )
         result = { type: 'array', element: _.merge(_.reject(concatenated, _.isUndefined)...) }
         if meta.bind?
           meta.bind.descriptor(result)
-        else 
+        else
           result
       exposed
-        
+
     object: ->
       meta.scope = (target) ->
         scope = meta.bind.get(target)
-        if scope? 
+        if scope?
           if typeof value is 'object' then value
           else throw new Error("Scope already assignd value of type #{typeof value}")
-        else 
+        else
           scope = {}
           meta.bind.set(target, scope)
           scope
@@ -89,36 +89,36 @@ module.exports = (types) -> (name) ->
         merged = _.merge(_.reject(_.concat(
           meta.if?.descriptor()
           meta.attrs.map (item) -> item.descriptor()
-          meta.content.map (item) -> item.descriptor()          
+          meta.content.map (item) -> item.descriptor()
         ), _.isUndefined)...)
         if meta.bind?
           meta.bind.descriptor(merged)
-        else 
+        else
           merged
       exposed
 
     generate: (obj, context) ->
-      doc = context?.ownerDocument or di.createDocument()      
+      doc = context?.ownerDocument or di.createDocument()
       meta.traverse obj, (item) ->
         if (not(meta.if?) or meta.if.get(item)?)
-          el = 
+          el =
             if meta.ns?
               doc.createElementNS(meta.ns, meta.name)
             else
-              doc.createElement(meta.name)        
-          meta.attrs.forEach (attr) -> attr.generate(item, el)              
-          meta.content.forEach (node) -> 
+              doc.createElement(meta.name)
+          meta.attrs.forEach (attr) -> attr.generate(item, el)
+          meta.content.forEach (node) ->
             if node.isSet(item)
               node.generate(item, el)
-          if context? 
+          if context?
             context.appendChild(el)
             return
-          else 
-            return el     
+          else
+            return el
 
     isSet: (obj) ->
       (_.isEmpty(meta.attrs) and _.isEmpty(meta.content)) or (
-        checked = false 
+        checked = false
         meta.traverse obj, (item) ->
           checked = checked or _.some(meta.attrs.concat(meta.content), (x) -> x.isSet(item))
         checked
@@ -127,27 +127,29 @@ module.exports = (types) -> (name) ->
     toDOM: (obj) -> exposed.generate(obj)
 
     toXML: (obj) ->
-      serializer.serializeToString(exposed.generate(obj))      
+      serializer.serializeToString(exposed.generate(obj))
 
     matches: (elem) ->
       elem.nodeType is 1 and elem.localName is meta.name and (
         not(meta.ns?) or meta.ns is elem.namespaceURI
       ) and (elem.attributes.length is meta.attrs.length) and _.every meta.attrs, (attr) -> attr.definedOn(elem)
 
-    extract: (elem, target = {}) ->    
-      scope = meta.scope(target)  
+    extract: (elem, target = {}) ->
+      scope = meta.scope(target)
       meta.attrs.forEach (attr) ->
-        attr.extract(elem, scope)        
+        attr.extract(elem, scope)
       Array.from(elem.childNodes).forEach (child) ->
-        match = meta.content.find (nodeDef) -> nodeDef.matches(child) 
+        match = meta.content.find (nodeDef) -> nodeDef.matches(child)
         match?.extract(child, scope)
-      target  
+      target
 
-    fromDOM: (elem) -> exposed.extract(elem)  
+    fromDOM: (elem) -> exposed.extract(elem)
 
     fromXML: (str) ->
       exposed.extract(parser.parseFromString(str).documentElement)
-      
+
+    name: () -> meta.name
+
     descriptor: ->
       meta.descriptor()
 
@@ -155,11 +157,11 @@ module.exports = (types) -> (name) ->
       if obj?
         meta.describe(obj)
         obj
-      else 
+      else
         obj = {}
         meta.describe(obj)
         { type: 'object', keys: obj }
-      
+
 
 
   exposed

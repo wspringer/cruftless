@@ -19,7 +19,7 @@ describe 'element', ->
   it 'should allow you to build the dom of an element', ->
     expect(element('foo').toXML()).toEqual '<foo/>'
     expect(element('foo').ns('http://eastpole.nl/').toXML()).toEqual '<foo xmlns="http://eastpole.nl/"/>'
-        
+
 describe 'the entire model', ->
 
 
@@ -44,26 +44,26 @@ describe 'the entire model', ->
       element('bar').attrs(
         attr('bar').value('bar')
       )
-    )    
+    )
     expect(el.toXML()).toEqual("<foo><bar bar=\"bar\"/></foo>")
 
   it 'should allow you to construct an element with an attribute with a value', ->
     el = element('foo').attrs(
       attr('bar').value('zaz')
-    )  
+    )
     expect(el.toXML()).toEqual("<foo bar=\"zaz\"/>")
 
   it 'should allow you to construct an element with an attribute with a reference', ->
     el = element('foo').attrs(
       attr('bar').bind('a')
-    )    
+    )
     expect(el.toXML({ a: 'tree' })).toEqual('<foo bar="tree"/>')
 
   it 'should allow you to construct an element with an attribute with a nested reference', ->
     el = element('foo').attrs(
       attr('bar').bind('a.b.c')
-    )    
-    expect(el.toXML(a: b: c: 4)).toEqual('<foo bar="4"/>')    
+    )
+    expect(el.toXML(a: b: c: 4)).toEqual('<foo bar="4"/>')
 
   it 'should fail over a missing attribute value', ->
     el = element('foo').attrs(
@@ -74,7 +74,7 @@ describe 'the entire model', ->
   it 'should fail over a missing property', ->
     el = element('foo').attrs(
       attr('bar').bind('a').required()
-    ) 
+    )
     expect(-> el.toXML({})).toThrow("Missing required attribute 'bar'")
 
   it 'should support nested text', ->
@@ -87,12 +87,12 @@ describe 'the entire model', ->
     el = element('foo').content(
       text().bind('a.b.c').required()
     )
-    expect(el.toXML(a:b:c: 3)).toEqual('<foo>3</foo>')    
+    expect(el.toXML(a:b:c: 3)).toEqual('<foo>3</foo>')
 
   it 'should allow you to extract an attribute value from an element', ->
     el = element('foo').attrs(
       attr('bar').bind('a.b.c')
-    )    
+    )
     extracted = el.fromXML("<foo bar='3'/>")
     expect(extracted).toHaveProperty('a')
     expect(extracted.a).toHaveProperty('b')
@@ -103,7 +103,7 @@ describe 'the entire model', ->
       element('bar').attrs(
         attr('baz').bind('a')
       )
-    )    
+    )
     extracted = el.fromXML("<foo><bar baz='3'/></foo>")
     expect(extracted).toHaveProperty('a', '3')
 
@@ -111,7 +111,7 @@ describe 'the entire model', ->
     el = element('foo').content(
       text().bind('a')
     )
-    extracted = el.fromXML("<foo>3</foo>")   
+    extracted = el.fromXML("<foo>3</foo>")
     expect(extracted).toHaveProperty('a', '3')
 
   it 'should deal with many occurences', ->
@@ -168,25 +168,25 @@ describe 'the entire model', ->
   it 'should return a type definition', ->
     el = element('foo').content(
       text().integer().bind('a')
-    ) 
+    )
     expect(el.descriptor()).toEqual({ type: 'object', keys: { a: { type: 'integer' }}})
 
   it 'should return a type definition in nested object situations', ->
     el = element('foo').bind('c').content(
       text().integer().bind('a')
-    ) 
+    )
     expect(el.descriptor()).toEqual({ type: 'object', keys: {"c": {"keys": {"a": {"type": "integer"}}, "type": "object"}}})
 
   it 'should return a type definition in nested array situations', ->
     el = element('foo').bind('c').array().content(
       text().integer().bind('a')
-    ) 
+    )
     expect(el.descriptor()).toEqual({ type: 'object', keys: {"c": {type: 'array', "element": { type: 'object', keys: {"a": {"type": "integer"}}}}}})
 
   it 'should handle complicated situations well', ->
     el = element('foo').bind('a').content(
       element('bar').bind('b.c').content(
-        element('zaz').content(text().bind('d'))        
+        element('zaz').content(text().bind('d'))
       )
       element('baz').content(
         text().bind('b.c.e')
@@ -209,20 +209,20 @@ describe 'the entire model', ->
       text().bind('a').boolean()
     )
     expect(el.toXML({ a: true })).toEqual('<foo>true</foo>')
-    expect(el.fromXML('<foo>true</foo>')).toEqual({ a: true })  
+    expect(el.fromXML('<foo>true</foo>')).toEqual({ a: true })
 
   it 'should not include nested elements if they\'re not bound', ->
     el = element('foo').content(
       element('bar').content(
         text().bind('a')
       )
-    )    
+    )
     expect(el.toXML()).toEqual('<foo/>')
 
   it 'should not include text if the variables are missing', ->
     el = element('foo').content(
       text().bind('a')
-    )    
+    )
     expect(el.toXML()).toEqual('<foo/>')
 
   it 'should not include nested elements if the variables are missing', ->
@@ -249,20 +249,20 @@ describe 'the entire model', ->
       ).content(
         text().bind('persons[0].name')
       ).if('persons[0].name')
-    )    
+    )
     expect(el.toXML({ persons: [ { name: 'Joe' }] })).toEqual("<foo><bar key=\"Person[1].Name\">Joe</bar></foo>")
     expect(el.toXML({ persons: []})).toEqual("<foo/>")
     expect(el.fromXML el.toXML({ persons: [ { name: 'Joe' }] })).toEqual({ persons: [ { name: 'Joe' } ] })
-  
+
   it 'should survive content getting passed in that is not matching', ->
     el = element('foo').content(
       element('bar').content(
         text().bind('a')
       )
-    )    
+    )
     expect(el.fromXML('<foo><zaz/></foo>')).toEqual({})
 
-  it 'should not fail on this', ->  
+  it 'should not fail on this', ->
     source = '''<CustomerSignupRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" MajorVersion="2" MinorVersion="0">
     <Header>
       <MessageId>c74894f9-1030-41ac-9aae-cbc5e6ee69a0</MessageId>
@@ -321,14 +321,17 @@ describe 'the entire model', ->
     )
     expect(el.fromXML('<foo>aa</foo>')).toEqual(a: b: [ 'aa' ])
 
+  it 'should have the local name readily available', ->
+    expect(parse('<foo/>').name()).toEqual('foo')
+
   it 'should be able to do that for currently failing cases', ->
     el = parse('''<KeyGroup>
       <Value key="Newsletter[1]">{{comm.newsLetter[0]|boolean}}</Value>
-    </KeyGroup>''')    
+    </KeyGroup>''')
     xml = el.toXML(comm: newsLetter: [true])
     expect(el.fromXML(xml)).toEqual({"comm": {"newsLetter": [true]}})
 
-  it 'should be able to parse a template from the wild', ->
+  xit 'should be able to parse a template from the wild', ->
     el = parse('''
 <catalog>
   <book id="{{id}}" c-bind="books|array">
@@ -349,7 +352,7 @@ describe 'the entire model', ->
           <genre>Computer</genre>
           <price>44.95</price>
           <publish_date>2000-10-01</publish_date>
-          <description>An in-depth look at creating applications 
+          <description>An in-depth look at creating applications
           with XML.</description>
        </book>
        <book id="bk102">
@@ -358,8 +361,8 @@ describe 'the entire model', ->
           <genre>Fantasy</genre>
           <price>5.95</price>
           <publish_date>2000-12-16</publish_date>
-          <description>A former architect battles corporate zombies, 
-          an evil sorceress, and her own childhood to become queen 
+          <description>A former architect battles corporate zombies,
+          an evil sorceress, and her own childhood to become queen
           of the world.</description>
        </book>
     </catalog>
