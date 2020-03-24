@@ -3,6 +3,9 @@
   "version": "0.1.2",
   "description": "Yet another simple way to parse and generate XML",
   "main": "lib/cruftless.js",
+  "files": [
+    "lib/"
+  ],
   "scripts": {
     "test": "jest",
     "watch:test": "jest --watch",
