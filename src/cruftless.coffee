@@ -2,11 +2,13 @@ _ = require 'lodash'
 
 module.exports = (opts = {}) ->
 
-  types = _.merge({}, require('./model/types'), opts.types or {})
+  opts = _.cloneDeep(opts)
 
-  element = require('./model/element')(types)
-  attr = require('./model/attr')(types)
-  text = require('./model/text')(types)
+  opts.types = _.merge({}, require('./model/types'), opts.types or {})
+
+  element = require('./model/element')(opts)
+  attr = require('./model/attr')(opts)
+  text = require('./model/text')(opts)
   parse = require('./model/builder')({ element, attr, text })
 
   { element, attr, text, parse }

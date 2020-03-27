@@ -1,4 +1,5 @@
-{ element, attr, text, parse } = require('../../src/cruftless')()
+cruftless = require('../../src/cruftless')
+{ element, attr, text, parse } = cruftless()
 
 describe 'element', ->
 
@@ -282,24 +283,12 @@ describe 'the entire model', ->
     </KeyGroup></DynamicAttributes>'''
     el = parse(source)
     xml = el.toXML()
-    expect(xml).toEqual('''<DynamicAttributes>
-    <KeyGroup>
-        <Value key=\"opt-in\"/>
-        <Value key=\"IdentifiedSince\"/>
-    </KeyGroup></DynamicAttributes>''')
+    expect(xml).toMatchSnapshot()
     expect(el.fromXML(xml)).toEqual({})
     xml = el.toXML({optIn : true})
-    expect(xml).toEqual('''<DynamicAttributes>
-    <KeyGroup>
-        <Value key=\"opt-in\">true</Value>
-        <Value key=\"IdentifiedSince\"/>
-    </KeyGroup></DynamicAttributes>''')
+    expect(xml).toMatchSnapshot()
     xml = el.toXML({optIn: 'True'})
-    expect(xml).toEqual('''<DynamicAttributes>
-    <KeyGroup>
-        <Value key=\"opt-in\">True</Value>
-        <Value key=\"IdentifiedSince\"/>
-    </KeyGroup></DynamicAttributes>''')
+    expect(xml).toMatchSnapshot()
 
   it 'should get the closest matching element', ->
     el = element('foo').content(
@@ -330,6 +319,13 @@ describe 'the entire model', ->
     </KeyGroup>''')
     xml = el.toXML(comm: newsLetter: [true])
     expect(el.fromXML(xml)).toEqual({"comm": {"newsLetter": [true]}})
+
+  it 'should allow you to preserve whitespace', ->
+    el = cruftless(preserveWhitespace: true).parse('''<foo>
+      <bar>{{a}}</bar>
+    </foo>''')
+    xml = el.toXML(a: 3)
+    expect(xml).toMatchSnapshot()
 
   xit 'should be able to parse a template from the wild', ->
     el = parse('''

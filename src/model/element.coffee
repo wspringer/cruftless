@@ -5,7 +5,7 @@ _ = require 'lodash'
 
 { parseExpr } = require './util'
 
-module.exports = (types) -> (name) ->
+module.exports = ({types}) -> (name) ->
   meta =
     name: name
     attrs: []
