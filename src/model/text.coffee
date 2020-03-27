@@ -16,7 +16,7 @@ module.exports = ({types, preserveWhitespace}) -> () ->
 
     value: (value) ->
       meta.value =
-        if (preserveWhitespace) then value else value.trim()
+        if (preserveWhitespace) then value else _.trim(value)
       exposed
 
     bind: (opts...) ->

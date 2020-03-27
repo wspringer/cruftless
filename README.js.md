@@ -9,7 +9,7 @@ runmd.onRequire = function(path) {
 
 # README
 
-An XML builder / parser that tries to ease the common cases, allowing you to quickly build a model from your document structure and get a builder / parser for free. 
+An XML builder / parser that tries to ease the common cases, allowing you to quickly build a model from your document structure and get a builder / parser for free.
 
 [![CircleCI](https://circleci.com/gh/wspringer/cruftless.svg?style=svg&circle-token=310415870909bda5fde99f144c9c06cf979abfa9)](https://circleci.com/gh/wspringer/cruftless)
 
@@ -55,7 +55,7 @@ el.toXML(); // RESULT
 … or the `toDOM()` operation instead to return a DOM representation of the document:
 
 ```javascript --run simple
-el.toDOM(); 
+el.toDOM();
 ```
 
 ## Binding
@@ -113,7 +113,7 @@ template = parse(`<persons>
   </person>
 </persons>`);
 
-// Note that because of the 'integer' modifier, integer values are 
+// Note that because of the 'integer' modifier, integer values are
 // now automatically getting transfered from and to strings.
 
 console.log(template.toXML({ persons: [
@@ -122,7 +122,7 @@ console.log(template.toXML({ persons: [
 ]}));
 ```
 
-You can add your own value types to convert from and to the string literals included in the XML representation. 
+You can add your own value types to convert from and to the string literals included in the XML representation.
 
 ```javascript --run simple-2
 const { element, attr, text, parse } = require('cruftless')({
@@ -140,10 +140,28 @@ console.log(template.toXML({ value: true }));
 console.log(template.toXML({ value: false }));
 ```
 
+## Whitespace
+
+By default, all whitespace in text content will be stripped, which probably
+makes sense in the case where you're using XML to represent data structures. If
+that's now what you want, the you can set the `preserveWhitespace` option to
+`true`.
+
+```javascript --run simple-3
+const { element, attr, text, parse } = require('cruftless')({
+  preserveWhitespace: true
+});
+
+template = parse(`<foo>
+  <bar>{{a}}</bar>
+</foo>`);
+
+console.log(template.toXML({ a: 3 }));
+```
 
 ## Alternative notation
 
-The `<!--persons|array-->` way of annotating an element is not the only way you are able to add metadata. Another way to add metadata to elements is by using one of the reserved attributes prefixed with `c-`. 
+The `<!--persons|array-->` way of annotating an element is not the only way you are able to add metadata. Another way to add metadata to elements is by using one of the reserved attributes prefixed with `c-`.
 
 ```javascript --run simple-2
 template = parse(`<persons>
@@ -188,7 +206,7 @@ template.toXML({ a: void 0 }); // RESULT
 template.toXML({ a: 3 }); // RESULT
 ```
 
-If your template contains variable references, and the data structure you are passing in does not contain these references, then — instead of generating the value `undefined`, Cruftless will drop the entire element. In fact, if a deeply nested element contains references to variable, and that variable is not defined, then it will not only drop *that* element, but all elements that included that element referring to a non-existing variable. 
+If your template contains variable references, and the data structure you are passing in does not contain these references, then — instead of generating the value `undefined`, Cruftless will drop the entire element. In fact, if a deeply nested element contains references to variable, and that variable is not defined, then it will not only drop *that* element, but all elements that included that element referring to a non-existing variable.
 
 ```javascript --run simple-2
 template = parse(`<level1>
@@ -210,12 +228,12 @@ console.log(template.toXML({ a: 3 }));
 
 ## Schema (incomplete, subject to change)
 
-Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects. 
-  
+Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects.
+
 ```javascript --run simple-2
 let schema = template.descriptor();
 console.log(JSON.stringify(schema, null, 2));
-```  
+```
 
 The schema will include additional metadata you attached to expressions:
 
