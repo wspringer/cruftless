@@ -2,29 +2,22 @@
 _ = require 'lodash'
 types = require './types'
 
-module.exports = (types) -> () ->
-  
-  meta = 
+module.exports = ({types, preserveWhitespace}) -> () ->
+
+  meta =
     required: false
     valueType: types.string
 
-  exposed = 
+  exposed =
 
     required: ->
       meta.required = true
       exposed
 
     value: (value) ->
-      meta.value = value
+      meta.value =
+        if (preserveWhitespace) then value else _.trim(value)
       exposed
-
-    bind: (opts...) ->
-      meta.bind = parseExpr(opts...)
-      exposed
-
-    generate: (obj, context) ->
-      value = extractValue(meta, obj)
-      node = context.ownerDocument.createTextNode(meta.valueType.to(value))
 
     bind: (opts...) ->
       meta.bind = parseExpr(opts...)
@@ -41,21 +34,21 @@ module.exports = (types) -> () ->
 
     sample: (value) ->
       meta.sample = value
-      exposed      
+      exposed
 
     extract: (node, target) ->
       meta.bind?.set(target, meta.valueType.from(node.textContent))
 
     descriptor: ->
-      meta.bind?.descriptor(_.merge({}, meta.valueType.desc, sample: if meta.sample? then meta.valueType.from(meta.sample)))      
+      meta.bind?.descriptor(_.merge({}, meta.valueType.desc, sample: if meta.sample? then meta.valueType.from(meta.sample)))
 
     isSet: (obj) ->
       meta.required or not(meta.bind) or meta.bind.get(obj)?
-  
-  _.forEach types, (value, key) -> 
-    exposed[key] = -> 
+
+  _.forEach types, (value, key) ->
+    exposed[key] = ->
       meta.valueType = value
-      exposed    
+      exposed
 
   exposed
 

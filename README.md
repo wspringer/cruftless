@@ -4,7 +4,7 @@
 
 # README
 
-An XML builder / parser that tries to ease the common cases, allowing you to quickly build a model from your document structure and get a builder / parser for free. 
+An XML builder / parser that tries to ease the common cases, allowing you to quickly build a model from your document structure and get a builder / parser for free.
 
 [![CircleCI](https://circleci.com/gh/wspringer/cruftless.svg?style=svg&circle-token=310415870909bda5fde99f144c9c06cf979abfa9)](https://circleci.com/gh/wspringer/cruftless)
 
@@ -39,21 +39,18 @@ let el = element('person').content(
     text().value(16)
   )
 );
-
 ```
 
 … and then to turn it back into XML, you'd use the `toXML()` operation:
 
 ```javascript
 el.toXML(); // ⇨ '<person><name>John Doe</name><age>16</age></person>'
-
 ```
 
 … or the `toDOM()` operation instead to return a DOM representation of the document:
 
 ```javascript
-el.toDOM(); 
-
+el.toDOM();
 ```
 
 ## Binding
@@ -69,21 +66,18 @@ el = element('person').content(
     text().bind('age')
   )
 );
-
 ```
 
 Now, if you want to generate different versions of your XML document for different persons, you can simply pass in an object with `name` and `age` properties:
 
 ```javascript
 let xml = el.toXML({ name: 'John Doe', age: '16'}); // ⇨ '<person><name>John Doe</name><age>16</age></person>'
-
 ```
 
 But the beauty is, it also works the other way around. If you have your model with binding expressions, then you're able to *extract* data from XML like this:
 
 ```javascript
 el.fromXML(xml); // ⇨ { name: 'John Doe', age: '16' }
-
 ```
 
 ## Less tedious, please
@@ -100,11 +94,7 @@ let { parse } = require('cruftless')();
 
 el = parse(template)
 console.log(el.toXML({ name: 'Jane Doe', age: '18' }));
-
-⇒ <person>
-⇒   <name>Jane Doe</name>
-⇒   <age>18</age>
-⇒ </person>
+⇒ <person><name>Jane Doe</name><age>18</age></person>
 ```
 
 ## Additional metadata
@@ -119,26 +109,17 @@ template = parse(`<persons>
   </person>
 </persons>`);
 
-// Note that because of the 'integer' modifier, integer values are 
+// Note that because of the 'integer' modifier, integer values are
 // now automatically getting transfered from and to strings.
 
 console.log(template.toXML({ persons: [
   { name: 'John Doe', age: 16 },
   { name: 'Jane Doe', age: 18 }
 ]}));
-
-⇒ <persons>
-⇒   <person>
-⇒     <name>John Doe</name>
-⇒     <age>16</age>
-⇒   </person><person>
-⇒     <name>Jane Doe</name>
-⇒     <age>18</age>
-⇒   </person>
-⇒ </persons>
+⇒ <persons><person><name>John Doe</name><age>16</age></person><person><name>Jane Doe</name><age>18</age></person></persons>
 ```
 
-You can add your own value types to convert from and to the string literals included in the XML representation. 
+You can add your own value types to convert from and to the string literals included in the XML representation.
 
 ```javascript
 const { element, attr, text, parse } = require('cruftless')({
@@ -154,15 +135,35 @@ const { element, attr, text, parse } = require('cruftless')({
 template = parse(`<foo>{{value|zeroOrOne}})</foo>`);
 console.log(template.toXML({ value: true }));
 console.log(template.toXML({ value: false }));
-
 ⇒ <foo>1</foo>
 ⇒ <foo>0</foo>
 ```
 
+## Whitespace
+
+By default, all whitespace in text content will be stripped, which probably
+makes sense in the case where you're using XML to represent data structures. If
+that's now what you want, the you can set the `preserveWhitespace` option to
+`true`.
+
+```javascript
+const { element, attr, text, parse } = require('cruftless')({
+  preserveWhitespace: true
+});
+
+template = parse(`<foo>
+  <bar>{{a}}</bar>
+</foo>`);
+
+console.log(template.toXML({ a: 3 }));
+⇒ <foo>
+⇒   <bar>3</bar>
+⇒ </foo>
+```
 
 ## Alternative notation
 
-The `<!--persons|array-->` way of annotating an element is not the only way you are able to add metadata. Another way to add metadata to elements is by using one of the reserved attributes prefixed with `c-`. 
+The `<!--persons|array-->` way of annotating an element is not the only way you are able to add metadata. Another way to add metadata to elements is by using one of the reserved attributes prefixed with `c-`.
 
 ```javascript
 template = parse(`<persons>
@@ -176,16 +177,7 @@ console.log(template.toXML({ persons: [
   { name: 'John Doe', age: 16 },
   { name: 'Jane Doe', age: 18 }
 ]}));
-
-⇒ <persons>
-⇒   <person>
-⇒     <name>John Doe</name>
-⇒     <age>16</age>
-⇒   </person><person>
-⇒     <name>Jane Doe</name>
-⇒     <age>18</age>
-⇒   </person>
-⇒ </persons>
+⇒ <persons><person><name>John Doe</name><age>16</age></person><person><name>Jane Doe</name><age>18</age></person></persons>
 ```
 
 If you hate the magic `c-` prefixed attributes, then you can also a slightly less readable but admittedly more correct XML namespace:
@@ -202,16 +194,7 @@ console.log(template.toXML({ persons: [
   { name: 'John Doe', age: 16 },
   { name: 'Jane Doe', age: 18 }
 ]}));
-
-⇒ <persons>
-⇒   <person>
-⇒     <name>John Doe</name>
-⇒     <age>16</age>
-⇒   </person><person>
-⇒     <name>Jane Doe</name>
-⇒     <age>18</age>
-⇒   </person>
-⇒ </persons>
+⇒ <persons><person><name>John Doe</name><age>16</age></person><person><name>Jane Doe</name><age>18</age></person></persons>
 ```
 
 ## Conditionals
@@ -225,10 +208,9 @@ template.toXML({}); // ⇨ '<foo/>'
 template.toXML({ a: null }); // ⇨ '<foo/>'
 template.toXML({ a: void 0 }); // ⇨ '<foo/>'
 template.toXML({ a: 3 }); // ⇨ '<foo><bar>text</bar></foo>'
-
 ```
 
-If your template contains variable references, and the data structure you are passing in does not contain these references, then — instead of generating the value `undefined`, Cruftless will drop the entire element. In fact, if a deeply nested element contains references to variable, and that variable is not defined, then it will not only drop *that* element, but all elements that included that element referring to a non-existing variable. 
+If your template contains variable references, and the data structure you are passing in does not contain these references, then — instead of generating the value `undefined`, Cruftless will drop the entire element. In fact, if a deeply nested element contains references to variable, and that variable is not defined, then it will not only drop *that* element, but all elements that included that element referring to a non-existing variable.
 
 ```javascript
 template = parse(`<level1>
@@ -238,42 +220,26 @@ template = parse(`<level1>
 </level1>`);
 
 console.log(template.toXML({ b: 2 }));
-
-⇒ <level1>
-⇒   <level2 b="2">
-⇒     
-⇒   </level2>
-⇒ </level1>
+⇒ <level1><level2 b="2"></level2></level1>
 ```
 
 ```javascript
 console.log(template.toXML({ b: 2, a: 3 }));
-
-⇒ <level1>
-⇒   <level2 b="2">
-⇒     <level3>3</level3>
-⇒   </level2>
-⇒ </level1>
+⇒ <level1><level2 b="2"><level3>3</level3></level2></level1>
 ```
 
 ```javascript
 console.log(template.toXML({ a: 3 }));
-
-⇒ <level1>
-⇒   <level2>
-⇒     <level3>3</level3>
-⇒   </level2>
-⇒ </level1>
+⇒ <level1><level2><level3>3</level3></level2></level1>
 ```
 
 ## Schema (incomplete, subject to change)
 
-Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects. 
-  
+Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects.
+
 ```javascript
 let schema = template.descriptor();
 console.log(JSON.stringify(schema, null, 2));
-
 ⇒ {
 ⇒   "type": "object",
 ⇒   "keys": {
@@ -285,7 +251,7 @@ console.log(JSON.stringify(schema, null, 2));
 ⇒     }
 ⇒   }
 ⇒ }
-```  
+```
 
 The schema will include additional metadata you attached to expressions:
 
@@ -297,7 +263,6 @@ template = parse(`<person>
 
 schema = template.descriptor();
 console.log(JSON.stringify(schema, null, 2));
-
 ⇒ {
 ⇒   "type": "object",
 ⇒   "keys": {
@@ -317,4 +282,4 @@ console.log(JSON.stringify(schema, null, 2));
 
 
 ----
-Markdown generated from [./README.js.md](README.js.md) by [![RunMD Logo](http://i.imgur.com/h0FVyzU.png)](https://github.com/broofa/runmd)
+Markdown generated from [./README.js.md](./README.js.md) by [![RunMD Logo](http://i.imgur.com/h0FVyzU.png)](https://github.com/broofa/runmd)

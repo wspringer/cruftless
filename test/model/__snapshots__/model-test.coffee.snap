@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`the entire model should allow you to preserve whitespace 1`] = `
+"<foo>
+  <bar>3</bar>
+</foo>"
+`;
+
+exports[`the entire model should not fail on this either 1`] = `"<DynamicAttributes><KeyGroup><Value key=\\"opt-in\\"/><Value key=\\"IdentifiedSince\\"/></KeyGroup></DynamicAttributes>"`;
+
+exports[`the entire model should not fail on this either 2`] = `"<DynamicAttributes><KeyGroup><Value key=\\"opt-in\\">true</Value><Value key=\\"IdentifiedSince\\"/></KeyGroup></DynamicAttributes>"`;
+
+exports[`the entire model should not fail on this either 3`] = `"<DynamicAttributes><KeyGroup><Value key=\\"opt-in\\">True</Value><Value key=\\"IdentifiedSince\\"/></KeyGroup></DynamicAttributes>"`;
