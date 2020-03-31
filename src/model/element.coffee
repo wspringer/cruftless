@@ -2,6 +2,7 @@ serializer = new(require('xmldom').XMLSerializer)
 di = new(require('xmldom').DOMImplementation)
 parser = new(require('xmldom').DOMParser)
 _ = require 'lodash'
+{ identity } = require 'lodash'
 
 { parseExpr } = require './util'
 
@@ -10,6 +11,8 @@ module.exports = ({types}) -> (name) ->
     name: name
     attrs: []
     content: []
+    required: true
+    multiple: false
     scope: (target) -> target or {}
     traverse: (obj, iterator) -> iterator(obj)
     descriptor: ->
@@ -22,6 +25,10 @@ module.exports = ({types}) -> (name) ->
 
   exposed =
 
+    optional: () ->
+      meta.required = false
+      exposed
+
     attrs: (attr...) ->
       meta.attrs.push(attr...)
       exposed
@@ -31,7 +38,7 @@ module.exports = ({types}) -> (name) ->
       exposed
 
     ns: (ns) ->
-      meta.ns = ns
+      if ns? then meta.ns = ns
       exposed
 
     bind: (opts...) ->
@@ -43,6 +50,7 @@ module.exports = ({types}) -> (name) ->
       exposed
 
     array: ->
+      meta.multiple = true
       meta.scope = (target) ->
         coll = meta.bind.get(target)
         if coll?
@@ -162,7 +170,20 @@ module.exports = ({types}) -> (name) ->
         meta.describe(obj)
         { type: 'object', keys: obj }
 
-
+    relaxng: (ctx, root = true) ->
+      wrap = switch
+        when meta.required and meta.multiple then ctx.element('oneOrMore').content
+        when not meta.required and meta.multiple then ctx.element('zeroOrMore').content
+        when not meta.required and not meta.multiple then ctx.element('optional').content
+        else identity
+      wrap(
+        ctx.element('element')
+          .attrs(ctx.attr('name').value(meta.name))
+          .ns(if root then 'http://relaxng.org/ns/structure/1.0')
+          .content(
+            ...meta.content.map((node) -> node.relaxng(ctx, false))
+          )
+      )
 
   exposed
 
