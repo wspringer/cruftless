@@ -327,6 +327,12 @@ describe 'the entire model', ->
     xml = el.toXML(a: 3)
     expect(xml).toMatchSnapshot()
 
+  it 'should include elements with a false value', ->
+    el = parse('''<foo><bar>{{a|boolean}}</bar></foo>''')
+    expect(el.toXML({ a: true })).toEqual('<foo><bar>true</bar></foo>')
+    expect(el.toXML({ a: false })).toEqual('<foo><bar>false</bar></foo>')
+
+
   xit 'should be able to parse a template from the wild', ->
     el = parse('''
 <catalog>

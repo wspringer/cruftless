@@ -43,7 +43,7 @@ module.exports = ({types, preserveWhitespace}) -> () ->
       meta.bind?.descriptor(_.merge({}, meta.valueType.desc, sample: if meta.sample? then meta.valueType.from(meta.sample)))
 
     isSet: (obj) ->
-      meta.required or not(meta.bind) or meta.bind.get(obj)?
+      meta.required or not(meta.bind) or not(_.isUndefined(meta.bind.get(obj)))
 
   _.forEach types, (value, key) ->
     exposed[key] = ->

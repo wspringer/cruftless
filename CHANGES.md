@@ -1,5 +1,9 @@
 # Changes
 
+## 0.1.6
+
+* FIX: Falsy values were getting excluded from the output
+
 ## 0.1.5
 
 * Upgrade xmldom dependency to ^0.3.0

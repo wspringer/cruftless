@@ -1,8 +1,8 @@
 _ = require 'lodash'
 
-module.exports = 
+module.exports =
 
-  string: 
+  string:
     desc: type: 'string'
     from: _.identity
     to: _.identity
@@ -15,9 +15,10 @@ module.exports =
   float:
     desc : type: 'float'
     from: (str) -> parseFloat()
-    to: (value) -> value.toString()    
+    to: (value) -> value.toString()
 
   boolean:
     desc: type: 'boolean'
     from: (str) -> str is 'true'
-    to: (value) -> value.toString()
+    to: (value) ->
+      value.toString()

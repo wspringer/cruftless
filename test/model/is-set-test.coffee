@@ -20,7 +20,7 @@ describe 'the isSet method', ->
   it 'should return true for bound attributes', ->
     el = element('foo').attrs(
       attr().bind('a')
-    )    
+    )
     expect(el.isSet({ b: 3 })).toBeFalsy()
     expect(el.isSet({ a: 3 })).toBeTruthy()
 
@@ -62,4 +62,9 @@ describe 'the isSet method', ->
         text().bind('b')
       )
     )
-    expect(el.isSet({ b: 3, a: 2 })).toBeTruthy()    
+    expect(el.isSet({ b: 3, a: 2 })).toBeTruthy()
+
+  it 'should return true for a false value', ->
+    t = text().bind('a').boolean()
+    expect(t.isSet({ a: true })).toBeTruthy()
+    expect(t.isSet({ a: false })).toBeTruthy()
