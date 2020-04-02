@@ -45,10 +45,23 @@ module.exports = ({types, preserveWhitespace}) -> () ->
     isSet: (obj) ->
       meta.required or not(meta.bind) or not(_.isUndefined(meta.bind.get(obj)))
 
+    relaxng: (ctx) ->
+      nested =
+        if meta.valueType.xsDataType?
+          ctx.element('data').attrs(ctx.attr('type').value(meta.valueType.xsDataType))
+        else
+          ctx.element('text')
+      if (meta.required)
+        nested
+      else
+        ctx.element('optional').content(nested)
+
   _.forEach types, (value, key) ->
     exposed[key] = ->
       meta.valueType = value
       exposed
+
+
 
   exposed
 
