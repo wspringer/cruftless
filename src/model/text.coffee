@@ -46,8 +46,7 @@ module.exports = ({types, preserveWhitespace}) -> () ->
       meta.required or not(meta.bind) or not(_.isUndefined(meta.bind.get(obj)))
 
     relaxng: (ctx) ->
-      type = meta.valueType.xsDataType or 'string'
-      nested = ctx.element('data').attrs(ctx.attr('type').value(meta.valueType.xsDataType))
+      nested = meta.valueType.relaxng(ctx)
       if (meta.required)
         nested
       else
