@@ -17,6 +17,7 @@ module.exports = ({types, preserveWhitespace}) -> () ->
     value: (value) ->
       meta.value =
         if (preserveWhitespace) then value else _.trim(value)
+      meta.required = true
       exposed
 
     bind: (opts...) ->
@@ -46,7 +47,11 @@ module.exports = ({types, preserveWhitespace}) -> () ->
       meta.required or not(meta.bind) or not(_.isUndefined(meta.bind.get(obj)))
 
     relaxng: (ctx) ->
-      nested = meta.valueType.relaxng(ctx)
+      nested =
+        if meta.value
+          ctx.element('value').content(ctx.text(meta.value))
+        else
+          meta.valueType.relaxng(ctx)
       if (meta.required)
         nested
       else

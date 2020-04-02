@@ -10,5 +10,12 @@ module.exports = (opts = {}) ->
   attr = require('./model/attr')(opts)
   text = require('./model/text')(opts)
   parse = require('./model/builder')({ element, attr, text })
+  relaxng = (template) ->
+    element('grammar')
+    .ns('http://relaxng.org/ns/structure/1.0')
+    .attrs(
+      attr('datatypeLibrary').value('http://www.w3.org/2001/XMLSchema-datatypes')
+    )
+    .content(template.relaxng({ element, attr, text }))
 
   { element, attr, text, parse }

@@ -170,18 +170,18 @@ module.exports = ({types}) -> (name) ->
         meta.describe(obj)
         { type: 'object', keys: obj }
 
-    relaxng: (ctx, root = true) ->
+    relaxng: (ctx) ->
       wrap = switch
         when meta.required and meta.multiple then ctx.element('oneOrMore').content
         when not meta.required and meta.multiple then ctx.element('zeroOrMore').content
         when not meta.required and not meta.multiple then ctx.element('optional').content
-        else identity
+      wrap = wrap or identity
       wrap(
         ctx.element('element')
           .attrs(ctx.attr('name').value(meta.name))
-          .ns(if root then 'http://relaxng.org/ns/structure/1.0')
           .content(
-            ...meta.content.map((node) -> node.relaxng(ctx, false))
+            ...meta.attrs.map((node) -> node.relaxng(ctx))
+            ...meta.content.map((node) -> node.relaxng(ctx))
           )
       )
 
