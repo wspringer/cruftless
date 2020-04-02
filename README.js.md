@@ -141,25 +141,6 @@ console.log(template.toXML({ value: true }));
 console.log(template.toXML({ value: false }));
 ```
 
-## Whitespace
-
-By default, all whitespace in text content will be stripped, which probably
-makes sense in the case where you're using XML to represent data structures. If
-that's now what you want, the you can set the `preserveWhitespace` option to
-`true`.
-
-```javascript --run simple-3
-const { element, attr, text, parse } = require('cruftless')({
-  preserveWhitespace: true
-});
-
-template = parse(`<foo>
-  <bar>{{a}}</bar>
-</foo>`);
-
-console.log(template.toXML({ a: 3 }));
-```
-
 ## Alternative notation
 
 The `<!--persons|array-->` way of annotating an element is not the only way you are able to add metadata. Another way to add metadata to elements is by using one of the reserved attributes prefixed with `c-`.

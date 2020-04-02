@@ -15,8 +15,7 @@ module.exports = ({types, preserveWhitespace}) -> () ->
       exposed
 
     value: (value) ->
-      meta.value =
-        if (preserveWhitespace) then value else _.trim(value)
+      meta.value = value
       meta.required = true
       exposed
 

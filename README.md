@@ -44,7 +44,7 @@ let el = element('person').content(
 … and then to turn it back into XML, you'd use the `toXML()` operation:
 
 ```javascript
-el.toXML(); // ⇨ '<person>\r\n    <name>John Doe</name>\r\n    <age>16</age>\r\n</person>'
+el.toXML(); // ⇨ '<person>\r\n  <name>John Doe</name>\r\n  <age>16</age>\r\n</person>'
 ```
 
 … or the `toDOM()` operation instead to return a DOM representation of the document:
@@ -71,7 +71,7 @@ el = element('person').content(
 Now, if you want to generate different versions of your XML document for different persons, you can simply pass in an object with `name` and `age` properties:
 
 ```javascript
-let xml = el.toXML({ name: 'John Doe', age: '16'}); // ⇨ '<person>\r\n    <name>John Doe</name>\r\n    <age>16</age>\r\n</person>'
+let xml = el.toXML({ name: 'John Doe', age: '16'}); // ⇨ '<person>\r\n  <name>John Doe</name>\r\n  <age>16</age>\r\n</person>'
 ```
 
 But the beauty is, it also works the other way around. If you have your model with binding expressions, then you're able to *extract* data from XML like this:
@@ -95,8 +95,8 @@ let { parse } = require('cruftless')();
 el = parse(template)
 console.log(el.toXML({ name: 'Jane Doe', age: '18' }));
 ⇒ <person>
-⇒     <name>Jane Doe</name>
-⇒     <age>18</age>
+⇒   <name>Jane Doe</name>
+⇒   <age>18</age>
 ⇒ </person>
 ```
 
@@ -120,14 +120,14 @@ console.log(template.toXML({ persons: [
   { name: 'Jane Doe', age: 18 }
 ]}));
 ⇒ <persons>
-⇒     <person>
-⇒         <name>John Doe</name>
-⇒         <age>16</age>
-⇒     </person>
-⇒     <person>
-⇒         <name>Jane Doe</name>
-⇒         <age>18</age>
-⇒     </person>
+⇒   <person>
+⇒     <name>John Doe</name>
+⇒     <age>16</age>
+⇒   </person>
+⇒   <person>
+⇒     <name>Jane Doe</name>
+⇒     <age>18</age>
+⇒   </person>
 ⇒ </persons>
 ```
 
@@ -190,14 +190,14 @@ console.log(template.toXML({ persons: [
   { name: 'Jane Doe', age: 18 }
 ]}));
 ⇒ <persons>
-⇒     <person>
-⇒         <name>John Doe</name>
-⇒         <age>16</age>
-⇒     </person>
-⇒     <person>
-⇒         <name>Jane Doe</name>
-⇒         <age>18</age>
-⇒     </person>
+⇒   <person>
+⇒     <name>John Doe</name>
+⇒     <age>16</age>
+⇒   </person>
+⇒   <person>
+⇒     <name>Jane Doe</name>
+⇒     <age>18</age>
+⇒   </person>
 ⇒ </persons>
 ```
 
@@ -216,14 +216,14 @@ console.log(template.toXML({ persons: [
   { name: 'Jane Doe', age: 18 }
 ]}));
 ⇒ <persons>
-⇒     <person>
-⇒         <name>John Doe</name>
-⇒         <age>16</age>
-⇒     </person>
-⇒     <person>
-⇒         <name>Jane Doe</name>
-⇒         <age>18</age>
-⇒     </person>
+⇒   <person>
+⇒     <name>John Doe</name>
+⇒     <age>16</age>
+⇒   </person>
+⇒   <person>
+⇒     <name>Jane Doe</name>
+⇒     <age>18</age>
+⇒   </person>
 ⇒ </persons>
 ```
 
@@ -237,7 +237,7 @@ template = parse(`<foo><bar c-if="a">text</bar></foo>`);
 template.toXML({}); // ⇨ '<foo/>'
 template.toXML({ a: null }); // ⇨ '<foo/>'
 template.toXML({ a: void 0 }); // ⇨ '<foo/>'
-template.toXML({ a: 3 }); // ⇨ '<foo>\r\n    <bar>text</bar>\r\n</foo>'
+template.toXML({ a: 3 }); // ⇨ '<foo>\r\n  <bar>text</bar>\r\n</foo>'
 ```
 
 If your template contains variable references, and the data structure you are passing in does not contain these references, then — instead of generating the value `undefined`, Cruftless will drop the entire element. In fact, if a deeply nested element contains references to variable, and that variable is not defined, then it will not only drop *that* element, but all elements that included that element referring to a non-existing variable.
@@ -251,26 +251,25 @@ template = parse(`<level1>
 
 console.log(template.toXML({ b: 2 }));
 ⇒ <level1>
-⇒     <level2 b="2">
-⇒     </level2>
+⇒   <level2 b="2"/>
 ⇒ </level1>
 ```
 
 ```javascript
 console.log(template.toXML({ b: 2, a: 3 }));
 ⇒ <level1>
-⇒     <level2 b="2">
-⇒         <level3>3</level3>
-⇒     </level2>
+⇒   <level2 b="2">
+⇒     <level3>3</level3>
+⇒   </level2>
 ⇒ </level1>
 ```
 
 ```javascript
 console.log(template.toXML({ a: 3 }));
 ⇒ <level1>
-⇒     <level2>
-⇒         <level3>3</level3>
-⇒     </level2>
+⇒   <level2>
+⇒     <level3>3</level3>
+⇒   </level2>
 ⇒ </level1>
 ```
 
@@ -334,21 +333,20 @@ const { relaxng } = require('cruftless')();
 
 console.log(relaxng(template));
 ⇒ <grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" xmlns="http://relaxng.org/ns/structure/1.0">
+⇒   <start>
 ⇒     <element name="person">
-⇒         <data type="string"/>
-⇒         <element name="name">
-⇒             <optional>
-⇒                 <data type="string"/>
-⇒             </optional>
-⇒         </element>
-⇒         <data type="string"/>
-⇒         <element name="age">
-⇒             <optional>
-⇒                 <data type="integer"/>
-⇒             </optional>
-⇒         </element>
-⇒         <data type="string"/>
+⇒       <element name="name">
+⇒         <optional>
+⇒           <data type="string"/>
+⇒         </optional>
+⇒       </element>
+⇒       <element name="age">
+⇒         <optional>
+⇒           <data type="integer"/>
+⇒         </optional>
+⇒       </element>
 ⇒     </element>
+⇒   </start>
 ⇒ </grammar>
 ```
 

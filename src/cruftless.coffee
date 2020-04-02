@@ -16,6 +16,10 @@ module.exports = (opts = {}) ->
     .attrs(
       attr('datatypeLibrary').value('http://www.w3.org/2001/XMLSchema-datatypes')
     )
-    .content(template.relaxng({ element, attr, text })).toXML()
+    .content(
+      element('start').content(
+        template.relaxng({ element, attr, text })
+      )
+    ).toXML()
 
   { element, attr, text, parse, relaxng }
