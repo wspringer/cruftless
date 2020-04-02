@@ -1,5 +1,10 @@
 # Changes
 
+## 0.2.0
+
+* Dropped `preserveWhitespace`, contemplating xml:space
+* Add the posibility to generate RelaxNG schemas from the template
+
 ## 0.1.6
 
 * FIX: Falsy values were getting excluded from the output
