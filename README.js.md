@@ -1,8 +1,9 @@
 ```javascript --hide
 require('coffeescript/register');
+const format = require('xml-formatter');
 runmd.onRequire = function(path) {
   if (path === 'cruftless') {
-    return './src/cruftless.coffee';
+    return './readme.cruftless.coffee';
   }
 }
 ```
@@ -226,7 +227,7 @@ console.log(template.toXML({ b: 2, a: 3 }));
 console.log(template.toXML({ a: 3 }));
 ```
 
-## Schema (incomplete, subject to change)
+## JSON-ish Schema (incomplete, subject to change)
 
 Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects.
 
@@ -247,5 +248,19 @@ schema = template.descriptor();
 console.log(JSON.stringify(schema, null, 2));
 ```
 
+## RelaxNG Schema
 
+Since Cruftless captures the structure of the XML document, it's also able to
+generate an XML Schema representation of the document structure. Only, it's not
+relying on XML Schema. It's using RelaxNG instead. If you never heard of
+RelaxNG before: think of it as a more readable better version of XML Schema,
+without the craziness.
+
+So based on the template above, this would give you the RelaxNG schema:
+
+```javascript --run simple-2
+const { relaxng } = require('cruftless')();
+
+console.log(relaxng(template));
+```
 

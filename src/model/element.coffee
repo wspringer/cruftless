@@ -6,7 +6,7 @@ _ = require 'lodash'
 
 { parseExpr } = require './util'
 
-module.exports = ({types}) -> (name) ->
+module.exports = ({types, format = _.identity}) -> (name) ->
   meta =
     name: name
     attrs: []
@@ -135,7 +135,7 @@ module.exports = ({types}) -> (name) ->
     toDOM: (obj) -> exposed.generate(obj)
 
     toXML: (obj) ->
-      serializer.serializeToString(exposed.generate(obj))
+      format(serializer.serializeToString(exposed.generate(obj)))
 
     matches: (elem) ->
       elem.nodeType is 1 and elem.localName is meta.name and (

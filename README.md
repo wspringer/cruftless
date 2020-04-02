@@ -44,7 +44,7 @@ let el = element('person').content(
 … and then to turn it back into XML, you'd use the `toXML()` operation:
 
 ```javascript
-el.toXML(); // ⇨ '<person><name>John Doe</name><age>16</age></person>'
+el.toXML(); // ⇨ '<person>\r\n    <name>John Doe</name>\r\n    <age>16</age>\r\n</person>'
 ```
 
 … or the `toDOM()` operation instead to return a DOM representation of the document:
@@ -71,7 +71,7 @@ el = element('person').content(
 Now, if you want to generate different versions of your XML document for different persons, you can simply pass in an object with `name` and `age` properties:
 
 ```javascript
-let xml = el.toXML({ name: 'John Doe', age: '16'}); // ⇨ '<person><name>John Doe</name><age>16</age></person>'
+let xml = el.toXML({ name: 'John Doe', age: '16'}); // ⇨ '<person>\r\n    <name>John Doe</name>\r\n    <age>16</age>\r\n</person>'
 ```
 
 But the beauty is, it also works the other way around. If you have your model with binding expressions, then you're able to *extract* data from XML like this:
@@ -94,7 +94,10 @@ let { parse } = require('cruftless')();
 
 el = parse(template)
 console.log(el.toXML({ name: 'Jane Doe', age: '18' }));
-⇒ <person><name>Jane Doe</name><age>18</age></person>
+⇒ <person>
+⇒     <name>Jane Doe</name>
+⇒     <age>18</age>
+⇒ </person>
 ```
 
 ## Additional metadata
@@ -116,7 +119,16 @@ console.log(template.toXML({ persons: [
   { name: 'John Doe', age: 16 },
   { name: 'Jane Doe', age: 18 }
 ]}));
-⇒ <persons><person><name>John Doe</name><age>16</age></person><person><name>Jane Doe</name><age>18</age></person></persons>
+⇒ <persons>
+⇒     <person>
+⇒         <name>John Doe</name>
+⇒         <age>16</age>
+⇒     </person>
+⇒     <person>
+⇒         <name>Jane Doe</name>
+⇒         <age>18</age>
+⇒     </person>
+⇒ </persons>
 ```
 
 You can add your own value types to convert from and to the string literals included in the XML representation.
@@ -177,7 +189,16 @@ console.log(template.toXML({ persons: [
   { name: 'John Doe', age: 16 },
   { name: 'Jane Doe', age: 18 }
 ]}));
-⇒ <persons><person><name>John Doe</name><age>16</age></person><person><name>Jane Doe</name><age>18</age></person></persons>
+⇒ <persons>
+⇒     <person>
+⇒         <name>John Doe</name>
+⇒         <age>16</age>
+⇒     </person>
+⇒     <person>
+⇒         <name>Jane Doe</name>
+⇒         <age>18</age>
+⇒     </person>
+⇒ </persons>
 ```
 
 If you hate the magic `c-` prefixed attributes, then you can also a slightly less readable but admittedly more correct XML namespace:
@@ -194,7 +215,16 @@ console.log(template.toXML({ persons: [
   { name: 'John Doe', age: 16 },
   { name: 'Jane Doe', age: 18 }
 ]}));
-⇒ <persons><person><name>John Doe</name><age>16</age></person><person><name>Jane Doe</name><age>18</age></person></persons>
+⇒ <persons>
+⇒     <person>
+⇒         <name>John Doe</name>
+⇒         <age>16</age>
+⇒     </person>
+⇒     <person>
+⇒         <name>Jane Doe</name>
+⇒         <age>18</age>
+⇒     </person>
+⇒ </persons>
 ```
 
 ## Conditionals
@@ -207,7 +237,7 @@ template = parse(`<foo><bar c-if="a">text</bar></foo>`);
 template.toXML({}); // ⇨ '<foo/>'
 template.toXML({ a: null }); // ⇨ '<foo/>'
 template.toXML({ a: void 0 }); // ⇨ '<foo/>'
-template.toXML({ a: 3 }); // ⇨ '<foo><bar>text</bar></foo>'
+template.toXML({ a: 3 }); // ⇨ '<foo>\r\n    <bar>text</bar>\r\n</foo>'
 ```
 
 If your template contains variable references, and the data structure you are passing in does not contain these references, then — instead of generating the value `undefined`, Cruftless will drop the entire element. In fact, if a deeply nested element contains references to variable, and that variable is not defined, then it will not only drop *that* element, but all elements that included that element referring to a non-existing variable.
@@ -220,20 +250,31 @@ template = parse(`<level1>
 </level1>`);
 
 console.log(template.toXML({ b: 2 }));
-⇒ <level1><level2 b="2"></level2></level1>
+⇒ <level1>
+⇒     <level2 b="2">
+⇒     </level2>
+⇒ </level1>
 ```
 
 ```javascript
 console.log(template.toXML({ b: 2, a: 3 }));
-⇒ <level1><level2 b="2"><level3>3</level3></level2></level1>
+⇒ <level1>
+⇒     <level2 b="2">
+⇒         <level3>3</level3>
+⇒     </level2>
+⇒ </level1>
 ```
 
 ```javascript
 console.log(template.toXML({ a: 3 }));
-⇒ <level1><level2><level3>3</level3></level2></level1>
+⇒ <level1>
+⇒     <level2>
+⇒         <level3>3</level3>
+⇒     </level2>
+⇒ </level1>
 ```
 
-## Schema (incomplete, subject to change)
+## JSON-ish Schema (incomplete, subject to change)
 
 Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects.
 
@@ -278,7 +319,38 @@ console.log(JSON.stringify(schema, null, 2));
 ⇒ }
 ```
 
+## RelaxNG Schema
 
+Since Cruftless captures the structure of the XML document, it's also able to
+generate an XML Schema representation of the document structure. Only, it's not
+relying on XML Schema. It's using RelaxNG instead. If you never heard of
+RelaxNG before: think of it as a more readable better version of XML Schema,
+without the craziness.
+
+So based on the template above, this would give you the RelaxNG schema:
+
+```javascript
+const { relaxng } = require('cruftless')();
+
+console.log(relaxng(template));
+⇒ <grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" xmlns="http://relaxng.org/ns/structure/1.0">
+⇒     <element name="person">
+⇒         <data type="string"/>
+⇒         <element name="name">
+⇒             <optional>
+⇒                 <data type="string"/>
+⇒             </optional>
+⇒         </element>
+⇒         <data type="string"/>
+⇒         <element name="age">
+⇒             <optional>
+⇒                 <data type="integer"/>
+⇒             </optional>
+⇒         </element>
+⇒         <data type="string"/>
+⇒     </element>
+⇒ </grammar>
+```
 
 
 ----
