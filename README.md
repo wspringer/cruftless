@@ -151,28 +151,6 @@ console.log(template.toXML({ value: false }));
 ⇒ <foo>0</foo>
 ```
 
-## Whitespace
-
-By default, all whitespace in text content will be stripped, which probably
-makes sense in the case where you're using XML to represent data structures. If
-that's now what you want, the you can set the `preserveWhitespace` option to
-`true`.
-
-```javascript
-const { element, attr, text, parse } = require('cruftless')({
-  preserveWhitespace: true
-});
-
-template = parse(`<foo>
-  <bar>{{a}}</bar>
-</foo>`);
-
-console.log(template.toXML({ a: 3 }));
-⇒ <foo>
-⇒   <bar>3</bar>
-⇒ </foo>
-```
-
 ## Alternative notation
 
 The `<!--persons|array-->` way of annotating an element is not the only way you are able to add metadata. Another way to add metadata to elements is by using one of the reserved attributes prefixed with `c-`.
@@ -335,16 +313,16 @@ console.log(relaxng(template));
 ⇒ <grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" xmlns="http://relaxng.org/ns/structure/1.0">
 ⇒   <start>
 ⇒     <element name="person">
-⇒       <element name="name">
-⇒         <optional>
+⇒       <optional>
+⇒         <element name="name">
 ⇒           <data type="string"/>
-⇒         </optional>
-⇒       </element>
-⇒       <element name="age">
-⇒         <optional>
+⇒         </element>
+⇒       </optional>
+⇒       <optional>
+⇒         <element name="age">
 ⇒           <data type="integer"/>
-⇒         </optional>
-⇒       </element>
+⇒         </element>
+⇒       </optional>
 ⇒     </element>
 ⇒   </start>
 ⇒ </grammar>

@@ -37,6 +37,9 @@ module.exports = ({types, format = _.identity}) -> (name) ->
       meta.content.push(elem...)
       exposed
 
+    isRequired: ->
+      meta.required
+
     ns: (ns) ->
       if ns? then meta.ns = ns
       exposed
@@ -171,10 +174,16 @@ module.exports = ({types, format = _.identity}) -> (name) ->
         { type: 'object', keys: obj }
 
     relaxng: (ctx) ->
+      required =
+        if (meta.content?.length || 0) is 1
+          meta.content[0].isRequired()
+        else
+          meta.required
+      multiple = meta.multiple
       wrap = switch
-        when meta.required and meta.multiple then ctx.element('oneOrMore').content
-        when not meta.required and meta.multiple then ctx.element('zeroOrMore').content
-        when not meta.required and not meta.multiple then ctx.element('optional').content
+        when required and multiple then ctx.element('oneOrMore').content
+        when not required and multiple then ctx.element('zeroOrMore').content
+        when not required and not multiple then ctx.element('optional').content
       wrap = wrap or identity
       wrap(
         ctx.element('element')

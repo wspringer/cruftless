@@ -21,7 +21,7 @@ describe 'the relaxng support', ->
 
   it 'should support optional text nodes', ->
     template = parse('''<foo>{{bar}}</foo>''')
-    expect(template.relaxng(cruftless()).toXML()).toEqual("<element name=\"foo\"><optional><data type=\"string\"/></optional></element>")
+    expect(template.relaxng(cruftless()).toXML()).toEqual("<optional><element name=\"foo\"><data type=\"string\"/></element></optional>")
 
   it 'should support typed text', ->
     template = parse('''<foo>{{bar|required|boolean}}</foo>''')

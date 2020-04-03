@@ -19,6 +19,9 @@ module.exports = ({types, preserveWhitespace}) -> () ->
       meta.required = true
       exposed
 
+    isRequired: ->
+      meta.required
+
     bind: (opts...) ->
       meta.bind = parseExpr(opts...)
       exposed
@@ -46,15 +49,10 @@ module.exports = ({types, preserveWhitespace}) -> () ->
       meta.required or not(meta.bind) or not(_.isUndefined(meta.bind.get(obj)))
 
     relaxng: (ctx) ->
-      nested =
-        if meta.value
-          ctx.element('value').content(ctx.text(meta.value))
-        else
-          meta.valueType.relaxng(ctx)
-      if (meta.required)
-        nested
+      if meta.value
+        ctx.element('value').content(ctx.text(meta.value))
       else
-        ctx.element('optional').content(nested)
+        meta.valueType.relaxng(ctx)
 
   _.forEach types, (value, key) ->
     exposed[key] = ->
