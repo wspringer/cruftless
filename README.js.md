@@ -1,8 +1,9 @@
 ```javascript --hide
 require('coffeescript/register');
+const format = require('xml-formatter');
 runmd.onRequire = function(path) {
   if (path === 'cruftless') {
-    return './src/cruftless.coffee';
+    return './readme.cruftless.coffee';
   }
 }
 ```
@@ -140,25 +141,6 @@ console.log(template.toXML({ value: true }));
 console.log(template.toXML({ value: false }));
 ```
 
-## Whitespace
-
-By default, all whitespace in text content will be stripped, which probably
-makes sense in the case where you're using XML to represent data structures. If
-that's now what you want, the you can set the `preserveWhitespace` option to
-`true`.
-
-```javascript --run simple-3
-const { element, attr, text, parse } = require('cruftless')({
-  preserveWhitespace: true
-});
-
-template = parse(`<foo>
-  <bar>{{a}}</bar>
-</foo>`);
-
-console.log(template.toXML({ a: 3 }));
-```
-
 ## Alternative notation
 
 The `<!--persons|array-->` way of annotating an element is not the only way you are able to add metadata. Another way to add metadata to elements is by using one of the reserved attributes prefixed with `c-`.
@@ -226,7 +208,7 @@ console.log(template.toXML({ b: 2, a: 3 }));
 console.log(template.toXML({ a: 3 }));
 ```
 
-## Schema (incomplete, subject to change)
+## JSON-ish Schema (incomplete, subject to change)
 
 Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects.
 
@@ -247,5 +229,19 @@ schema = template.descriptor();
 console.log(JSON.stringify(schema, null, 2));
 ```
 
+## RelaxNG Schema
 
+Since Cruftless captures the structure of the XML document, it's also able to
+generate an XML Schema representation of the document structure. Only, it's not
+relying on XML Schema. It's using RelaxNG instead. If you never heard of
+RelaxNG before: think of it as a more readable better version of XML Schema,
+without the craziness.
+
+So based on the template above, this would give you the RelaxNG schema:
+
+```javascript --run simple-2
+const { relaxng } = require('cruftless')();
+
+console.log(relaxng(template));
+```
 

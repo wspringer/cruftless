@@ -15,9 +15,12 @@ module.exports = ({types, preserveWhitespace}) -> () ->
       exposed
 
     value: (value) ->
-      meta.value =
-        if (preserveWhitespace) then value else _.trim(value)
+      meta.value = value
+      meta.required = true
       exposed
+
+    isRequired: ->
+      meta.required
 
     bind: (opts...) ->
       meta.bind = parseExpr(opts...)
@@ -45,10 +48,18 @@ module.exports = ({types, preserveWhitespace}) -> () ->
     isSet: (obj) ->
       meta.required or not(meta.bind) or not(_.isUndefined(meta.bind.get(obj)))
 
+    relaxng: (ctx) ->
+      if meta.value
+        ctx.element('value').content(ctx.text(meta.value))
+      else
+        meta.valueType.relaxng(ctx)
+
   _.forEach types, (value, key) ->
     exposed[key] = ->
       meta.valueType = value
       exposed
+
+
 
   exposed
 

@@ -24,6 +24,7 @@ module.exports = ({types}) -> (name) ->
 
     value: (value) ->
       meta.value = value
+      meta.required = true
       exposed
 
     sample: (value) ->
@@ -58,6 +59,18 @@ module.exports = ({types}) -> (name) ->
         elem.hasAttributeNS(meta.name) and (meta.bind? or elem.getAttributeNS(meta.name) is meta.value)
       else
         elem.hasAttribute(meta.name) and (meta.bind? or elem.getAttribute(meta.name) is meta.value)
+
+    relaxng: (ctx) ->
+      data =
+        if meta.value?
+          ctx.element('value').content(ctx.text().value(meta.value))
+        else
+          meta.valueType.relaxng(ctx)
+      nested = ctx.element('attribute').attrs(ctx.attr('name').value(meta.name)).content(data)
+      if meta.required
+        nested
+      else
+        ctx.element('optional').content(nested)
 
   _.forEach types, (value, key) ->
     exposed[key] = ->

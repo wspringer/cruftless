@@ -320,13 +320,6 @@ describe 'the entire model', ->
     xml = el.toXML(comm: newsLetter: [true])
     expect(el.fromXML(xml)).toEqual({"comm": {"newsLetter": [true]}})
 
-  it 'should allow you to preserve whitespace', ->
-    el = cruftless(preserveWhitespace: true).parse('''<foo>
-      <bar>{{a}}</bar>
-    </foo>''')
-    xml = el.toXML(a: 3)
-    expect(xml).toMatchSnapshot()
-
   it 'should include elements with a false value', ->
     el = parse('''<foo><bar>{{a|boolean}}</bar></foo>''')
     expect(el.toXML({ a: true })).toEqual('<foo><bar>true</bar></foo>')

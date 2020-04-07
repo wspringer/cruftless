@@ -2,14 +2,17 @@ serializer = new(require('xmldom').XMLSerializer)
 di = new(require('xmldom').DOMImplementation)
 parser = new(require('xmldom').DOMParser)
 _ = require 'lodash'
+{ identity } = require 'lodash'
 
 { parseExpr } = require './util'
 
-module.exports = ({types}) -> (name) ->
+module.exports = ({types, format = _.identity}) -> (name) ->
   meta =
     name: name
     attrs: []
     content: []
+    required: true
+    multiple: false
     scope: (target) -> target or {}
     traverse: (obj, iterator) -> iterator(obj)
     descriptor: ->
@@ -22,6 +25,10 @@ module.exports = ({types}) -> (name) ->
 
   exposed =
 
+    optional: () ->
+      meta.required = false
+      exposed
+
     attrs: (attr...) ->
       meta.attrs.push(attr...)
       exposed
@@ -30,8 +37,11 @@ module.exports = ({types}) -> (name) ->
       meta.content.push(elem...)
       exposed
 
+    isRequired: ->
+      meta.required
+
     ns: (ns) ->
-      meta.ns = ns
+      if ns? then meta.ns = ns
       exposed
 
     bind: (opts...) ->
@@ -43,6 +53,7 @@ module.exports = ({types}) -> (name) ->
       exposed
 
     array: ->
+      meta.multiple = true
       meta.scope = (target) ->
         coll = meta.bind.get(target)
         if coll?
@@ -127,7 +138,7 @@ module.exports = ({types}) -> (name) ->
     toDOM: (obj) -> exposed.generate(obj)
 
     toXML: (obj) ->
-      serializer.serializeToString(exposed.generate(obj))
+      format(serializer.serializeToString(exposed.generate(obj)))
 
     matches: (elem) ->
       elem.nodeType is 1 and elem.localName is meta.name and (
@@ -162,7 +173,26 @@ module.exports = ({types}) -> (name) ->
         meta.describe(obj)
         { type: 'object', keys: obj }
 
-
+    relaxng: (ctx) ->
+      required =
+        if (meta.content?.length || 0) is 1
+          meta.content[0].isRequired()
+        else
+          meta.required
+      multiple = meta.multiple
+      wrap = switch
+        when required and multiple then ctx.element('oneOrMore').content
+        when not required and multiple then ctx.element('zeroOrMore').content
+        when not required and not multiple then ctx.element('optional').content
+      wrap = wrap or identity
+      wrap(
+        ctx.element('element')
+          .attrs(ctx.attr('name').value(meta.name))
+          .content(
+            ...meta.attrs.map((node) -> node.relaxng(ctx))
+            ...meta.content.map((node) -> node.relaxng(ctx))
+          )
+      )
 
   exposed
 
