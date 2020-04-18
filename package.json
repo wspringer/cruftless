@@ -27,6 +27,6 @@
     "jest": "^24.9.0",
     "jest-preset-coffeescript": "^1.1.1",
     "runmd": "^1.0.1",
-    "xml-formatter": "^1.2.0"
+    "xml-formatter": "^2.0.0"
   }
 }
