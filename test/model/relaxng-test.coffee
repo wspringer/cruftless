@@ -31,3 +31,7 @@ describe 'the relaxng support', ->
     template = parse('''<foo name="yay"/>''')
     expect(template.relaxng(cruftless()).toXML()).toEqual('<element name=\"foo\"><attribute name=\"name\"><value>yay</value></attribute></element>')
 
+  it 'should not break on comments', ->
+    template = parse('''<foo><!--{{a}}--></foo>''')
+    expect(-> template.relaxng(cruftless()).toXML()).not.toThrow()
+    expect(template.relaxng(cruftless()).toXML()).toEqual('<optional><element name="foo"/></optional>')

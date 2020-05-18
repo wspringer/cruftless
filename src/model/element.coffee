@@ -190,7 +190,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
           .attrs(ctx.attr('name').value(meta.name))
           .content(
             ...meta.attrs.map((node) -> node.relaxng(ctx))
-            ...meta.content.map((node) -> node.relaxng(ctx))
+            ...meta.content.map((node) -> node.relaxng(ctx)).filter((node) -> node?)
           )
       )
 
