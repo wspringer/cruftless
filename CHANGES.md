@@ -1,5 +1,10 @@
 # Changes
 
+## 0.3.0
+
+* Comments used to offer a way to add more binding instructions to the template.
+  That has now been replaced by the use of processing instructions.
+
 ## 0.2.0
 
 * Dropped `preserveWhitespace`, contemplating xml:space

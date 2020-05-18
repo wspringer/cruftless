@@ -9,7 +9,8 @@ module.exports = (opts = {}) ->
   element = require('./model/element')(opts)
   attr = require('./model/attr')(opts)
   text = require('./model/text')(opts)
-  parse = require('./model/builder')({ element, attr, text })
+  comment = require('./model/comment')(opts)
+  parse = require('./model/builder')({ element, attr, text, comment })
   relaxng = (template) ->
     element('grammar')
     .ns('http://relaxng.org/ns/structure/1.0')

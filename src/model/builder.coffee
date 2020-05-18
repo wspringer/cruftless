@@ -13,7 +13,7 @@ forAllAttributes = (node, fn) ->
   result
 
 module.exports = (opts) ->
-  { element, attr, text } = opts
+  { element, attr, text, comment } = opts
 
   parse = (node) ->
     switch node.nodeType
@@ -23,9 +23,13 @@ module.exports = (opts) ->
 
         childNodes = Array.from(node.childNodes)
 
-        commentNode = childNodes.find (node) -> node.nodeType is 8
-        if commentNode?
-          binding.raw(commentNode.textContent).apply(el)
+        piNode = childNodes.find (node) -> node.nodeType is 7
+        if piNode? and piNode.target is 'bind'
+          binding.raw(piNode.data).apply(el)
+
+        # commentNode = childNodes.find (node) -> node.nodeType is 8
+        # if commentNode?
+        #   binding.raw(commentNode.textContent).apply(el)
 
         content =
           childNodes
@@ -54,6 +58,9 @@ module.exports = (opts) ->
       when 4
         empty = /^\s*$/.test(node.textContent)
         if not(empty) then binding.curly(node.data).apply(text())
+      when 8
+        empty = /^\s*$/.test(node.textContent)
+        if not(empty) then binding.curly(node.textContent).apply(comment())
 
   (xml) ->
     parse(new DOMParser().parseFromString(xml).documentElement)
