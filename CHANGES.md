@@ -1,5 +1,9 @@
 # Changes
 
+## 0.3.1
+
+* Fixes a RelaxNG generation bug caused by comment binding
+
 ## 0.3.0
 
 * Comments used to offer a way to add more binding instructions to the template.
