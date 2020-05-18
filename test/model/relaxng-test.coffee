@@ -10,7 +10,7 @@ describe 'the relaxng support', ->
     )
 
   it 'should handle collections correctly', ->
-    template = parse('''<foo><bar><!--elements|array--><baz/></bar></foo>''')
+    template = parse('''<foo><bar><?bind elements|array?><baz/></bar></foo>''')
     expect(template.relaxng(cruftless()).toXML()).toEqual(
       "<element name=\"foo\"><oneOrMore><element name=\"bar\"><element name=\"baz\"/></element></oneOrMore></element>"
     )

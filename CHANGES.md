@@ -1,5 +1,11 @@
 # Changes
 
+## 0.3.0
+
+* Comments used to offer a way to add more binding instructions to the template.
+  That has now been replaced by the use of processing instructions.
+* As a result, you can now bind comments to variables: `<!--{{foo}}-->`
+
 ## 0.2.0
 
 * Dropped `preserveWhitespace`, contemplating xml:space

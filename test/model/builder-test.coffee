@@ -29,9 +29,9 @@ describe 'the builder', ->
 
   it 'should handle expressions in attributes correctly', ->
     xml = '<foo a="{{a}}"/>'
-    expect(parse(xml).toXML(a: 3)).toEqual '<foo a="3"/>'    
+    expect(parse(xml).toXML(a: 3)).toEqual '<foo a="3"/>'
 
-  it 'should handle modifiers correctly', ->        
+  it 'should handle modifiers correctly', ->
     xml = '<foo>{{bar|required}}</foo>'
     expect(-> parse(xml).toXML()).toThrowError()
 
@@ -54,25 +54,25 @@ describe 'the builder', ->
   it 'should support arrays', ->
     xml = '<foo><bar c-bind="a|array" t="{{b}}"/></foo>'
     expect(parse(xml).toXML(a: [ { b: 3 }, { b: 4 }])).toEqual '<foo><bar t="3"/><bar t="4"/></foo>'
-    
+
   it 'should support arrays', ->
     xml = '<foo><bar c-bind="a|array">{{b}}</bar></foo>'
     expect(parse(xml).toXML(a: [ { b: 3 }, { b: 4 }])).toEqual '<foo><bar>3</bar><bar>4</bar></foo>'
-  
+
   it 'should support comment syntax', ->
-    xml = '<foo><bar t="{{b}}"><!--a|array--></bar></foo>'
+    xml = '<foo><bar t="{{b}}"><?bind a|array?></bar></foo>'
     expect(parse(xml).toXML(a: [ { b: 3 }, { b: 4 }])).toEqual '<foo><bar t="3"/><bar t="4"/></foo>'
-  
+
   it 'should support conditionals', ->
     xml = '<foo><bar c-if="a">{{a}}</bar></foo>'
     expect(parse(xml).toXML()).toEqual '<foo/>'
 
   it 'should support samples', ->
     xml = '<foo>{{a|sample:something}}</foo>'
-    expect(parse(xml).descriptor()).toEqual({"keys": {"a": {"sample": "something", "type": "string"}}, "type": "object"})    
+    expect(parse(xml).descriptor()).toEqual({"keys": {"a": {"sample": "something", "type": "string"}}, "type": "object"})
 
   it 'should support conditionals with namespaces', ->
-    xml = '<foo><bar xmlns:c="https://github.com/wspringer/cruftless" c:if="a">{{a}}</bar></foo>'    
+    xml = '<foo><bar xmlns:c="https://github.com/wspringer/cruftless" c:if="a">{{a}}</bar></foo>'
     expect(parse(xml).toXML()).toEqual '<foo/>'
 
   it 'should handle CDATA', ->
