@@ -1,5 +1,9 @@
 # Changes
 
+## 0.3.3
+
+* Fixes a bug related to raw data.
+
 ## 0.3.2
 
 * Have the ability to get the raw data, even if the fields have been annotated
