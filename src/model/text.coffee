@@ -39,8 +39,8 @@ module.exports = ({types, preserveWhitespace}) -> () ->
       meta.sample = value
       exposed
 
-    extract: (node, target) ->
-      meta.bind?.set(target, meta.valueType.from(node.textContent))
+    extract: (node, target, raw) ->
+      meta.bind?.set(target, if raw then node.textContent else meta.valueType.from(node.textContent))
 
     descriptor: ->
       meta.bind?.descriptor(_.merge({}, meta.valueType.desc, sample: if meta.sample? then meta.valueType.from(meta.sample)))

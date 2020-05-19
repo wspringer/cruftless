@@ -145,19 +145,19 @@ module.exports = ({types, format = _.identity}) -> (name) ->
         not(meta.ns?) or meta.ns is elem.namespaceURI
       ) and (elem.attributes.length is meta.attrs.length) and _.every meta.attrs, (attr) -> attr.definedOn(elem)
 
-    extract: (elem, target = {}) ->
+    extract: (elem, target = {}, raw = false) ->
       scope = meta.scope(target)
       meta.attrs.forEach (attr) ->
-        attr.extract(elem, scope)
+        attr.extract(elem, scope, raw)
       Array.from(elem.childNodes).forEach (child) ->
         match = meta.content.find (nodeDef) -> nodeDef.matches(child)
-        match?.extract(child, scope)
+        match?.extract(child, scope, raw)
       target
 
-    fromDOM: (elem) -> exposed.extract(elem)
+    fromDOM: (elem) -> exposed.extract(elem, {}, raw)
 
-    fromXML: (str) ->
-      exposed.extract(parser.parseFromString(str).documentElement)
+    fromXML: (str, raw = false) ->
+      exposed.extract(parser.parseFromString(str).documentElement, {}, raw)
 
     name: () -> meta.name
 

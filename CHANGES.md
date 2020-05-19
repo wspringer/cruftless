@@ -1,5 +1,10 @@
 # Changes
 
+## 0.3.2
+
+* Have the ability to get the raw data, even if the fields have been annotated
+  with type annotations.
+
 ## 0.3.1
 
 * Fixes a RelaxNG generation bug caused by comment binding

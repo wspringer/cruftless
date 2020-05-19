@@ -148,6 +148,23 @@ console.log(template.toXML({ value: true }));
 console.log(template.toXML({ value: false }));
 ```
 
+Sometimes, it's still useful to be able to access the raw field values, ignoring
+the type annotations.
+
+To get the actual data:
+
+```javascript --run simple-2
+// The second argument defaults to false, so might as well leave it out
+console.log(template.fromXML('<foo>1</foo>', false));
+```
+
+To get the raw data:
+
+```javascript --run simple-2
+console.log(template.fromXML('<foo>1</foo>', true));
+```
+
+
 ## Alternative notation
 
 The `<!--persons|array-->` way of annotating an element is not the only way you are able to add metadata. Another way to add metadata to elements is by using one of the reserved attributes prefixed with `c-`.
