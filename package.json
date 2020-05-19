@@ -1,6 +1,6 @@
 {
   "name": "cruftless",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Yet another simple way to parse and generate XML",
   "main": "lib/cruftless.js",
   "files": [
