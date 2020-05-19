@@ -154,7 +154,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
         match?.extract(child, scope, raw)
       target
 
-    fromDOM: (elem) -> exposed.extract(elem, {}, raw)
+    fromDOM: (elem, raw = false) -> exposed.extract(elem, {}, raw)
 
     fromXML: (str, raw = false) ->
       exposed.extract(parser.parseFromString(str).documentElement, {}, raw)
