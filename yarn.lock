@@ -3277,24 +3277,22 @@ ws@^5.2.0:
   dependencies:
     async-limiter "~1.0.0"
 
-xml-formatter@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/xml-formatter/-/xml-formatter-1.2.0.tgz#cfbf2fd7250b5b77fcb484d9df4adf7ab30b3b2d"
-  integrity sha512-+7hrQv9ZmmDzbCchRdQIyL3Y+Twp35ZbuLDJRi3mV9KYJWKLcRI/fo8oVgbx4+GxI6MrZZhvVy/5i+f2g5fhUg==
+xml-formatter@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/xml-formatter/-/xml-formatter-2.1.0.tgz#ff438be6e2195e480b7525ecd3b06652ed76f390"
+  integrity sha512-t55v5mfpohwKvNbfd8A0FZSZI22//hqXqx3AwRx3mjZel0IEoRM2p1bvVnvNPxHqdqZ0sDjUrBqfHJNbIfE8fw==
   dependencies:
-    xml-parser-xo "^2.1.1"
+    xml-parser-xo "^3.0.0"
 
 xml-name-validator@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-3.0.0.tgz#6ae73e06de4d8c6e47f9fb181f78d648ad457c6a"
   integrity sha512-A5CUptxDsvxKJEU3yO6DuWBSJz/qizqzJKOMIfUJHETbBw/sFaDxgd6fxm1ewUaM0jZ444Fc5vC5ROYurg/4Pw==
 
-xml-parser-xo@^2.1.1:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/xml-parser-xo/-/xml-parser-xo-2.2.0.tgz#f560076a4d5cde5029f8f8be03ce6e3b470ff87c"
-  integrity sha512-Jyr77eEVPkjnMCEP5M0QTz3mJM3Kcnp6YRiIs3RnqIr5NDqKLcXU8Ixh9GtOepMvGcNrh+584K7c1avq0T5onw==
-  dependencies:
-    debug "^2.2.0"
+xml-parser-xo@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/xml-parser-xo/-/xml-parser-xo-3.0.0.tgz#4d46f1962e5100f228b5f73f34c61bb798430195"
+  integrity sha512-MPPexqXBx48m3OFMQXxo7+RYhG6o6kCGflk4q4oL3uQ0b7d5NDKjHFDwUoozOTPT3WFztT13z3R9Sn0QCTIJcQ==
 
 xmldom@^0.3.0:
   version "0.3.0"
