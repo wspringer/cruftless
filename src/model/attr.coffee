@@ -7,11 +7,16 @@ module.exports = ({types}) -> (name) ->
     name: name
     required: false
     valueType: types.string
+    defaultValue: undefined
 
   exposed =
 
     required: ->
       meta.required = true
+      exposed
+
+    default: (value) ->
+      meta.defaultValue = value
       exposed
 
     ns: (ns) ->
@@ -32,7 +37,7 @@ module.exports = ({types}) -> (name) ->
       exposed
 
     generate: (obj, elem) ->
-      value = extractValue(meta, obj)
+      value = extractValue(meta, obj) or meta.defaultValue
       if value?
         if meta.ns?
           elem.setAttributeNS(meta.ns, meta.name, value)
@@ -53,7 +58,7 @@ module.exports = ({types}) -> (name) ->
       meta.bind?.descriptor(_.merge({}, meta.valueType.desc, sample: if meta.sample? then meta.valueType.from(meta.sample)))
 
     isSet: (obj) ->
-      not(meta.bind) or meta.bind.get(obj)?
+      not(meta.bind) or meta.bind.get(obj)? or meta.defaultValue?
 
     definedOn: (elem) ->
       if meta.ns?

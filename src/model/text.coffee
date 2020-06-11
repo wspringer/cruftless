@@ -7,11 +7,16 @@ module.exports = ({types, preserveWhitespace}) -> () ->
   meta =
     required: false
     valueType: types.string
+    defaultValue: undefined
 
   exposed =
 
     required: ->
       meta.required = true
+      exposed
+
+    default: (value) ->
+      meta.defaultValue = value
       exposed
 
     value: (value) ->
@@ -27,9 +32,15 @@ module.exports = ({types, preserveWhitespace}) -> () ->
       exposed
 
     generate: (obj, context) ->
-      value = extractValue(meta, obj)
-      node = context.ownerDocument.createTextNode(meta.valueType.to(value))
-      context.appendChild(node)
+      extracted = extractValue(meta, obj)
+      value =
+        if extracted?
+          extracted
+        else
+          meta.defaultValue
+      if value?
+        node = context.ownerDocument.createTextNode(meta.valueType.to(value))
+        context.appendChild(node)
       return
 
     matches: (node) ->
@@ -46,7 +57,7 @@ module.exports = ({types, preserveWhitespace}) -> () ->
       meta.bind?.descriptor(_.merge({}, meta.valueType.desc, sample: if meta.sample? then meta.valueType.from(meta.sample)))
 
     isSet: (obj) ->
-      meta.required or not(meta.bind) or not(_.isUndefined(meta.bind.get(obj)))
+      meta.required or not(meta.bind) or not(_.isUndefined(meta.bind.get(obj))) or not(_.isUndefined(meta.defaultValue))
 
     relaxng: (ctx) ->
       if meta.value

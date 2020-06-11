@@ -164,6 +164,16 @@ To get the raw data:
 console.log(template.fromXML('<foo>1</foo>', true));
 ```
 
+## Default values
+
+In addition to setting a value type, you can also set a default value in case
+the variable is undefined:
+
+```javascript --run simple-2
+template = parse(`<foo>{{name|default:Wilfred}}</foo>`);
+console.log(template.toXML());
+```
+
 
 ## Alternative notation
 

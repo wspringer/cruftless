@@ -176,6 +176,17 @@ console.log(template.fromXML('<foo>1</foo>', true));
 ⇒ { value: '1' }
 ```
 
+## Default values
+
+In addition to setting a value type, you can also set a default value in case
+the variable is undefined:
+
+```javascript
+template = parse(`<foo>{{name|default:Wilfred}}</foo>`);
+console.log(template.toXML());
+⇒ <foo>Wilfred</foo>
+```
+
 
 ## Alternative notation
 
