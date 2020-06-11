@@ -1,5 +1,9 @@
 # Changes
 
+## 0.3.4
+
+* Add CDATA support
+
 ## 0.3.3
 
 * Fixes a bug related to raw data.

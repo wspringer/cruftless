@@ -7,8 +7,13 @@ module.exports = ({types, preserveWhitespace}) -> () ->
   meta =
     required: false
     valueType: types.string
+    cdata: false
 
   exposed =
+
+    cdata: ->
+      meta.cdata = true
+      exposed
 
     required: ->
       meta.required = true
@@ -28,12 +33,16 @@ module.exports = ({types, preserveWhitespace}) -> () ->
 
     generate: (obj, context) ->
       value = extractValue(meta, obj)
-      node = context.ownerDocument.createTextNode(meta.valueType.to(value))
+      node =
+        if meta.cdata
+          context.ownerDocument.createCDATASection(meta.valueType.to(value))
+        else
+          context.ownerDocument.createTextNode(meta.valueType.to(value))
       context.appendChild(node)
       return
 
     matches: (node) ->
-      node.nodeType is 3
+      node.nodeType is 3 or node.nodeType is 4
 
     sample: (value) ->
       meta.sample = value
