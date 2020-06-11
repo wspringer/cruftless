@@ -138,7 +138,8 @@ console.log(template.toXML({ persons: [
 ⇒ </persons>
 ```
 
-You can add your own value types to convert from and to the string literals included in the XML representation.
+You can add your own value types to convert from and to the string literals
+included in the XML representation.
 
 ```javascript
 const { element, attr, text, parse } = require('cruftless')({
@@ -205,7 +206,8 @@ console.log(template.toXML({ persons: [
 ⇒ </persons>
 ```
 
-If you hate the magic `c-` prefixed attributes, then you can also a slightly less readable but admittedly more correct XML namespace:
+If you hate the magic `c-` prefixed attributes, then you can also a slightly
+less readable but admittedly more correct XML namespace:
 
 ```javascript
 template = parse(`<persons>
@@ -233,7 +235,11 @@ console.log(template.toXML({ persons: [
 
 ## Conditionals
 
-There may be times when you want to exclude entire sections of an XML structure if a particular condition is met. Cruftless has some basic support for that, albeit limited. You can set conditions on elements, using the `c-if` attribute. In that case, the element will only be included in case the expression of the `c-if` attribute is evaluating to something else than `undefined` or `null`.
+There may be times when you want to exclude entire sections of an XML structure
+if a particular condition is met. Cruftless has some basic support for that,
+albeit limited. You can set conditions on elements, using the `c-if` attribute.
+In that case, the element will only be included in case the expression of the
+`c-if` attribute is evaluating to something else than `undefined` or `null`.
 
 ```javascript
 template = parse(`<foo><bar c-if="a">text</bar></foo>`);
@@ -244,7 +250,12 @@ template.toXML({ a: void 0 }); // ⇨ '<foo/>'
 template.toXML({ a: 3 }); // ⇨ '<foo>\r\n  <bar>text</bar>\r\n</foo>'
 ```
 
-If your template contains variable references, and the data structure you are passing in does not contain these references, then — instead of generating the value `undefined`, Cruftless will drop the entire element. In fact, if a deeply nested element contains references to variable, and that variable is not defined, then it will not only drop *that* element, but all elements that included that element referring to a non-existing variable.
+If your template contains variable references, and the data structure you are
+passing in does not contain these references, then — instead of generating the
+value `undefined`, Cruftless will drop the entire element. In fact, if a deeply
+nested element contains references to variable, and that variable is not
+defined, then it will not only drop *that* element, but all elements that
+included that element referring to a non-existing variable.
 
 ```javascript
 template = parse(`<level1>
@@ -277,9 +288,48 @@ console.log(template.toXML({ a: 3 }));
 ⇒ </level1>
 ```
 
+## CDATA
+
+Your XML documents might contain CDATA sections. Cruftless will treat those like
+ordinary text nodes. That is, if you have an element that has a text node bound
+to a variable, then it will resolve those values regardless of the fact if the
+incoming XML document has a text node or a CDATA node.
+
+```javascript
+template = parse(`<person>{{name}}</person>`);
+console.log(template.fromXML(`<person>Alice</person>`));
+⇒ { name: 'Alice' }
+```
+
+```javascript
+console.log(template.fromXML(`<person><![CDATA[Alice]]></person>`));
+⇒ { name: 'Alice' }
+```
+
+However, if you would *produce* XML, then — by default — it will always produce
+a text node:
+
+```javascript
+console.log(template.toXML({ name: 'Alice' }));
+⇒ <person>Alice</person>
+```
+
+That is, unless you specifiy a `cdata` option in your binding:
+
+```javascript
+template = parse(`<person>{{name|cdata}}</person>`);
+console.log(template.toXML({ name: 'Alice' }));
+⇒ <person>
+⇒   <![CDATA[Alice]]>
+⇒ </person>
+```
+
+
 ## JSON-ish Schema (incomplete, subject to change)
 
-Since Cruftless has all of the metadata of your XML document and how it binds to your data structures at its disposal, it also allows you to generate a 'schema' of the data structure it expects.
+Since Cruftless has all of the metadata of your XML document and how it binds to
+your data structures at its disposal, it also allows you to generate a 'schema'
+of the data structure it expects.
 
 ```javascript
 let schema = template.descriptor();
@@ -287,10 +337,7 @@ console.log(JSON.stringify(schema, null, 2));
 ⇒ {
 ⇒   "type": "object",
 ⇒   "keys": {
-⇒     "b": {
-⇒       "type": "string"
-⇒     },
-⇒     "a": {
+⇒     "name": {
 ⇒       "type": "string"
 ⇒     }
 ⇒   }
