@@ -3294,10 +3294,10 @@ xml-parser-xo@^3.0.0:
   resolved "https://registry.yarnpkg.com/xml-parser-xo/-/xml-parser-xo-3.0.0.tgz#4d46f1962e5100f228b5f73f34c61bb798430195"
   integrity sha512-MPPexqXBx48m3OFMQXxo7+RYhG6o6kCGflk4q4oL3uQ0b7d5NDKjHFDwUoozOTPT3WFztT13z3R9Sn0QCTIJcQ==
 
-xmldom@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.3.0.tgz#e625457f4300b5df9c2e1ecb776147ece47f3e5a"
-  integrity sha512-z9s6k3wxE+aZHgXYxSTpGDo7BYOUfJsIRyoZiX6HTjwpwfS2wpQBQKa2fD+ShLyPkqDYo5ud7KitmLZ2Cd6r0g==
+xmldom@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.5.0.tgz#193cb96b84aa3486127ea6272c4596354cb4962e"
+  integrity sha512-Foaj5FXVzgn7xFzsKeNIde9g6aFBxTPi37iwsno8QvApmtg7KYrr+OPyRHcJF7dud2a5nGRBXK3n0dL62Gf7PA==
 
 y18n@^4.0.0:
   version "4.0.0"
