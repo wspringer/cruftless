@@ -35,3 +35,7 @@ describe 'the relaxng support', ->
     template = parse('''<foo><!--{{a}}--></foo>''')
     expect(-> template.relaxng(cruftless()).toXML()).not.toThrow()
     expect(template.relaxng(cruftless()).toXML()).toEqual('<optional><element name="foo"/></optional>')
+
+  it 'should forward namespaces', ->
+    template = parse('''<foo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><bar xsi:type="SomeType"/></foo>''')
+    expect(template.relaxng(cruftless()).toXML()).toMatchSnapshot()
