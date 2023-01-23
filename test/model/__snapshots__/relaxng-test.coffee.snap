@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`the relaxng support should forward namespaces 1`] = `"<element name=\\"foo\\"><element name=\\"bar\\"><attribute name=\\"xsi:type\\" xmlns:xsi=\\"http://www.w3.org/2001/XMLSchema-instance\\"><value>SomeType</value></attribute></element></element>"`;

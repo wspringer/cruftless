@@ -68,6 +68,14 @@ module.exports = ({types}) -> (name) ->
         else
           meta.valueType.relaxng(ctx)
       nested = ctx.element('attribute').attrs(ctx.attr('name').value(meta.name)).content(data)
+
+      # This is a bit of a hack. First of all, the prefix is known during parsing. We could have kept it.
+      # Second: schemawise, it might have been better to use the RelaxNG "ns" attribute.
+      # Third: It's a little fishy scan for ':' to see if an attribute is namespaced.
+
+      if meta.ns and meta.name.indexOf(':') >= 0
+        [prefix,] = meta.name.split(':')
+        nested.attrs(ctx.attr("xmlns:#{prefix}").value(meta.ns))
       if meta.required
         nested
       else
