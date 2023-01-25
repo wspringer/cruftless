@@ -1,5 +1,9 @@
 # Changes
 
+## 0.3.6
+
+- Add support for capturing an entire nodeset
+
 ## 0.3.5
 
 - Fix a RelaxNG generation issue
