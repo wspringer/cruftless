@@ -18,9 +18,9 @@ module.exports = () -> () ->
       meta.bind = parseExpr(opts...)
       exposed
 
-    matches: (node) => true
+    matches: (node) -> true
 
-    generate: (obj, context) =>
+    generate: (obj, context) ->
       nodes = extractValue(meta, obj)
       _.forEach nodes, (node) -> context.appendChild(node)
       return
