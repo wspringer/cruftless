@@ -13,7 +13,7 @@ forAllAttributes = (node, fn) ->
   result
 
 module.exports = (opts) ->
-  { element, attr, text, comment } = opts
+  { element, attr, text, comment, capture } = opts
 
   parse = (node) ->
     switch node.nodeType
@@ -26,10 +26,10 @@ module.exports = (opts) ->
         piNode = childNodes.find (node) -> node.nodeType is 7
         if piNode? and piNode.target is 'bind'
           binding.raw(piNode.data).apply(el)
-
-        # commentNode = childNodes.find (node) -> node.nodeType is 8
-        # if commentNode?
-        #   binding.raw(commentNode.textContent).apply(el)
+        if piNode? and piNode.target is 'capture'
+          captured = capture()
+          binding.raw(piNode.data).apply(captured)
+          el.content(captured)
 
         content =
           childNodes

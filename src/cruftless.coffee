@@ -9,8 +9,9 @@ module.exports = (opts = {}) ->
   element = require('./model/element')(opts)
   attr = require('./model/attr')(opts)
   text = require('./model/text')(opts)
+  capture = require('./model/capture')(opts)
   comment = require('./model/comment')(opts)
-  parse = require('./model/builder')({ element, attr, text, comment })
+  parse = require('./model/builder')({ element, attr, text, comment, capture })
   relaxng = (template) ->
     element('grammar')
     .ns('http://relaxng.org/ns/structure/1.0')
@@ -23,4 +24,4 @@ module.exports = (opts = {}) ->
       )
     ).toXML()
 
-  { element, attr, text, parse, relaxng }
+  { element, attr, text, parse, relaxng, capture }

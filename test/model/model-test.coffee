@@ -1,5 +1,6 @@
 cruftless = require('../../src/cruftless')
-{ element, attr, text, parse } = cruftless()
+_ = require 'lodash'
+{ element, attr, text, parse, capture, relaxng } = cruftless()
 
 describe 'element', ->
 
@@ -324,6 +325,28 @@ describe 'the entire model', ->
     el = parse('''<foo><bar>{{a|boolean}}</bar></foo>''')
     expect(el.toXML({ a: true })).toEqual('<foo><bar>true</bar></foo>')
     expect(el.toXML({ a: false })).toEqual('<foo><bar>false</bar></foo>')
+
+  # it 'should work simple', ->
+  #   el = parse('''
+  #   <foo>
+  #     <bar c-bind="persons|array">{{name}}</bar>
+  #     <baz c-bind="persons|array">{{name}}</baz>
+  #   </foo>
+  #   '''.trim())
+  #   expect(el.toXML({ persons: [{ name: "Joe" }, { name: 'Peter'}] })).toEqual('<foo><bar>Joe</bar></foo>')
+
+  it 'should allow you to capture anything', ->
+    el = element('foo').content(
+      capture().bind('a')
+    )
+    extracted = el.fromXML('<foo><baz/></foo>')
+    expect(extracted).toHaveProperty('a')
+    expect(_.isArray(extracted.a)).toBe(true)
+    expect(extracted.a.length).toBe(1)
+    expect(extracted.a[0]).toHaveProperty('nodeType', 1)
+    expect(extracted.a[0]).toHaveProperty('tagName', 'baz')
+    expect(el.toXML(extracted)).toEqual('<foo><baz/></foo>')
+    expect(relaxng(el)).toMatchSnapshot()
 
 
   xit 'should be able to parse a template from the wild', ->
