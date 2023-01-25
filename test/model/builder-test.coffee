@@ -78,3 +78,11 @@ describe 'the builder', ->
   it 'should handle CDATA', ->
     xml = '<foo><![CDATA[Bad <strong>stuff</strong>]]></foo>'
     expect(parse(xml).toXML()).toEqual "<foo>Bad &lt;strong>stuff&lt;/strong></foo>"
+
+  it 'should allow you to capture a nodeset', ->
+    template = parse('<foo><?capture a?></foo>')
+    extracted = template.fromXML('<foo><bar/></foo>')
+    expect(extracted.a).not.toBeNull()
+    expect(extracted.a.length).toEqual 1
+    expect(extracted.a[0].nodeName).toEqual 'bar'
+

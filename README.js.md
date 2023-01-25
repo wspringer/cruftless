@@ -1,11 +1,11 @@
 ```javascript --hide
-require('coffeescript/register');
-const format = require('xml-formatter');
-runmd.onRequire = function(path) {
-  if (path === 'cruftless') {
-    return './readme.cruftless.coffee';
+require("coffeescript/register");
+const format = require("xml-formatter");
+runmd.onRequire = function (path) {
+  if (path === "cruftless") {
+    return "./readme.cruftless.coffee";
   }
-}
+};
 ```
 
 # README
@@ -16,10 +16,9 @@ An XML builder / parser that tries to ease the common cases, allowing you to qui
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/wspringer/cruftless.svg)](https://greenkeeper.io/)
 
-
 ## Yet another XML binding framework?
 
-I hate to say this, but: 'yes'. Or, perhaps: 'no'. Because Cruftless is not really an XML binding framework as you know it. It's almost more like Handlebars. But where Handlebars allows you to only *generate* documents, Cruftless also allows you to *extract* data from documents.
+I hate to say this, but: 'yes'. Or, perhaps: 'no'. Because Cruftless is not really an XML binding framework as you know it. It's almost more like Handlebars. But where Handlebars allows you to only _generate_ documents, Cruftless also allows you to _extract_ data from documents.
 
 ## Building XML documents
 
@@ -32,18 +31,14 @@ Cruftless builds a simplified metamodel of your XML document, and it's not based
 </person>
 ```
 
-Then, using the builder API, Cruftless allows you to *build* a model of your document like this:
+Then, using the builder API, Cruftless allows you to _build_ a model of your document like this:
 
 ```javascript --run simple
-const { element, attr, text } = require('cruftless')();
+const { element, attr, text } = require("cruftless")();
 
-let el = element('person').content(
-  element('name').content(
-    text().value('John Doe')
-  ),
-  element('age').content(
-    text().value(16)
-  )
+let el = element("person").content(
+  element("name").content(text().value("John Doe")),
+  element("age").content(text().value(16))
 );
 ```
 
@@ -64,23 +59,19 @@ el.toDOM();
 Now, this itself doesn't seem all that useful. Where it gets useful is when you start adding references to your document model:
 
 ```javascript --run simple
-el = element('person').content(
-  element('name').content(
-    text().bind('name')
-  ),
-  element('age').content(
-    text().bind('age')
-  )
+el = element("person").content(
+  element("name").content(text().bind("name")),
+  element("age").content(text().bind("age"))
 );
 ```
 
 Now, if you want to generate different versions of your XML document for different persons, you can simply pass in an object with `name` and `age` properties:
 
 ```javascript --run simple
-let xml = el.toXML({ name: 'John Doe', age: '16'}); // RESULT
+let xml = el.toXML({ name: "John Doe", age: "16" }); // RESULT
 ```
 
-But the beauty is, it also works the other way around. If you have your model with binding expressions, then you're able to *extract* data from XML like this:
+But the beauty is, it also works the other way around. If you have your model with binding expressions, then you're able to _extract_ data from XML like this:
 
 ```javascript --run simple
 el.fromXML(xml); // RESULT
@@ -94,12 +85,12 @@ I hope you can see how this is useful. However, I also hope you can see that thi
 let template = `<person>
   <name>{{name}}</name>
   <age>{{age}}</age>
-</person>`
+</person>`;
 
-let { parse } = require('cruftless')();
+let { parse } = require("cruftless")();
 
-el = parse(template)
-console.log(el.toXML({ name: 'Jane Doe', age: '18' }));
+el = parse(template);
+console.log(el.toXML({ name: "Jane Doe", age: "18" }));
 ```
 
 ## Additional metadata
@@ -124,24 +115,28 @@ template = parse(`<persons>
 // Note that because of the 'integer' modifier, integer values are
 // now automatically getting transfered from and to strings.
 
-console.log(template.toXML({ persons: [
-  { name: 'John Doe', age: 16 },
-  { name: 'Jane Doe', age: 18 }
-]}));
+console.log(
+  template.toXML({
+    persons: [
+      { name: "John Doe", age: 16 },
+      { name: "Jane Doe", age: 18 },
+    ],
+  })
+);
 ```
 
 You can add your own value types to convert from and to the string literals
 included in the XML representation.
 
 ```javascript --run simple-2
-const { element, attr, text, parse } = require('cruftless')({
+const { element, attr, text, parse } = require("cruftless")({
   types: {
     zeroOrOne: {
-      type: 'boolean',
-      from: str => str == '1',
-      to: value => value ? '1' : '0'
-    }
-  }
+      type: "boolean",
+      from: (str) => str == "1",
+      to: (value) => (value ? "1" : "0"),
+    },
+  },
 });
 
 template = parse(`<foo>{{value|zeroOrOne}})</foo>`);
@@ -156,15 +151,14 @@ To get the actual data:
 
 ```javascript --run simple-2
 // The second argument defaults to false, so might as well leave it out
-console.log(template.fromXML('<foo>1</foo>', false));
+console.log(template.fromXML("<foo>1</foo>", false));
 ```
 
 To get the raw data:
 
 ```javascript --run simple-2
-console.log(template.fromXML('<foo>1</foo>', true));
+console.log(template.fromXML("<foo>1</foo>", true));
 ```
-
 
 ## Alternative notation
 
@@ -178,10 +172,14 @@ template = parse(`<persons>
   </person>
 </persons>`);
 
-console.log(template.toXML({ persons: [
-  { name: 'John Doe', age: 16 },
-  { name: 'Jane Doe', age: 18 }
-]}));
+console.log(
+  template.toXML({
+    persons: [
+      { name: "John Doe", age: 16 },
+      { name: "Jane Doe", age: 18 },
+    ],
+  })
+);
 ```
 
 If you hate the magic `c-` prefixed attributes, then you can also a slightly
@@ -195,10 +193,14 @@ template = parse(`<persons>
   </person>
 </persons>`);
 
-console.log(template.toXML({ persons: [
-  { name: 'John Doe', age: 16 },
-  { name: 'Jane Doe', age: 18 }
-]}));
+console.log(
+  template.toXML({
+    persons: [
+      { name: "John Doe", age: 16 },
+      { name: "Jane Doe", age: 18 },
+    ],
+  })
+);
 ```
 
 ## Conditionals
@@ -222,7 +224,7 @@ If your template contains variable references, and the data structure you are
 passing in does not contain these references, then — instead of generating the
 value `undefined`, Cruftless will drop the entire element. In fact, if a deeply
 nested element contains references to variable, and that variable is not
-defined, then it will not only drop *that* element, but all elements that
+defined, then it will not only drop _that_ element, but all elements that
 included that element referring to a non-existing variable.
 
 ```javascript --run simple-2
@@ -259,20 +261,19 @@ console.log(template.fromXML(`<person>Alice</person>`));
 console.log(template.fromXML(`<person><![CDATA[Alice]]></person>`));
 ```
 
-However, if you would *produce* XML, then — by default — it will always produce
+However, if you would _produce_ XML, then — by default — it will always produce
 a text node:
 
 ```javascript --run simple-2
-console.log(template.toXML({ name: 'Alice' }));
+console.log(template.toXML({ name: "Alice" }));
 ```
 
 That is, unless you specifiy a `cdata` option in your binding:
 
 ```javascript --run simple-2
 template = parse(`<person>{{name|cdata}}</person>`);
-console.log(template.toXML({ name: 'Alice' }));
+console.log(template.toXML({ name: "Alice" }));
 ```
-
 
 ## JSON-ish Schema (incomplete, subject to change)
 
@@ -308,8 +309,28 @@ without the craziness.
 So based on the template above, this would give you the RelaxNG schema:
 
 ```javascript --run simple-2
-const { relaxng } = require('cruftless')();
+const { relaxng } = require("cruftless")();
 
 console.log(relaxng(template));
 ```
 
+## Nodeset Capture
+
+There are situations where it makes very little sense to have one template
+dictating the structure of the entire document. Typically, in those cases, you
+want to slowly peel the entire structure about, starting with the outer envelope
+/ container, and then slowly work your way in.
+
+In order to support that, Cruftless offers a solution to capture parts of the
+DOM tree as is and store it in a variable to be processed further downstream.
+The syntax is not all that different than the bind syntax and might be
+harmonized at some point.
+
+This is how you use it:
+
+```javascript --run simple-2
+template = parse(`<foo><?capture nodes?></foo>`);
+const { nodes } = template.fromXML(`<foo><bar/><bar/></foo>`);
+console.log(nodes.length);
+console.log(nodes[0].tagName);
+```
