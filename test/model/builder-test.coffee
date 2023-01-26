@@ -86,3 +86,6 @@ describe 'the builder', ->
     expect(extracted.a.length).toEqual 1
     expect(extracted.a[0].nodeName).toEqual 'bar'
 
+  it 'should preserve namespace declarations', ->
+    template = parse('<foo:bar xmlns:foo="http://example.com/"/>')
+    expect(template.toXML()).toEqual('<foo:bar xmlns:foo="http://example.com/"/>')
