@@ -194,9 +194,12 @@ module.exports = ({types, format = _.identity}) -> (name) ->
           ...meta.attrs.map((node) -> node.relaxng(ctx))
           ...meta.content.map((node) -> node.relaxng(ctx)).filter((node) -> node?)
         )
-      if meta.ns and meta.name.indexOf(':') >= 0
-        [prefix,] = meta.name.split(':')
-        el.attrs(ctx.attr("xmlns:#{prefix}").value(meta.ns))
+      if meta.ns
+        if meta.name.indexOf(':') >= 0
+          [prefix,] = meta.name.split(':')
+          el.attrs(ctx.attr("xmlns:#{prefix}").value(meta.ns))
+        else
+          el.attrs(ctx.attr('ns').value(meta.ns))
       wrap(
         el
       )
