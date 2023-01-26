@@ -161,6 +161,9 @@ module.exports = ({types, format = _.identity}) -> (name) ->
 
     name: () -> meta.name
 
+    getAttribute: (name) ->
+      meta.attrs.find((attr) -> attr.getName() is name)
+
     descriptor: ->
       meta.descriptor()
 

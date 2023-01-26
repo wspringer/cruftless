@@ -31,6 +31,12 @@ module.exports = ({types}) -> (name) ->
       meta.sample = value
       exposed
 
+    getName: ->
+      meta.name
+
+    getValue: ->
+      meta.value
+
     generate: (obj, elem) ->
       value = extractValue(meta, obj)
       if value?
