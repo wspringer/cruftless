@@ -1,5 +1,9 @@
 # Changes
 
+## 0.4.1
+
+- Fix a number of issues with RelaxNG generation and namespaces
+
 ## 0.4.0
 
 - Add support for capturing an entire nodeset
