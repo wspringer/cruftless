@@ -3,6 +3,7 @@
 ## 0.3.6
 
 - Add support for capturing an entire nodeset
+- Produce sensible RelaxNG grammars for captures
 
 ## 0.3.5
 
