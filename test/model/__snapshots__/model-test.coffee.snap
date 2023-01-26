@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`the entire model should allow you to capture anything 1`] = `"<grammar datatypeLibrary=\\"http://www.w3.org/2001/XMLSchema-datatypes\\" xmlns=\\"http://relaxng.org/ns/structure/1.0\\"><start><optional><element name=\\"foo\\"><ref name=\\"any\\"/></element></optional></start></grammar>"`;
+exports[`the entire model should allow you to capture anything 1`] = `"<grammar datatypeLibrary=\\"http://www.w3.org/2001/XMLSchema-datatypes\\" xmlns=\\"http://relaxng.org/ns/structure/1.0\\"><start><optional><element name=\\"foo\\"><ref name=\\"any\\"/></element></optional></start><define name=\\"any\\"><zeroOrMore><choice><element><anyName/><ref name=\\"any\\"/></element><attribute><anyName/></attribute><text/></choice></zeroOrMore></define></grammar>"`;
 
 exports[`the entire model should not fail on this either 1`] = `"<DynamicAttributes><KeyGroup><Value key=\\"opt-in\\"/><Value key=\\"IdentifiedSince\\"/></KeyGroup></DynamicAttributes>"`;
 
