@@ -348,7 +348,6 @@ describe 'the entire model', ->
     expect(el.toXML(extracted)).toEqual('<foo><baz/></foo>')
     expect(relaxng(el)).toMatchSnapshot()
 
-
   xit 'should be able to parse a template from the wild', ->
     el = parse('''
 <catalog>

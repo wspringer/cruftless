@@ -1,4 +1,5 @@
 cruftless = require('../../src/cruftless')
+
 { parse } = cruftless()
 
 describe 'the relaxng support', ->
@@ -39,3 +40,7 @@ describe 'the relaxng support', ->
   it 'should forward namespaces', ->
     template = parse('''<foo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><bar xsi:type="SomeType"/></foo>''')
     expect(template.relaxng(cruftless()).toXML()).toMatchSnapshot()
+
+  it 'should handled prefixed namespaces', ->
+    template = parse('''<foo:bar xmlns:foo="http://example.com/"></foo:bar>''')
+    expect(template.relaxng(cruftless()).toXML()).toEqual('<element name="foo:bar" xmlns:foo="http://example.com/"/>')

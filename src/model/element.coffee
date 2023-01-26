@@ -188,13 +188,17 @@ module.exports = ({types, format = _.identity}) -> (name) ->
         when not required and multiple then ctx.element('zeroOrMore').content
         when not required and not multiple then ctx.element('optional').content
       wrap = wrap or identity
+      el = ctx.element('element')
+        .attrs(ctx.attr('name').value(meta.name))
+        .content(
+          ...meta.attrs.map((node) -> node.relaxng(ctx))
+          ...meta.content.map((node) -> node.relaxng(ctx)).filter((node) -> node?)
+        )
+      if meta.ns and meta.name.indexOf(':') >= 0
+        [prefix,] = meta.name.split(':')
+        el.attrs(ctx.attr("xmlns:#{prefix}").value(meta.ns))
       wrap(
-        ctx.element('element')
-          .attrs(ctx.attr('name').value(meta.name))
-          .content(
-            ...meta.attrs.map((node) -> node.relaxng(ctx))
-            ...meta.content.map((node) -> node.relaxng(ctx)).filter((node) -> node?)
-          )
+        el
       )
 
   exposed
