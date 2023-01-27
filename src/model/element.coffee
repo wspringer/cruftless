@@ -117,7 +117,8 @@ module.exports = ({types, format = _.identity}) -> (name) ->
               doc.createElementNS(meta.ns, meta.name)
             else
               doc.createElement(meta.name)
-          meta.attrs.forEach (attr) -> attr.generate(item, el)
+          meta.attrs.forEach (attr) ->
+            attr.generate(item, el)
           meta.content.forEach (node) ->
             if node.isSet(item)
               node.generate(item, el)
