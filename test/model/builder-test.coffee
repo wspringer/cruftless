@@ -86,6 +86,16 @@ describe 'the builder', ->
     expect(extracted.a.length).toEqual 1
     expect(extracted.a[0].nodeName).toEqual 'bar'
 
+  it 'should allow you to produce data using a capture', ->
+    template = parse('<foo><?capture a?></foo>')
+    extracted = template.fromXML('<foo><bar/></foo>')
+    expect(template.toXML(extracted)).toEqual '<foo><bar/></foo>'
+
+  it 'should allow you produce data using a self-constructed dom node', ->
+    template = parse('<foo><?capture a?></foo>')
+    data = { a: [ parse('<bar/>').toDOM()] }
+    expect(template.toXML(data)).toEqual '<foo><bar/></foo>'
+
   it 'should preserve namespace declarations', ->
     template = parse('<foo:bar xmlns:foo="http://example.com/"/>')
     expect(template.toXML()).toEqual('<foo:bar xmlns:foo="http://example.com/"/>')
