@@ -41,11 +41,12 @@ module.exports = ({types}) -> (name) ->
       value = extractValue(meta, obj)
       if value?
         if meta.ns?
-          elem.setAttributeNS(meta.ns, meta.name, value)
+          elem.setAttributeNS(meta.ns, meta.name, meta.valueType.to(value))
         else
-          elem.setAttribute(meta.name, value)
+          elem.setAttribute(meta.name, meta.valueType.to(value))
 
     extract: (elem, target, raw) ->
+
       if meta.bind?
         value =
           if meta.ns?
@@ -53,7 +54,7 @@ module.exports = ({types}) -> (name) ->
           else
             elem.getAttribute(meta.name)
         decoded = if raw then value else meta.valueType.from(value)
-        if value? then meta.bind.set(target,decoded)
+        if value? then meta.bind.set(target, decoded)
 
     descriptor: ->
       meta.bind?.descriptor(_.merge({}, meta.valueType.desc, sample: if meta.sample? then meta.valueType.from(meta.sample)))

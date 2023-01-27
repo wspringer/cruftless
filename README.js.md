@@ -144,6 +144,14 @@ console.log(template.toXML({ value: true }));
 console.log(template.toXML({ value: false }));
 ```
 
+The same works with attributes as well:
+
+```javascript --run simple-2
+template = parse(`<foo bar="{{value|zeroOrOne}}"/>`);
+console.log(template.toXML({ value: true }));
+console.log(template.toXML({ value: false }));
+```
+
 Sometimes, it's still useful to be able to access the raw field values, ignoring
 the type annotations.
 
