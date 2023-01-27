@@ -2,8 +2,8 @@
   types: {
     zeroOrOne: {
       type: "boolean",
-      from: (str) => str == "1",
-      to: (value) => if value then "1" else "0",
+      from: (str) -> str == '1',
+      to: (value) -> if value then '1' else '0',
     },
   },
 });
