@@ -1,5 +1,9 @@
 # Changes
 
+## 0.4.2
+
+- Fixes a bug where bindings on attributes are ignoring specific value types set on those attributes
+
 ## 0.4.1
 
 - Fix a number of issues with RelaxNG generation and namespaces
