@@ -63,10 +63,14 @@ module.exports = ({types}) -> (name) ->
       not(meta.bind) or meta.bind.get(obj)?
 
     definedOn: (elem) ->
-      if meta.ns?
-        elem.hasAttributeNS(meta.name) and (meta.bind? or elem.getAttributeNS(meta.name) is meta.value)
-      else
-        elem.hasAttribute(meta.name) and (meta.bind? or elem.getAttribute(meta.name) is meta.value)
+      # Another hack. We need to start remembering the prefix and local name during parsing.
+      localName = _.last(meta.name.split(':'))
+      result =
+        if meta.ns?
+          elem.hasAttributeNS(meta.ns, localName) and (meta.bind? or elem.getAttributeNS(meta.ns, localName) is meta.value)
+        else
+          elem.hasAttribute(meta.name) and (meta.bind? or elem.getAttribute(meta.name) is meta.value)
+      result
 
     relaxng: (ctx) ->
       data =
