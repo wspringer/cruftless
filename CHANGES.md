@@ -1,25 +1,31 @@
 # Changes
 
+## 0.4.3
+
+- Fixes a pattern matching bug causing some issues with namespaces. Note that
+  this is related to an undocumented feature which might be dropped in a future
+  major version.
+
 ## 0.4.2
 
-- Fixes a bug where bindings on attributes are ignoring specific value types set on those attributes
+- Fixes a bug where bindings on attributes are ignoring specific value types set on those attributes.
 
 ## 0.4.1
 
-- Fix a number of issues with RelaxNG generation and namespaces
+- Fix a number of issues with RelaxNG generation and namespaces.
 
 ## 0.4.0
 
-- Add support for capturing an entire nodeset
-- Produce sensible RelaxNG grammars for captures
+- Add support for capturing an entire nodeset.
+- Produce sensible RelaxNG grammars for captures.
 
 ## 0.3.5
 
-- Fix a RelaxNG generation issue
+- Fix a RelaxNG generation issue.
 
 ## 0.3.4
 
-- Add CDATA support
+- Add CDATA support.
 
 ## 0.3.3
 
