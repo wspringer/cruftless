@@ -99,3 +99,37 @@ describe 'the builder', ->
   it 'should preserve namespace declarations', ->
     template = parse('<foo:bar xmlns:foo="http://example.com/"/>')
     expect(template.toXML()).toEqual('<foo:bar xmlns:foo="http://example.com/"/>')
+
+  it 'should support nesting', ->
+    template = parse('<foo><bar c-bind="a|object"><baz>{{b}}</baz></bar></foo>')
+    expect(template.fromXML('<foo><bar><baz>3</baz></bar></foo>')).toEqual { a: { b: '3' } }
+    expect(template.toXML({ a: { b: '3' } })).toEqual '<foo><bar><baz>3</baz></bar></foo>'
+
+  it 'should work in the case currently failing', ->
+    template = parse('''<CATSChangeRequest version="r29" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ChangeReasonCode>{{changeReasonCode}}</ChangeReasonCode>
+  <ProposedDate>{{proposedDate|xsDate}}</ProposedDate>
+  <MeterReadTypeCode>{{meterReadTypeCode}}</MeterReadTypeCode>
+  <NMIStandingData xsi:type="ase:ElectricityStandingData" c-bind="nmiStandingData|object">
+    <NMI checksum="{{nmiChecksum|integer}}">{{nmi}}</NMI>
+    <RoleAssignments>
+      <RoleAssignment c-bind="roleAssignments|array">
+        <Party>{{party}}</Party>
+        <Role>{{role}}</Role>
+      </RoleAssignment>
+    </RoleAssignments>
+  </NMIStandingData>
+</CATSChangeRequest>''')
+    data = template.fromXML('''<CATSChangeRequest version="r29" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ChangeReasonCode>1</ChangeReasonCode>
+  <NMIStandingData xsi:type="ase:ElectricityStandingData">
+    <NMI checksum="1">123456789</NMI>
+    <RoleAssignments>
+      <RoleAssignment>
+        <Party>123456789</Party>
+        <Role>1</Role>
+      </RoleAssignment>
+    </RoleAssignments>
+  </NMIStandingData>
+    </CATSChangeRequest>''')
+    expect(data).toEqual { changeReasonCode: '1', nmiStandingData: { nmi: '123456789', nmiChecksum: 1, roleAssignments: [ { party: '123456789', role: '1' } ] } }
