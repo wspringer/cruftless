@@ -1,5 +1,10 @@
 # Changes
 
+## 0.4.4
+
+- Fixes an issue where container elements were getting inserted to aggressively
+  in case of captures.
+
 ## 0.4.3
 
 - Fixes a pattern matching bug causing some issues with namespaces. Note that
