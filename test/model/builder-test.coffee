@@ -133,3 +133,14 @@ describe 'the builder', ->
   </NMIStandingData>
     </CATSChangeRequest>''')
     expect(data).toEqual { changeReasonCode: '1', nmiStandingData: { nmi: '123456789', nmiChecksum: 1, roleAssignments: [ { party: '123456789', role: '1' } ] } }
+
+  it 'should behave similarly with captures', ->
+    template = parse('<foo><bar c-bind="persons"><?capture name?></bar></foo>')
+    expect(template.toXML({ persons: { name: [parse('<name>Bob</name>').toDOM()] } })).toEqual '<foo><bar><name>Bob</name></bar></foo>'
+    expect(template.toXML({ persons: { name: [] } })).toEqual '<foo/>'
+
+  it 'should not include elements when not needed', ->
+    template = parse('<foo><bar c-bind="persons|array"><name>{{name}}</name></bar></foo>')
+    expect(template.toXML({ persons: [ { name: 'Bob' } ] })).toEqual '<foo><bar><name>Bob</name></bar></foo>'
+    expect(template.toXML({ persons: [  ] })).toEqual '<foo/>'
+
