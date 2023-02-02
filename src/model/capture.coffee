@@ -22,7 +22,7 @@ module.exports = () -> () ->
 
     generate: (obj, context) ->
       nodes = extractValue(meta, obj)
-      _.forEach nodes, (node) -> context.appendChild(node)
+      _.forEach nodes, (node) -> context.appendChild(node) if node
       return
 
     extract: (node, target, raw) ->
@@ -36,7 +36,7 @@ module.exports = () -> () ->
       meta.bind?.descriptor()
 
     isSet: (obj) ->
-      meta.required or not(meta.bind) or not(_.isUndefined(meta.bind.get(obj)))
+      meta.required or not(meta.bind) or not(_.isEmpty(meta.bind.get(obj)))
 
     relaxng: (ctx) ->
       ctx.element("ref").attrs(ctx.attr("name").value("any"))
