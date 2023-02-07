@@ -1,6 +1,6 @@
 # Changes
 
-## 0.4.5
+## 0.5.0
 
 - Add rudimentary XInclude support.
 
