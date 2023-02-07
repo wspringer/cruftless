@@ -134,6 +134,15 @@ describe 'the builder', ->
     </CATSChangeRequest>''')
     expect(data).toEqual { changeReasonCode: '1', nmiStandingData: { nmi: '123456789', nmiChecksum: 1, roleAssignments: [ { party: '123456789', role: '1' } ] } }
 
+  it 'should support xinclude to some extent', ->
+    resolve = (href) -> ['<foo>{{note}}</foo>', resolve]
+    template = parse('<foo xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include href="foo"/></foo>', resolve)
+    expect(template.toXML({note: 'bar'})).toEqual '<foo><foo>bar</foo></foo>'
+
+  it 'should leave xincludes unharmed when the resolve function is missing', ->
+    template = parse('<foo xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include href="foo"/></foo>')
+    expect(template.toXML({note: 'bar'})).toMatchSnapshot()
+
   it 'should behave similarly with captures', ->
     template = parse('<foo><bar c-bind="persons"><?capture name?></bar></foo>')
     expect(template.toXML({ persons: { name: [parse('<name>Bob</name>').toDOM()] } })).toEqual '<foo><bar><name>Bob</name></bar></foo>'

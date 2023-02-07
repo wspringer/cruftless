@@ -2,6 +2,7 @@ DOMParser = require('xmldom').DOMParser
 _ = require 'lodash'
 binding = require './binding'
 curlyNS = 'https://github.com/wspringer/cruftless'
+xincludeNS = 'http://www.w3.org/2001/XInclude'
 
 forAllAttributes = (node, fn) ->
   i = 0
@@ -15,9 +16,17 @@ forAllAttributes = (node, fn) ->
 module.exports = (opts) ->
   { element, attr, text, comment, capture } = opts
 
-  parse = (node) ->
+  parse = (node, resolve) ->
     switch node.nodeType
       when 1
+        if node.namespaceURI is xincludeNS and node.localName is 'include' and resolve?
+          href = node.getAttributeNS(xincludeNS, 'href')
+          if href?
+            [xml, next] = resolve(href)
+            if xml?
+              return parse(new DOMParser().parseFromString(xml).documentElement, next)
+
+
         el = element(node.tagName)
         if node.namespaceURI then el.ns(node.namespaceURI)
 
@@ -33,7 +42,7 @@ module.exports = (opts) ->
 
         content =
           childNodes
-          .map parse
+          .map (node) -> parse(node, resolve)
           .filter _.negate(_.isUndefined)
         el.content(content...)
 
@@ -63,8 +72,8 @@ module.exports = (opts) ->
         empty = /^\s*$/.test(node.textContent)
         if not(empty) then binding.curly(node.textContent).apply(comment())
 
-  (xml) ->
-    parse(new DOMParser().parseFromString(xml).documentElement)
+  (xml, resolver) ->
+    parse(new DOMParser().parseFromString(xml).documentElement, resolver)
 
 
 
