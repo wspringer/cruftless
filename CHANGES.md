@@ -1,5 +1,9 @@
 # Changes
 
+## 0.4.5
+
+- Add rudimentary XInclude support.
+
 ## 0.4.4
 
 - Fixes an issue where container elements were getting inserted to aggressively
