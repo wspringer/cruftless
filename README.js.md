@@ -342,3 +342,30 @@ const { nodes } = template.fromXML(`<foo><bar/><bar/></foo>`);
 console.log(nodes.length);
 console.log(nodes[0].tagName);
 ```
+
+## Rudimentary xinclude support
+
+With cruftless, it often makes sense to break a larger template apart into
+smaller ones that can be referenced in various locations. To that end, we're
+relying on basic xinclude implementation.
+
+```javascript --run simple-2
+resolve = (href) => {
+  return ["<bla/>", resolve];
+};
+template = parse(
+  `<foo xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include href="bla.xml"/></foo>`,
+  resolve
+);
+console.log(template.toXML({}));
+```
+
+Note that the resolve function is expected to resolve the href within a context
+and then return both the XML _and_ a new resolve function that is capable fo
+resolving hrefs from within the context of the resolved file. In this case,
+we're not really doing that. In fact, this resolver will **always** return the
+same snippet of XML, but it doesn't require a lot of imagination to figure out
+how to turn this resolver into something sensible.
+
+If you are not passing the resolve function, then it will simply leave the
+xinclude unharmed.

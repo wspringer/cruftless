@@ -435,5 +435,25 @@ console.log(nodes[0].tagName);
 ⇒ bar
 ```
 
+## Rudimentary xinclude support
+
+With cruftless, it often makes sense to break a larger template apart into
+smaller ones that can be referenced in various locations. To that end, we're
+relying on basic xinclude implementation.
+
+```javascript
+resolve = (href) => {
+  return ["<bla/>", resolve];
+};
+template = parse(
+  `<foo xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include href="bla.xml"/></foo>`,
+  resolve
+);
+console.log(template.toXML({}));
+⇒ <foo>
+⇒   <bla/>
+⇒ </foo>
+```
+
 ----
 Markdown generated from [./README.js.md](./README.js.md) by [![RunMD Logo](http://i.imgur.com/h0FVyzU.png)](https://github.com/broofa/runmd)
