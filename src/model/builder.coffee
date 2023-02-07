@@ -20,7 +20,7 @@ module.exports = (opts) ->
     switch node.nodeType
       when 1
         if node.namespaceURI is xincludeNS and node.localName is 'include' and resolve?
-          href = node.getAttributeNS(xincludeNS, 'href')
+          href = node.getAttribute('href')
           if href?
             [xml, next] = resolve(href)
             if xml?

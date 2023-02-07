@@ -351,7 +351,11 @@ relying on basic xinclude implementation.
 
 ```javascript --run simple-2
 resolve = (href) => {
-  return ["<bla/>", resolve];
+  if (href === "bla.xml") {
+    return ["<bla/>", resolve];
+  } else {
+    return ["<missing/>", resolve];
+  }
 };
 template = parse(
   `<foo xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include href="bla.xml"/></foo>`,
