@@ -1,10 +1,12 @@
 {
   "name": "cruftless",
-  "version": "0.4.3",
+  "version": "0.4.5",
   "description": "Yet another simple way to parse and generate XML",
   "main": "lib/cruftless.js",
+  "types": "./cruftless.d.ts",
   "files": [
-    "lib/"
+    "lib/",
+    "cruftless.d.ts"
   ],
   "scripts": {
     "test": "jest",
