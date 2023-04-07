@@ -455,5 +455,15 @@ console.log(template.toXML({}));
 ⇒ </foo>
 ```
 
+Note that the resolve function is expected to resolve the href within a context
+and then return both the XML _and_ a new resolve function that is capable fo
+resolving hrefs from within the context of the resolved file. In this case,
+we're not really doing that. In fact, this resolver will **always** return the
+same snippet of XML, but it doesn't require a lot of imagination to figure out
+how to turn this resolver into something sensible.
+
+If you are not passing the resolve function, then it will simply leave the
+xinclude unharmed.
+
 ----
 Markdown generated from [./README.js.md](./README.js.md) by [![RunMD Logo](http://i.imgur.com/h0FVyzU.png)](https://github.com/broofa/runmd)
