@@ -150,7 +150,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
       scope = meta.scope(target)
       meta.attrs.forEach (attr) ->
         attr.extract(elem, scope, raw)
-      Array.from(elem.childNodes).forEach (child) ->
+      Array.from(elem.childNodes or []).forEach (child) ->
         match = meta.content.find (nodeDef) -> nodeDef.matches(child)
         match?.extract(child, scope, raw)
       target
