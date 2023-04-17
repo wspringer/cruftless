@@ -1,5 +1,9 @@
 # Changes
 
+## 0.5.3
+
+- Fixing a bug that somehow reappeared.
+
 ## 0.5.2
 
 - Add type definitions.
