@@ -144,7 +144,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
     matches: (elem) ->
       elem.nodeType is 1 and elem.localName is meta.name and (
         not(meta.ns?) or meta.ns is elem.namespaceURI
-      ) and (elem.attributes.length is meta.attrs.length) and _.every meta.attrs, (attr) -> attr.definedOn(elem)
+      ) 
 
     extract: (elem, target = {}, raw = false) ->
       scope = meta.scope(target)
