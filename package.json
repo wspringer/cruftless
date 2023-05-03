@@ -25,6 +25,7 @@
     "preset": "jest-preset-coffeescript"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.26.1",
     "coffeescript": "^2.4.1",
     "jest": "^24.9.0",
     "jest-preset-coffeescript": "^1.1.1",

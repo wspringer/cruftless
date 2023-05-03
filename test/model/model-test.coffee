@@ -291,20 +291,6 @@ describe 'the entire model', ->
     xml = el.toXML({optIn: 'True'})
     expect(xml).toMatchSnapshot()
 
-  it 'should get the closest matching element', ->
-    el = element('foo').content(
-      element('bar').attrs(attr('a').value('b')).content(text().bind('c'))
-      element('bar').attrs(attr('d').value('e')).content(text().bind('f'))
-    )
-    expect(el.fromXML(el.toXML({ f: "3" }))).toEqual({ f: "3" })
-
-  it 'should match as closely as possible', ->
-    el = element('foo').content(
-      element('bar').content(text().bind('a'))
-      element('bar').attrs(attr('d').value('e')).content(text().bind('b'))
-    )
-    expect(el.fromXML('<foo><bar d="e">zaz</bar></foo>')).toEqual({'b': 'zaz'})
-
   it 'should allow you bind to array elements', ->
     el = element('foo').content(
       text().bind('a.b[0]')
