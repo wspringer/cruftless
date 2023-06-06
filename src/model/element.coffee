@@ -52,6 +52,35 @@ module.exports = ({types, format = _.identity}) -> (name) ->
       meta.if = parseExpr(opts...)
       exposed
 
+    values: ->
+      meta.multiple = true
+      meta.scope = (target) ->
+        coll = meta.bind.get(target)
+        if not(Array.isArray(coll))
+          coll = []
+          meta.bind.set(target, coll)
+        scope = {}
+        index = coll.length
+        Object.defineProperty scope, 'value',
+          get: -> coll[index]
+          set: (val) -> coll[index] = val
+        scope
+      meta.traverse = (obj, iterator) ->
+        coll = meta.bind.get(obj) or []
+        coll.forEach (x) -> iterator({ value: x })
+      meta.descriptor = ->
+        concatenated = _.concat(
+          meta.if?.descriptor()
+          meta.attrs.map (item) -> item.descriptor()
+          meta.content.map (item) -> item.descriptor()
+        )
+        result = { type: 'array', element: _.merge(_.reject(concatenated, _.isUndefined)...).keys.value }
+        if meta.bind?
+          meta.bind.descriptor(result)
+        else
+          result
+      exposed
+
     array: ->
       meta.multiple = true
       meta.scope = (target) ->
@@ -61,7 +90,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
             scope = {}
             coll.push(scope)
             scope
-          else throw new Error("Scope already assignd value of type #{typeof value}")
+          else throw new Error("Expected array, got #{typeof coll}")
         else
           coll = []
           meta.bind.set(target, coll)
@@ -89,7 +118,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
         scope = meta.bind.get(target)
         if scope?
           if typeof value is 'object' then value
-          else throw new Error("Scope already assignd value of type #{typeof value}")
+          else throw new Error("Scope already assigned value of type #{typeof value}")
         else
           scope = {}
           meta.bind.set(target, scope)
@@ -144,7 +173,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
     matches: (elem) ->
       elem.nodeType is 1 and elem.localName is meta.name and (
         not(meta.ns?) or meta.ns is elem.namespaceURI
-      ) 
+      )
 
     extract: (elem, target = {}, raw = false) ->
       scope = meta.scope(target)
