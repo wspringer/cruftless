@@ -6,7 +6,7 @@
 
 An XML builder / parser that tries to ease the common cases, allowing you to quickly build a model from your document structure and get a builder / parser for free.
 
-[![CircleCI](https://circleci.com/gh/wspringer/cruftless.svg?style=svg&circle-token=310415870909bda5fde99f144c9c06cf979abfa9)](https://circleci.com/gh/wspringer/cruftless)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/wspringer/cruftless/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/wspringer/cruftless/tree/master)
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/wspringer/cruftless.svg)](https://greenkeeper.io/)
 
