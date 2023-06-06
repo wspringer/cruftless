@@ -74,7 +74,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
           meta.attrs.map (item) -> item.descriptor()
           meta.content.map (item) -> item.descriptor()
         )
-        result = { type: 'array', element: _.merge(_.reject(concatenated, _.isUndefined)...) }
+        result = { type: 'array', element: _.merge(_.reject(concatenated, _.isUndefined)...).keys.value }
         if meta.bind?
           meta.bind.descriptor(result)
         else
@@ -90,7 +90,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
             scope = {}
             coll.push(scope)
             scope
-          else throw new Error("Scope already assignd value of type #{typeof value}")
+          else throw new Error("Expected array, got #{typeof coll}")
         else
           coll = []
           meta.bind.set(target, coll)
@@ -118,7 +118,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
         scope = meta.bind.get(target)
         if scope?
           if typeof value is 'object' then value
-          else throw new Error("Scope already assignd value of type #{typeof value}")
+          else throw new Error("Scope already assigned value of type #{typeof value}")
         else
           scope = {}
           meta.bind.set(target, scope)

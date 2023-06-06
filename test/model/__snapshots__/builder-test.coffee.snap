@@ -1,3 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`the builder should leave xincludes unharmed when the resolve function is missing 1`] = `"<foo><xi:include href=\\"foo\\" xmlns:xi=\\"http://www.w3.org/2001/XInclude\\"/></foo>"`;
+
+exports[`the builder should support values 1`] = `
+Object {
+  "keys": Object {
+    "a": Object {
+      "element": Object {
+        "sample": undefined,
+        "type": "integer",
+      },
+      "type": "array",
+    },
+  },
+  "type": "object",
+}
+`;

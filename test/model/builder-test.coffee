@@ -63,7 +63,7 @@ describe 'the builder', ->
     template = parse('<foo><bar c-bind="a|values">{{value|integer}}</bar></foo>')
     expect(template.fromXML('<foo><bar>3</bar><bar>4</bar></foo>')).toEqual(a: [ 3, 4 ])
     expect(template.toXML(a: [ 3, 4 ])).toEqual '<foo><bar>3</bar><bar>4</bar></foo>'
-    # expect(template.toXML(a: [ { value: 3 }, { value: 4 }])).toEqual '<foo><bar>3</bar><bar>4</bar></foo>'
+    expect(template.descriptor()).toMatchSnapshot()
 
   it 'should support comment syntax', ->
     xml = '<foo><bar t="{{b}}"><?bind a|array?></bar></foo>'
