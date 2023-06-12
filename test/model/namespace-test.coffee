@@ -41,3 +41,7 @@ describe 'cruftless namespaces', ->
     it 'should not be needed to keep repeating it', ->
       xml = '<foo xmlns:bar="http://foo.bar"><baz bar:zaz="zaz"/></foo>'
       expect(parse(xml).toXML()).toEqual(xml)
+
+    it 'should preserve XInclude xmlns in case no resolver is passed', ->
+      xml = '<foo xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include href="bar.xml"/></foo>'
+      expect(parse(xml).toXML()).toEqual('<foo><xi:include href=\"bar.xml\" xmlns:xi=\"http://www.w3.org/2001/XInclude\"/></foo>')
