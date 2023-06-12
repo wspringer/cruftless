@@ -52,7 +52,7 @@ module.exports = (opts) ->
             binding.raw(item.value).apply(el)
           else if (item.namespaceURI is curlyNS and item.localName is 'if') or (item.name is 'c-if')
             binding.raw(item.value).apply(el, 'if')
-          else if item.prefix is 'xmlns' or item.name is 'xmlns'
+          else if item.prefix is 'xmlns' and (item.value is curlyNS or item.value is xincludeNS)
             # ignore
           else
             res = binding.curly(item.value).apply(attr(item.name))

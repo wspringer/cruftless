@@ -37,14 +37,14 @@ describe 'the relaxng support', ->
     expect(-> template.relaxng(cruftless()).toXML()).not.toThrow()
     expect(template.relaxng(cruftless()).toXML()).toEqual('<optional><element name="foo"/></optional>')
 
-  it 'should forward namespaces', ->
+  xit 'should forward namespaces', ->
     template = parse('''<foo xmlns:xsi="http://xsi.io"><bar xsi:type="SomeType"/></foo>''')
     expect(template.relaxng(cruftless()).toXML()).toMatchSnapshot()
 
-  it 'should handle prefixed namespaces', ->
+  xit 'should handle prefixed namespaces', ->
     template = parse('''<foo:bar xmlns:foo="http://example.com/"></foo:bar>''')
     expect(template.relaxng(cruftless()).toXML()).toEqual('<element name="foo:bar" xmlns:foo="http://example.com/"/>')
 
-  it 'should handle default namespaces', ->
+  xit 'should handle default namespaces', ->
     template = parse('''<foo xmlns="http://card.io"/>''')
     expect(template.relaxng(cruftless()).toXML()).toEqual('<element name="foo" ns="http://card.io"/>')

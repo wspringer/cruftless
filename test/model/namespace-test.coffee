@@ -17,20 +17,27 @@ describe 'cruftless namespaces', ->
       )
       expect(el.toXML()).toEqual('<foo><bar xmlns:t=\"http://foo.bar\" t:zaz=\"foo\"/><t:zaz/></foo>')
 
-      
+
   describe 'when parsing templates', ->
 
     it 'should correctly handle namespaces', ->
       xml = '<foo><bar xmlns:t=\"http://foo.bar\" t:zaz=\"t:zaz\"/><t:zaz/></foo>'
-      expect(parse(xml).toXML()).toEqual(xml)        
+      expect(parse(xml).toXML()).toEqual(xml)
 
     it 'should correctly handle default namespaces', ->
       xml = '<foo><bar xmlns=\"http://foo.bar\"><zaz/></bar></foo>'
-      expect(parse(xml).toXML()).toEqual(xml)        
+      expect(parse(xml).toXML()).toEqual(xml)
 
     it 'should ignore the cruftless namespace', ->
       xml = '<foo><bar xmlns:c="https://github.com/wspringer/cruftless" c:if="a">{{a}}</bar></foo>'
       template = parse(xml)
       expect(template.toXML()).toEqual('<foo/>')
       expect(template.toXML({ a: 4 })).toEqual('<foo><bar>4</bar></foo>')
-      
+
+    it 'should preserve additional namespaces', ->
+      xml = '<foo xmlns:bar="http://foo.bar"/>'
+      expect(parse(xml).toXML()).toEqual(xml)
+
+    it 'should not be needed to keep repeating it', ->
+      xml = '<foo xmlns:bar="http://foo.bar"><baz bar:zaz="zaz"/></foo>'
+      expect(parse(xml).toXML()).toEqual(xml)
