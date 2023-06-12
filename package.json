@@ -19,7 +19,7 @@
   "author": "Wilfred Springer",
   "license": "MIT",
   "dependencies": {
-    "xmldom": "^0.3.0"
+    "xmldom": "0.6.0"
   },
   "jest": {
     "preset": "jest-preset-coffeescript"
