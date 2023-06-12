@@ -1,5 +1,11 @@
 # Changes
 
+## 1.1.1
+
+### Patch Changes
+
+- 6828baf: Prevent namespace declarations from getting dropped
+
 ## 1.1.0
 
 ### Minor Changes
