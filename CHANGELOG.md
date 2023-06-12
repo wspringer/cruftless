@@ -1,5 +1,11 @@
 # Changes
 
+## 1.1.2
+
+### Patch Changes
+
+- a9f8aac: Bump xmldom to version 0.6.0
+
 ## 1.1.1
 
 ### Patch Changes
