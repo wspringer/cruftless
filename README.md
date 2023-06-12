@@ -412,6 +412,10 @@ console.log(relaxng(template));
 ⇒ </grammar>
 ```
 
+**NOTE:** There are [various
+issues](https://github.com/wspringer/cruftless/issues/50) with the way RelaxNG
+schemas are generated. Consider this to be work in progress.
+
 ## Nodeset Capture
 
 There are situations where it makes very little sense to have one template

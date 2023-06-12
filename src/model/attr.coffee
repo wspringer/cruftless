@@ -41,7 +41,10 @@ module.exports = ({types}) -> (name) ->
       value = extractValue(meta, obj)
       if value?
         if meta.ns?
-          elem.setAttributeNS(meta.ns, meta.name, meta.valueType.to(value))
+          if meta.ns isnt 'http://www.w3.org/2000/xmlns/'
+            elem.setAttributeNS(meta.ns, meta.name, meta.valueType.to(value))
+          else
+            elem.setAttributeNS(meta.ns, meta.name, meta.valueType.to(value))
         else
           elem.setAttribute(meta.name, meta.valueType.to(value))
 
