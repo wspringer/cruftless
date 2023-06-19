@@ -174,3 +174,8 @@ describe 'the builder', ->
     expect(template.toXML({ persons: [ { name: 'Bob' } ] })).toEqual '<foo><bar><name>Bob</name></bar></foo>'
     expect(template.toXML({ persons: [  ] })).toEqual '<foo/>'
 
+  it 'should ommit an element if not present', ->
+    template = parse('<foo><bar c-bind="bar|object" baz="yay"><name>{{name}}</name></bar></foo>')
+    expect(template.toXML({ bar: { name: 'Bob' } })).toEqual '<foo><bar baz="yay"><name>Bob</name></bar></foo>'
+    expect(template.toXML({  })).toEqual '<foo/>'
+    expect(template.fromXML('<foo/>')).toEqual({ })
