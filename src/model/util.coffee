@@ -4,7 +4,6 @@ accessor = require '../expr/accessor'
 re = /([a-zA-Z0-9]+)(?:\[([0-9]+)\])?/
 
 parsePath = (str) ->
-  segments = str.split('.')
 
   { set, get, descriptor } = accessor.of(str)
 

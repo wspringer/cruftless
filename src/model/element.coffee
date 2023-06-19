@@ -124,7 +124,8 @@ module.exports = ({types, format = _.identity}) -> (name) ->
           meta.bind.set(target, scope)
           scope
       meta.traverse = (obj, iterator) ->
-        iterator(meta.bind.get(obj))
+        value = meta.bind.get(obj)
+        if (value) then iterator(value)
       meta.descriptor = ->
         merged = _.merge(_.reject(_.concat(
           meta.if?.descriptor()
