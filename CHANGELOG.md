@@ -1,5 +1,11 @@
 # Changes
 
+## 1.1.3
+
+### Patch Changes
+
+- 1da2d3e: Prevent elements bound to missing objects from being inserted. Fixes #54.
+
 ## 1.1.2
 
 ### Patch Changes
