@@ -51,11 +51,19 @@ module.exports = ({types}) -> (name) ->
     extract: (elem, target, raw) ->
 
       if meta.bind?
+        # We're working around a bug in the version of xmldom we're relying upon
+        # Fixed in later versions of xmldom
         value =
           if meta.ns?
-            elem.getAttributeNS(meta.ns, meta.name)
+            if elem.hasAttributeNS(meta.ns, meta.name)
+              elem.getAttributeNS(meta.ns, meta.name)
+            else
+              null
           else
-            elem.getAttribute(meta.name)
+            if elem.hasAttribute(meta.name)
+              elem.getAttribute(meta.name)
+            else
+              null
         decoded = if raw then value else meta.valueType.from(value)
         if value? then meta.bind.set(target, decoded)
 
