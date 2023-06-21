@@ -1,5 +1,11 @@
 # Changes
 
+## 1.1.4
+
+### Patch Changes
+
+- 50f84fc: Fix for a bug causing missing attribute values to be intepreted as empty strings. Workaround for a bug in the version of xmldom we're depending on. See https://github.com/wspringer/cruftless/issues/56.
+
 ## 1.1.3
 
 ### Patch Changes
