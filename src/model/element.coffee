@@ -5,6 +5,7 @@ _ = require 'lodash'
 { identity } = require 'lodash'
 
 { parseExpr } = require './util'
+{ xsiNS } = require '../ns'
 
 module.exports = ({types, format = _.identity}) -> (name) ->
   meta =
@@ -13,6 +14,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
     content: []
     required: true
     multiple: false
+    kind: undefined
     scope: (target) -> target or {}
     traverse: (obj, iterator) -> iterator(obj)
     descriptor: ->
@@ -39,6 +41,12 @@ module.exports = ({types, format = _.identity}) -> (name) ->
 
     isRequired: ->
       meta.required
+
+    kind: (kind) ->
+      if kind? then meta.kind = kind
+      exposed
+
+    getKind: -> meta.kind
 
     ns: (ns) ->
       if ns? then meta.ns = ns
@@ -150,7 +158,10 @@ module.exports = ({types, format = _.identity}) -> (name) ->
           meta.attrs.forEach (attr) ->
             attr.generate(item, el)
           meta.content.forEach (node) ->
-            if node.isSet(item)
+            if obj?.kind?
+              if obj.kind is node.getKind?()
+                node.generate(item, el)
+            else if node.isSet(item)
               node.generate(item, el)
           if context?
             context.appendChild(el)
@@ -174,7 +185,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
     matches: (elem) ->
       elem.nodeType is 1 and elem.localName is meta.name and (
         not(meta.ns?) or meta.ns is elem.namespaceURI
-      )
+      ) and (_.isUndefined(meta.kind) or elem.getAttributeNS(xsiNS, 'type') is meta.kind)
 
     extract: (elem, target = {}, raw = false) ->
       scope = meta.scope(target)
@@ -183,6 +194,8 @@ module.exports = ({types, format = _.identity}) -> (name) ->
       Array.from(elem.childNodes or []).forEach (child) ->
         match = meta.content.find (nodeDef) -> nodeDef.matches(child)
         match?.extract(child, scope, raw)
+      if meta.kind
+        scope.kind = meta.kind
       target
 
     fromDOM: (elem, raw = false) -> exposed.extract(elem, {}, raw)

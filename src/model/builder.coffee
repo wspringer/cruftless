@@ -2,7 +2,7 @@ DOMParser = require('xmldom').DOMParser
 _ = require 'lodash'
 binding = require './binding'
 curlyNS = 'https://github.com/wspringer/cruftless'
-xincludeNS = 'http://www.w3.org/2001/XInclude'
+{ xincludeNS, xsiNS } = require '../ns'
 
 forAllAttributes = (node, fn) ->
   i = 0
@@ -28,6 +28,7 @@ module.exports = (opts) ->
 
 
         el = element(node.tagName)
+        if node.hasAttributeNS(xsiNS, 'type') then el.kind(node.getAttributeNS(xsiNS, 'type'))
         if node.namespaceURI then el.ns(node.namespaceURI)
 
         childNodes = Array.from(node.childNodes)
