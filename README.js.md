@@ -159,13 +159,13 @@ To get the actual data:
 
 ```javascript --run simple-2
 // The second argument defaults to false, so might as well leave it out
-console.log(template.fromXML("<foo>1</foo>", false));
+console.log(template.fromXML("<foo bar='1'/>", false));
 ```
 
 To get the raw data:
 
 ```javascript --run simple-2
-console.log(template.fromXML("<foo>1</foo>", true));
+console.log(template.fromXML("<foo bar='1'/>", true));
 ```
 
 ## Alternative notation

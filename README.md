@@ -171,15 +171,15 @@ To get the actual data:
 
 ```javascript
 // The second argument defaults to false, so might as well leave it out
-console.log(template.fromXML("<foo>1</foo>", false));
-⇒ {}
+console.log(template.fromXML("<foo bar='1'/>", false));
+⇒ { value: true }
 ```
 
 To get the raw data:
 
 ```javascript
-console.log(template.fromXML("<foo>1</foo>", true));
-⇒ {}
+console.log(template.fromXML("<foo bar='1'/>", true));
+⇒ { value: '1' }
 ```
 
 ## Alternative notation
