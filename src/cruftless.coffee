@@ -6,6 +6,8 @@ module.exports = (opts = {}) ->
 
   opts.types = _.merge({}, require('./model/types'), opts.types or {})
 
+  opts.kindProperty = opts.kindProperty or 'kind'
+
   element = require('./model/element')(opts)
 
   attr = require('./model/attr')(opts)

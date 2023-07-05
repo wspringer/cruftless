@@ -26,6 +26,11 @@ declare module "cruftless" {
   }
   export interface CruftlessOpts {
     types: CruftlessTypes;
+    /**
+     * The name of the property that holds the name of the polymorphic variant
+     * of a content model. Used in case of xsi:type.
+     */
+    kindProperty?: string;
   }
 
   export interface Cruftless {

@@ -5,14 +5,16 @@ _ = require 'lodash'
 { identity } = require 'lodash'
 
 { parseExpr } = require './util'
+{ xsiNS } = require '../ns'
 
-module.exports = ({types, format = _.identity}) -> (name) ->
+module.exports = ({types, kindProperty, format = _.identity}) -> (name) ->
   meta =
     name: name
     attrs: []
     content: []
     required: true
     multiple: false
+    kind: undefined
     scope: (target) -> target or {}
     traverse: (obj, iterator) -> iterator(obj)
     descriptor: ->
@@ -39,6 +41,10 @@ module.exports = ({types, format = _.identity}) -> (name) ->
 
     isRequired: ->
       meta.required
+
+    kind: (kind) ->
+      if kind? then meta.kind = kind
+      exposed
 
     ns: (ns) ->
       if ns? then meta.ns = ns
@@ -141,7 +147,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
     generate: (obj, context) ->
       doc = context?.ownerDocument or di.createDocument()
       meta.traverse obj, (item) ->
-        if (not(meta.if?) or meta.if.get(item)?)
+        if (not(meta.if?) or meta.if.get(item)?) and (not(meta.kind?) or meta.kind is item?[kindProperty] or not(item?[kindProperty]?))
           el =
             if meta.ns?
               doc.createElementNS(meta.ns, meta.name)
@@ -174,7 +180,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
     matches: (elem) ->
       elem.nodeType is 1 and elem.localName is meta.name and (
         not(meta.ns?) or meta.ns is elem.namespaceURI
-      )
+      ) and (_.isUndefined(meta.kind) or elem.getAttributeNS(xsiNS, 'type') is meta.kind)
 
     extract: (elem, target = {}, raw = false) ->
       scope = meta.scope(target)
@@ -183,6 +189,8 @@ module.exports = ({types, format = _.identity}) -> (name) ->
       Array.from(elem.childNodes or []).forEach (child) ->
         match = meta.content.find (nodeDef) -> nodeDef.matches(child)
         match?.extract(child, scope, raw)
+      if meta.kind
+        scope[kindProperty] = meta.kind
       target
 
     fromDOM: (elem, raw = false) -> exposed.extract(elem, {}, raw)
