@@ -138,21 +138,21 @@ describe 'the builder', ->
     </RoleAssignments>
   </NMIStandingData>
     </CATSChangeRequest>''')
-    expect(data).toEqual { changeReasonCode: '1', nmiStandingData: { nmi: '123456789', nmiChecksum: 1, roleAssignments: [ { party: '123456789', role: '1' } ] } }
+    expect(data).toEqual { changeReasonCode: '1', nmiStandingData: { kind: 'ase:ElectricityStandingData', nmi: '123456789', nmiChecksum: 1, roleAssignments: [ { party: '123456789', role: '1' } ] } }
     data = template.fromXML('''<CATSChangeRequest version="r29" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ChangeReasonCode>1</ChangeReasonCode>
   <NMIStandingData xsi:type="ase:ElectricityStandingData">
     <NMI checksum="1">123456789</NMI>
   </NMIStandingData>
     </CATSChangeRequest>''')
-    expect(data).toEqual { changeReasonCode: '1', nmiStandingData: { nmi: '123456789', nmiChecksum: 1 } }
+    expect(data).toEqual { changeReasonCode: '1', nmiStandingData: { kind: 'ase:ElectricityStandingData', nmi: '123456789', nmiChecksum: 1 } }
     data = template.fromXML('''<CATSChangeRequest version="r29">
   <ChangeReasonCode>1</ChangeReasonCode>
   <NMIStandingData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ase:ElectricityStandingData" >
     <NMI checksum="1">123456789</NMI>
   </NMIStandingData>
     </CATSChangeRequest>''')
-    expect(data).toEqual { changeReasonCode: '1', nmiStandingData: { nmi: '123456789', nmiChecksum: 1 } }
+    expect(data).toEqual { changeReasonCode: '1', nmiStandingData: { kind: 'ase:ElectricityStandingData', nmi: '123456789', nmiChecksum: 1 } }
 
 
   it 'should support xinclude to some extent', ->

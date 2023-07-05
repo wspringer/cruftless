@@ -7,7 +7,7 @@ _ = require 'lodash'
 { parseExpr } = require './util'
 { xsiNS } = require '../ns'
 
-module.exports = ({types, format = _.identity}) -> (name) ->
+module.exports = ({types, kindProperty, format = _.identity}) -> (name) ->
   meta =
     name: name
     attrs: []
@@ -45,8 +45,6 @@ module.exports = ({types, format = _.identity}) -> (name) ->
     kind: (kind) ->
       if kind? then meta.kind = kind
       exposed
-
-    getKind: -> meta.kind
 
     ns: (ns) ->
       if ns? then meta.ns = ns
@@ -149,7 +147,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
     generate: (obj, context) ->
       doc = context?.ownerDocument or di.createDocument()
       meta.traverse obj, (item) ->
-        if (not(meta.if?) or meta.if.get(item)?)
+        if (not(meta.if?) or meta.if.get(item)?) and (not(meta.kind?) or meta.kind is item?[kindProperty])
           el =
             if meta.ns?
               doc.createElementNS(meta.ns, meta.name)
@@ -158,10 +156,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
           meta.attrs.forEach (attr) ->
             attr.generate(item, el)
           meta.content.forEach (node) ->
-            if obj?.kind?
-              if obj.kind is node.getKind?()
-                node.generate(item, el)
-            else if node.isSet(item)
+            if node.isSet(item)
               node.generate(item, el)
           if context?
             context.appendChild(el)
@@ -195,7 +190,7 @@ module.exports = ({types, format = _.identity}) -> (name) ->
         match = meta.content.find (nodeDef) -> nodeDef.matches(child)
         match?.extract(child, scope, raw)
       if meta.kind
-        scope.kind = meta.kind
+        scope[kindProperty] = meta.kind
       target
 
     fromDOM: (elem, raw = false) -> exposed.extract(elem, {}, raw)
