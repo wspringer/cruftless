@@ -172,14 +172,14 @@ To get the actual data:
 ```javascript
 // The second argument defaults to false, so might as well leave it out
 console.log(template.fromXML("<foo>1</foo>", false));
-⇒ { value: false }
+⇒ {}
 ```
 
 To get the raw data:
 
 ```javascript
 console.log(template.fromXML("<foo>1</foo>", true));
-⇒ { value: '' }
+⇒ {}
 ```
 
 ## Alternative notation
@@ -411,6 +411,47 @@ console.log(relaxng(template));
 ⇒   </start>
 ⇒ </grammar>
 ```
+
+## Support for xsi:type
+
+XML Schema introduced a kind of polymorphism that many schema designers are a
+bit too eager to embrace. Supporting that in Cruftless is not trivial, so
+although some level of support exists, be advised it's very limited. Also, be
+aware that whatever support for RelaxNG we have, it completely falls apart when
+using `xsi:type`.
+
+This is how you use it: suppose that you have a set of students and teachers,
+but for students you need a different content model than for teachers. Then you
+could model that using `xsi:type`.
+
+```javascript
+template = parse(`
+<people xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <person xsi:type="Student" c-bind="people|array" nickName="{{name}}" grade="{{grade}}" />
+  <person xsi:type="Teacher" c-bind="people|array" name="{{name}}" subject="{{subject}}" />
+</people>
+`.trim());
+
+console.log(template.fromXML(`
+<people xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <person xsi:type="Student" nickName="Jesse" grade="D" />
+  <person xsi:type="Student" nickName="Badger" grade="C" />
+  <person xsi:type="Teacher" name="Walther" subject="chemistry" />
+</people>
+`.trim()));
+⇒ {
+⇒   people: [
+⇒     { name: 'Jesse', grade: 'D', kind: 'Student' },
+⇒     { name: 'Badger', grade: 'C', kind: 'Student' },
+⇒     { name: 'Walther', subject: 'chemistry', kind: 'Teacher' }
+⇒   ]
+⇒ }
+```
+
+In the above case, the `xsi:type` attribute determines the content model of the
+data getting parsed. It will pass the value to the `kind` property of the data
+extracted. Reversely, it will use the `kind` property to determine how to render
+the data as XML.
 
 **NOTE:** There are [various
 issues](https://github.com/wspringer/cruftless/issues/50) with the way RelaxNG
