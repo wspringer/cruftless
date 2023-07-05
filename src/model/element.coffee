@@ -147,7 +147,7 @@ module.exports = ({types, kindProperty, format = _.identity}) -> (name) ->
     generate: (obj, context) ->
       doc = context?.ownerDocument or di.createDocument()
       meta.traverse obj, (item) ->
-        if (not(meta.if?) or meta.if.get(item)?) and (not(meta.kind?) or meta.kind is item?[kindProperty])
+        if (not(meta.if?) or meta.if.get(item)?) and (not(meta.kind?) or meta.kind is item?[kindProperty] or not(item?[kindProperty]?))
           el =
             if meta.ns?
               doc.createElementNS(meta.ns, meta.name)

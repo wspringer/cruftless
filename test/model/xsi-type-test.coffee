@@ -13,9 +13,9 @@ describe 'xsi:type support', ->
     a = attr('type').ns(xsiNS).value('B')
     expect(a.isSet({ kind: 'B' })).toBe(true)
 
-  # it 'should preserve xsi:type attributes', ->
-  #   template = parse("<foo xmlns:xsi='#{xsiNS}'><bar xsi:type='B'/></foo>")
-  #   expect(template.toXML()).toEqual('<foo xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><bar xsi:type=\"B\"/></foo>')
+  it 'should preserve xsi:type attributes in case the kind property is not set (for backward compatability)', ->
+    template = parse("<foo xmlns:xsi='#{xsiNS}'><bar xsi:type='B'/></foo>")
+    expect(template.toXML()).toEqual('<foo xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><bar xsi:type=\"B\"/></foo>')
 
   it 'should respect the kind property', ->
     template = parse("<foo xmlns:xsi='#{xsiNS}'><bar xsi:type='B'/></foo>")
