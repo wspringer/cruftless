@@ -1,5 +1,11 @@
 # Changes
 
+## 1.2.1
+
+### Patch Changes
+
+- c24c4cc: Fixes #60, preventing us from parsing documents that use other namespace prefixes than the ones used in the `xsi:type` definitions in the binding template.
+
 ## 1.2.0
 
 ### Minor Changes
