@@ -370,7 +370,7 @@ normalization of the prefixes. So, if your template refers to a type with an
 `ns1:` prefix, and the document you are passing is using the `ns0:` prefix, then
 you can make sure the types in the documents you are parsing are rewritten to
 `ns1`, by the namespace of `ns1` in the configuration options of your Cruftless
-instance.
+instance. (See <https://github.com/wspringer/cruftless/blob/60-xsitype-should-always-be-interpreted-as-a-qname/test/model/xsi-type-test.coffee#L84>.)
 
 **NOTE:** There are [various
 issues](https://github.com/wspringer/cruftless/issues/50) with the way RelaxNG
