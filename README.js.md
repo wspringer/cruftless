@@ -335,26 +335,42 @@ but for students you need a different content model than for teachers. Then you
 could model that using `xsi:type`.
 
 ```javascript --run simple-2
-template = parse(`
+template = parse(
+  `
 <people xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <person xsi:type="Student" c-bind="people|array" nickName="{{name}}" grade="{{grade}}" />
   <person xsi:type="Teacher" c-bind="people|array" name="{{name}}" subject="{{subject}}" />
 </people>
-`.trim());
+`.trim()
+);
 
-console.log(template.fromXML(`
+console.log(
+  template.fromXML(
+    `
 <people xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <person xsi:type="Student" nickName="Jesse" grade="D" />
   <person xsi:type="Student" nickName="Badger" grade="C" />
   <person xsi:type="Teacher" name="Walther" subject="chemistry" />
 </people>
-`.trim()));
+`.trim()
+  )
+);
 ```
 
 In the above case, the `xsi:type` attribute determines the content model of the
 data getting parsed. It will pass the value to the `kind` property of the data
 extracted. Reversely, it will use the `kind` property to determine how to render
 the data as XML.
+
+Now, `xsi:type` values are assumed to `QName`s. That means that there might be a
+prefix in the name that resolves to a namespace. The documents that you _parse_
+might use different namespace prefixes than the binding template. In order to
+avoid issues with that, Cruftless accepts a `prefixes` option specifically for
+normalization of the prefixes. So, if your template refers to a type with an
+`ns1:` prefix, and the document you are passing is using the `ns0:` prefix, then
+you can make sure the types in the documents you are parsing are rewritten to
+`ns1`, by the namespace of `ns1` in the configuration options of your Cruftless
+instance.
 
 **NOTE:** There are [various
 issues](https://github.com/wspringer/cruftless/issues/50) with the way RelaxNG

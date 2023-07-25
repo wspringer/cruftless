@@ -1,4 +1,8 @@
-{ parse, attr, element, text } = require('../../src/cruftless')()
+{ parse, attr, element, text } = require('../../src/cruftless')({
+  prefixes: {
+    ase: 'http://foo.bar/'
+  }
+})
 { xsiNS } = require '../../src/ns'
 
 
@@ -71,4 +75,10 @@ describe 'xsi:type support', ->
     </foo>""".trim())
     expect(template.toXML(as: [{b: '3', kind: 'B'}, {c: '4', kind: 'C'}])).toEqual('<foo xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><bar xsi:type=\"B\">3</bar><bar xsi:type=\"C\">4</bar></foo>')
 
-
+  it 'should be flexible in terms of namespace prefixes', ->
+    template = parse("""
+    <foo xmlns:xsi='#{xsiNS}'>
+    <bar c-bind="b|object" xsi:type='ase:B'>{{name}}</bar>
+    </foo>""".trim())
+    expect(template.fromXML('<foo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><bar xsi:type="ase:B">3</bar></foo>')).toEqual { b: { kind: 'ase:B', name: '3' } }
+    expect(template.fromXML('<foo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns0="http://foo.bar/"><bar xsi:type="ns0:B">3</bar></foo>')).toEqual { b: { kind: 'ase:B', name: '3' } }

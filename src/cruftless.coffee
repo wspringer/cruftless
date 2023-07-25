@@ -8,6 +8,8 @@ module.exports = (opts = {}) ->
 
   opts.kindProperty = opts.kindProperty or 'kind'
 
+  opts.prefixes = opts.prefixes or {}
+
   element = require('./model/element')(opts)
 
   attr = require('./model/attr')(opts)
