@@ -24,6 +24,7 @@ declare module "cruftless" {
      */
     relaxng: (...args: any[]) => Template<unknown>;
   }
+
   export interface CruftlessOpts {
     types: CruftlessTypes;
     /**
@@ -31,6 +32,12 @@ declare module "cruftless" {
      * of a content model. Used in case of xsi:type.
      */
     kindProperty?: string;
+
+    /**
+     * Prefix mapping for namespaces. Prefixes are the keys, namespaces are the values.
+     * Used for xsi:type canonicalization.
+     */
+    prefixes?: Record<string, string>;
   }
 
   export interface Cruftless {

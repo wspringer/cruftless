@@ -7,7 +7,10 @@ _ = require 'lodash'
 { parseExpr } = require './util'
 { xsiNS } = require '../ns'
 
-module.exports = ({types, kindProperty, format = _.identity}) -> (name) ->
+
+
+
+module.exports = ({types, kindProperty, format = _.identity, prefixes}) -> (name) ->
   meta =
     name: name
     attrs: []
@@ -24,6 +27,26 @@ module.exports = ({types, kindProperty, format = _.identity}) -> (name) ->
         meta.content.map (item) -> item.descriptor()
       )
       _.merge(_.reject(concatenated, _.isUndefined)...)
+
+  ###
+  This is a simple workaround for
+  https://github.com/wspringer/cruftless/issues/60 If there *are* prefixes
+  registered, it will try to rewrite the type to a canonical version of it,
+  using a registered prefix. Otherwise, it will use the value of xsi:type as is.
+  ###
+  canonicalizedXsiType = (elem) ->
+    qname = elem.getAttributeNS(xsiNS, 'type')
+    if qname.indexOf(':') > 0
+      [prefix, localName] = qname.split(':')
+      ns = elem.lookupNamespaceURI(prefix)
+      qualifier = Object.keys(prefixes).find (key) -> prefixes[key] is ns
+      if qualifier?
+        "#{qualifier}:#{localName}"
+      else
+        qname
+    else
+      qname
+
 
   exposed =
 
@@ -180,7 +203,7 @@ module.exports = ({types, kindProperty, format = _.identity}) -> (name) ->
     matches: (elem) ->
       elem.nodeType is 1 and elem.localName is meta.name and (
         not(meta.ns?) or meta.ns is elem.namespaceURI
-      ) and (_.isUndefined(meta.kind) or elem.getAttributeNS(xsiNS, 'type') is meta.kind)
+      ) and (_.isUndefined(meta.kind) or canonicalizedXsiType(elem) is meta.kind)
 
     extract: (elem, target = {}, raw = false) ->
       scope = meta.scope(target)
